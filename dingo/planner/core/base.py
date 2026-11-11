@@ -39,7 +39,7 @@ from dingo.planner.environment.state import DeploymentState
 from dingo.planner.monitoring.diagnostics_recorder import DiagnosticsRecorder
 from dingo.planner.monitoring.live_dashboard import start_live_dashboard
 from dingo.planner.monitoring.planner_metrics import PlannerPrometheusMetrics
-from dingo.planner.offline.trace_data import extract_metrics_from_trace
+from dingo.planner.offline.trace_data import extract_traffic_observations_from_trace
 from dynamo.runtime import DistributedRuntime
 
 if TYPE_CHECKING:
@@ -193,19 +193,10 @@ class NativePlannerBase:
     ) -> Optional[list[TrafficObservation]]:
         if self.config.load_predictor_warmup_trace is None:
             return None
-        metrics = extract_metrics_from_trace(
+        return extract_traffic_observations_from_trace(
             self.config.load_predictor_warmup_trace,
             self.config.throughput_adjustment_interval_seconds,
         )
-        return [
-            TrafficObservation(
-                duration_s=self.config.throughput_adjustment_interval_seconds,
-                num_req=float(m["request_count"]),
-                isl=float(m["avg_isl"]),
-                osl=float(m["avg_osl"]),
-            )
-            for m in metrics
-        ]
 
     async def _bootstrap_engine_plugins_if_needed(self) -> None:
         # Keep the orchestrator dependency aligned with lazy engine construction.
