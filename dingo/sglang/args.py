@@ -533,7 +533,6 @@ async def parse_args(
     ):
         parsed_args.max_running_requests = 8
         logging.info("Defaulting max_running_requests to 8 for diffusion worker")
-
     if image_diffusion_worker or video_generation_worker:
         worker_type = (
             "image diffusion" if image_diffusion_worker else "video generation"
