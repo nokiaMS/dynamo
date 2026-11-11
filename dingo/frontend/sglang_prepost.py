@@ -29,6 +29,7 @@ from sglang.srt.parser.jinja_template_utils import (
 )
 from sglang.srt.parser.reasoning_parser import ReasoningParser
 
+from .thinking import apply_default_thinking_mode_to_template_kwargs
 from .utils import PreprocessError, extract_mm_urls, random_call_id
 
 logger = logging.getLogger(__name__)
@@ -543,6 +544,7 @@ def _flatten_message_content(content: Any) -> Any:
 
 def _normalize_openai_thinking_template_kwargs(
     request: dict[str, Any],
+    default_thinking_mode: str | None = None,
 ) -> dict[str, Any]:
     request = copy.copy(request)
     chat_template_kwargs = dict(
@@ -567,8 +569,17 @@ def _normalize_openai_thinking_template_kwargs(
         elif thinking_type == "disabled":
             setdefault_reasoning(False)
 
-    if request.get("reasoning_effort") == "none":
+    reasoning_effort = request.get("reasoning_effort")
+    if reasoning_effort is not None:
+        chat_template_kwargs["reasoning_effort"] = reasoning_effort
+    if reasoning_effort == "none":
         setdefault_reasoning(False)
+
+    chat_template_kwargs = apply_default_thinking_mode_to_template_kwargs(
+        chat_template_kwargs,
+        default_thinking_mode,
+        request_has_root_thinking=request.get("thinking") is not None,
+    )
 
     if chat_template_kwargs:
         request["chat_template_kwargs"] = chat_template_kwargs
@@ -836,6 +847,7 @@ def preprocess_chat_request(
     reasoning_parser_name: str | None,
     exclude_tools_when_tool_choice_none: bool = True,
     template_force_reasoning: bool = False,
+    default_thinking_mode: str | None = None,
 ) -> SglangPreprocessResult:
     """Preprocess a chat request using SGLang tokenizer and parser APIs.
 
@@ -846,7 +858,7 @@ def preprocess_chat_request(
 
     Synchronous -- suitable for both main-process and worker-process execution.
     """
-    request = _normalize_openai_thinking_template_kwargs(request)
+    request = _normalize_openai_thinking_template_kwargs(request, default_thinking_mode)
     messages = _materialize_messages(request.get("messages", []))
 
     # Generation mode is independent of whether the client wants reasoning
