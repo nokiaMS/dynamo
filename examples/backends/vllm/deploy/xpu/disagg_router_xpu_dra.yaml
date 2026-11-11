@@ -1,6 +1,16 @@
 # SPDX-FileCopyrightText: Copyright (c) 2025-2026 NVIDIA CORPORATION & AFFILIATES. All rights reserved.
 # SPDX-License-Identifier: Apache-2.0
 
+# XPU Disaggregated Deployment with KV Router
+#
+# This example demonstrates disaggregated serving (Prefill/Decode separation)
+# with KV Router enabled for inteligent request routing based on KV cache availability.
+#
+# Requirements:
+# - Intel XPU with DRA (Dynamic Resource Allocation) driver installed
+# - Dynamo Operator with v1alpha1 support
+# - XPU-specific vLLM image (nvcr.io/nvidia/ai-dynamo/vllm-runtime-xpu:my-tag)
+
 apiVersion: resource.k8s.io/v1
 kind: ResourceClaimTemplate
 metadata:
@@ -17,7 +27,7 @@ spec:
 apiVersion: nvidia.com/v1alpha1
 kind: DynamoGraphDeployment
 metadata:
-  name: vllm-disagg-xpu-dra
+  name: xpu-disagg-router
 spec:
   services:
     Frontend:
@@ -27,11 +37,15 @@ spec:
       extraPodSpec:
         mainContainer:
           image: nvcr.io/nvidia/ai-dynamo/vllm-runtime:my-tag
+          env:
+            # Enable KV Router for intelligent worker selection
+            - name: DYN_ROUTER_MODE
+              value: kv
     VllmDecodeWorker:
       envFromSecret: hf-token-secret
       componentType: worker
       subComponentType: decode
-      replicas: 1
+      replicas: 2
       resources:
         requests:
           custom:
@@ -41,8 +55,15 @@ spec:
         resourceClaims:
           - name: gpu
             resourceClaimTemplateName: gpu-template
+        # NOTE: Uncomment if your environment requires specific group access
+        # securityContext:
+        #   runAsUser: 1000
+        #   runAsGroup: 1000
+        #   supplementalGroups:
+        #     - 44   # render group
+        #     - 991  # video group
         mainContainer:
-          image: nvcr.io/nvidia/ai-dynamo/vllm-runtime:my-tag
+          image: nvcr.io/nvidia/ai-dynamo/vllm-runtime-xpu:my-tag
           resources:
             claims:
               - name: gpu
@@ -53,7 +74,7 @@ spec:
           command:
             - python3
             - -m
-            - dingo.vllm
+            - dynamo.vllm
           args:
             - --model
             - Qwen/Qwen3-0.6B
@@ -65,7 +86,7 @@ spec:
       envFromSecret: hf-token-secret
       componentType: worker
       subComponentType: prefill
-      replicas: 1
+      replicas: 2
       resources:
         requests:
           custom:
@@ -75,8 +96,15 @@ spec:
         resourceClaims:
           - name: gpu
             resourceClaimTemplateName: gpu-template
+        # NOTE: Uncomment if your environment requires specific group access
+        # securityContext:
+        #   runAsUser: 1000
+        #   runAsGroup: 1000
+        #   supplementalGroups:
+        #     - 44   # render group
+        #     - 991  # video group
         mainContainer:
-          image: nvcr.io/nvidia/ai-dynamo/vllm-runtime:my-tag
+          image: nvcr.io/nvidia/ai-dynamo/vllm-runtime-xpu:my-tag
           resources:
             claims:
               - name: gpu
@@ -87,13 +115,19 @@ spec:
           command:
             - python3
             - -m
-            - dingo.vllm
+            - dynamo.vllm
           args:
             - --model
             - Qwen/Qwen3-0.6B
             - --disaggregation-mode
             - prefill
+            # Enable KV events publishing for router cache tracking
+            - --kv-events-config
+            - '{"publisher":"zmq","topic":"kv-events","endpoint":"tcp://*:20080","enable_kv_cache_events":true}'
+            # NixlConnector config for XPU KV transfer
             - --kv-transfer-config
             - '{"kv_connector":"NixlConnector","kv_role":"kv_both","kv_buffer_device":"xpu"}'
             - --block-size
             - "64"
+            # Enable prefix caching for KV reuse
+            - --enable-prefix-caching
