@@ -27,6 +27,7 @@ from dingo.common.utils.engine_response import normalize_finish_reason
 from dingo.common.utils.output_modalities import RequestType
 from dingo.common.utils.video_utils import normalize_video_frames
 from dingo.vllm.omni.utils import is_empty_payload
+from dingo.vllm.handlers import build_prompt_tokens_details
 
 logger = logging.getLogger(__name__)
 
@@ -522,10 +523,8 @@ def _build_completion_usage(request_output: Any) -> Dict[str, Any]:
         "total_tokens": (
             prompt_tokens + completion_tokens if prompt_tokens is not None else None
         ),
-        "prompt_tokens_details": (
-            {"cached_tokens": num_cached}
-            if (num_cached := getattr(request_output, "num_cached_tokens", None))
-            else None
+        "prompt_tokens_details": build_prompt_tokens_details(
+            getattr(request_output, "num_cached_tokens", None)
         ),
     }
 
