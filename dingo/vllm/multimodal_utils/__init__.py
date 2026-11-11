@@ -3,6 +3,10 @@
 
 from dingo.common.multimodal.image_loader import ImageLoader
 from dingo.vllm.multimodal_utils.chat_message_utils import extract_user_text
+from dingo.vllm.multimodal_utils.custom_encoder_adapter import (
+    CustomEncoderAdapter,
+    create_custom_encoder_adapter,
+)
 from dingo.vllm.multimodal_utils.embed_assembler import build_mixed_embeds
 from dingo.vllm.multimodal_utils.encode_utils import (
     encode_image_embeddings,
@@ -31,6 +35,8 @@ from dingo.vllm.multimodal_utils.vision_encoder_backend import (
 
 __all__ = [
     "build_mixed_embeds",
+    "CustomEncoderAdapter",
+    "create_custom_encoder_adapter",
     "encode_image_embeddings",
     "extract_user_text",
     "get_encoder_components",
