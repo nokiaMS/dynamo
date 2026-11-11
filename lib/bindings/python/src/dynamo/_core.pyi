@@ -868,6 +868,7 @@ class ModelRuntimeConfig:
     data_parallel_start_rank: int
     data_parallel_size: int
     enable_local_indexer: bool
+    kv_state_endpoint: str | None
     enable_eagle: bool
     taints: Set[str]
     stable_routing_id: str | None
@@ -1152,6 +1153,7 @@ class KvEventPublisher:
         zmq_topic: Optional[str] = None,
         batching_timeout_ms: Optional[int] = None,
         image_token_id: Optional[int] = None,
+        kv_state_endpoint: Optional[str] = None,
     ) -> None:
         """
         Create a `KvEventPublisher` object.
@@ -1169,6 +1171,7 @@ class KvEventPublisher:
             enable_local_indexer: Enable worker-local KV indexer
             zmq_endpoint: Optional ZMQ endpoint for relay mode (e.g. "tcp://127.0.0.1:5557")
             zmq_topic: ZMQ topic to subscribe to (defaults to "" when zmq_endpoint is set)
+            kv_state_endpoint: KV event ownership endpoint; defaults to endpoint.
         """
 
     def publish_stored(
@@ -3370,6 +3373,7 @@ class backend:
             route_to_encoder: bool = ...,
             media_decoder: Optional[MediaDecoder] = None,
             media_fetcher: Optional[MediaFetcher] = None,
+            kv_state_endpoint: Optional[str] = None,
         ) -> None: ...
 
     class Worker:
