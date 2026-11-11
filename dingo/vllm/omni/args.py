@@ -25,6 +25,7 @@ from dingo.common.configuration.groups.runtime_args import (
     DynamoRuntimeConfig,
 )
 from dingo.common.configuration.utils import add_argument, add_negatable_bool_argument
+from dingo.common.constants import DisaggregationMode
 
 logger = logging.getLogger(__name__)
 
@@ -553,6 +554,12 @@ class OmniConfig(DynamoRuntimeConfig):
 
     # Realtime (bidirectional) serving mode
     realtime: bool = False
+
+    # Reserved compatibility fields for shared/base LoRA registration paths.
+    # Omni currently overrides LoRA discovery registration, but these fields
+    # keep OmniConfig shape-compatible with shared handler expectations.
+    disaggregation_mode: DisaggregationMode = DisaggregationMode.AGGREGATED
+    route_to_encoder: bool = False
 
     @classmethod
     def from_cli_args(cls, args: argparse.Namespace) -> "OmniConfig":
