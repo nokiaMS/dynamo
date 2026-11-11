@@ -25,7 +25,11 @@ from typing import Any
 
 import pytest
 
-from tests.router.e2e_harness import run_basic_router_test, run_router_decisions_test
+from tests.router.e2e_harness import (
+    run_basic_router_test,
+    run_cache_salt_isolation_test,
+    run_router_decisions_test,
+)
 from tests.router.test_router_e2e_with_sglang import MODEL_NAME as SGLANG_MODEL_NAME
 from tests.router.test_router_e2e_with_sglang import SGLANG_ARGS, SGLangProcess
 from tests.router.test_router_e2e_with_vllm import BLOCK_SIZE as VLLM_BLOCK_SIZE
@@ -172,6 +176,38 @@ def test_unified_vllm_router_decisions_multiple_workers(
     )
 
 
+@pytest.mark.pre_merge
+@pytest.mark.gpu_1
+@pytest.mark.vllm
+@pytest.mark.model(VLLM_MODEL_NAME)
+@pytest.mark.profiled_vram_gib(6.9)
+@pytest.mark.requested_vllm_kv_cache_bytes(331_801_000)
+@pytest.mark.timeout(360)
+@pytest.mark.parametrize("request_plane", ["tcp"], indirect=True)
+def test_unified_vllm_cache_salt_isolation(
+    request,
+    runtime_services_dynamic_ports,
+    predownload_models,
+    set_ucx_tls_no_mm,
+    request_plane,
+) -> None:
+    """Cache-salted vLLM events remain isolated in the router index.
+
+    This crosses the real unified vLLM engine and its KV-event publisher, then
+    queries the router index independently for each tenant namespace.
+    """
+    run_cache_salt_isolation_test(
+        engine_process_cls=UnifiedVLLMProcess,
+        engine_args_name="vllm_args",
+        engine_args=VLLM_ARGS,
+        request=request,
+        request_plane=request_plane,
+        model_name=VLLM_MODEL_NAME,
+        block_size=VLLM_BLOCK_SIZE,
+        component_name="backend",
+    )
+
+
 @pytest.mark.gpu_2
 @pytest.mark.nightly
 @pytest.mark.vllm
@@ -307,4 +343,5 @@ def test_unified_sglang_router_decisions_dp(
         test_dp_rank=True,
         extra_process_kwargs={"data_parallel_size": 2},
     )
+
 

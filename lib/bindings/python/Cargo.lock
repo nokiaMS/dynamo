@@ -2211,6 +2211,7 @@ dependencies = [
  "chrono",
  "dashmap",
  "derive_builder",
+ "dynamo-kv-hashing",
  "dynamo-runtime",
  "dynamo-tokens",
  "flume",
