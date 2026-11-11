@@ -28,6 +28,7 @@ from dingo.common.snapshot.lifecycle import (
 )
 from dingo.common.utils.runtime import parse_endpoint
 from dynamo.runtime.logging import configure_dynamo_logging
+from dingo.sglang._compat import ensure_sglang_tensor_image_size
 from dingo.sglang.backend_args import DynamoSGLangArgGroup, DynamoSGLangConfig
 
 configure_dynamo_logging()
@@ -551,6 +552,8 @@ async def parse_args(
         # set before SGLang resolves ServerArgs and freezes its fields.
         parsed_args.incremental_streaming_output = True
         server_args = ServerArgs.from_cli_args(parsed_args)
+        if server_args.get_model_config().is_multimodal:
+            ensure_sglang_tensor_image_size()
 
     if getattr(server_args, "schedule_low_priority_values_first", False):
         raise ValueError(
