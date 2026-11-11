@@ -7,7 +7,7 @@ subtitle: Route multimodal requests to workers with the best KV cache overlap
 
 ## Overview
 
-Multimodal KV routing extends Dynamo's KV-aware router to account for image content when computing cache overlap scores. An image hash (`mm_hash`) is computed per request — in the Rust frontend by default for vLLM backends or by vLLM's own processor when the chat-processor variant is enabled — and included in per-block routing metadata. The KV router then selects the backend worker with the highest cache overlap, including overlap on image embedding blocks.
+Multimodal KV routing extends Dynamo's KV-aware router to account for image content when computing cache overlap scores. An image hash (`mm_hash`) is computed per request — in the Rust frontend by default (vLLM and SGLang backends), or by vLLM's own processor when the chat-processor variant is enabled — and included in per-block routing metadata. The KV router then selects the backend worker with the highest cache overlap, including overlap on image embedding blocks.
 
 Repeated requests containing the same image are routed to the worker that already has the corresponding KV cache blocks, maximizing prefix cache reuse.
 
@@ -29,6 +29,7 @@ Without MM-aware routing, the standard router treats image token blocks as opaqu
 |---------|------|-----------|-------|
 | **vLLM** | Rust frontend (default) | ✅ | Uses `llm-multimodal` crate for image-token counting + placeholder expansion. Supported models tracked below. |
 | **vLLM** | Python chat-processor (`--dyn-chat-processor vllm --router-mode kv`) | ✅ | Uses vLLM's own multimodal processor — supports any VLM that vLLM supports. |
+
 | **SGLang** | Rust frontend (default) | ✅ (\*) | Uses `llm-multimodal` crate for image-token counting; engaged automatically when the worker reports `backend_framework="sglang"`. |
 
 (\*) The SGLang Rust-frontend path substitutes per-image `pad_value` tokens in the routing-side view so SGLang's RadixAttention prefix cache key (`MM_PAD_SHIFT_VALUE + mm_hash % 2^30`) matches byte-for-byte. Requires the sglang fork with the `mm_hashes` field on `GenerateReqInput` ([sgl-project/sglang#25300](https://github.com/sgl-project/sglang/pull/25300)).
@@ -86,6 +87,7 @@ Frontend (vLLM processor + KV router) → Backend Workers
 ```
 
 Use this variant (`--dyn-chat-processor=vllm`) when you want the frontend to run vLLM's HF image processor in-process and ship pre-processed `mm_kwargs` to the selected worker via shared memory or NIXL RDMA, so the backend skips the HF processor entirely. See the [Transfer Mode Details](#transfer-mode-details-vllm-only) section below for the `DYNAMO_MM_TRANSFER` flags.
+
 
 ### SGLang
 
@@ -177,6 +179,7 @@ delivery channel between frontend and worker.
 | `SINGLE_GPU` | `false` | Pack all workers onto GPU 0 (testing-only override; pass `--single-gpu` or set `SINGLE_GPU=true` for functional tests on a single-GPU box) |
 | `DYNAMO_MM_TRANSFER` | `shm` | Transfer mode for pre-processed mm_kwargs: `shm` (shared memory, same-node), `nixl` (RDMA, cross-node) |
 | `DYNAMO_DISABLE_NIXL_MM` | unset | Set to `1` to disable mm_kwargs transfer entirely (backend re-processes images from URLs) |
+
 
 ### SGLang
 
