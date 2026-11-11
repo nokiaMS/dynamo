@@ -604,9 +604,8 @@ impl CommonExtProvider for NvCreateChatCompletionRequest {
                 }
                 ResponseFormat::JsonSchema { json_schema } => {
                     // validate_response_format ensures schema is present when type=json_schema
-                    let schema = json_schema.schema.clone();
-                    if !schema.is_null() {
-                        return Some(schema);
+                    if !json_schema.schema.is_null() {
+                        return Some(json_schema.schema.clone());
                     }
                 }
             }

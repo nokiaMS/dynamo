@@ -2609,8 +2609,6 @@ thinking
         let schema = ResponseFormatJsonSchema {
             name: "city".into(),
             description: None,
-            // `schema` is `serde_json::Value` (not `Option<Value>`) in the
-            // current dynamo-protocols release.
             schema: serde_json::json!({"type": "object"}),
             strict: Some(true),
         };
