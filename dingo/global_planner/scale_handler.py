@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from typing import Iterator, Optional
 
 from dingo.planner import KubernetesConnector, SubComponentType, TargetReplica
-from dingo.planner.connectors.kubernetes_api import KubernetesAPI
+from dingo.planner.connectors.clients.kubernetes_api import KubernetesAPI
 from dingo.planner.connectors.protocol import ScaleRequest, ScaleResponse, ScaleStatus
 from dingo.planner.core import budget
 from dingo.planner.errors import DynamoGraphDeploymentNotReadyError
