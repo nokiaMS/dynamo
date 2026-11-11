@@ -57,6 +57,7 @@ from dingo.common.backend.health_check import (
 from dingo.common.backend.publisher import ComponentSnapshot, KvEventSource, ZmqSource
 from dingo.common.backend.worker import WorkerConfig
 from dingo.common.constants import DisaggregationMode
+from dingo.common.native_offloading import NATIVE_OFFLOADING_CAPACITY_RUNTIME_KEY
 from dingo.common.utils.input_params import InputParamManager
 from dingo.common.utils.structural_tag import serialize_structural_tag
 from dynamo.llm import ModelInput
@@ -68,6 +69,7 @@ from dingo.sglang._disagg import (
 )
 from dingo.sglang.args import parse_args
 from dingo.sglang.capacity import (
+    get_hicache_native_offloading_capacity,
     kv_metrics_block_values,
     local_dp_rank_bounds,
     runtime_capacity,
@@ -92,11 +94,19 @@ def _warmup_enabled() -> bool:
     return raw.strip().lower() not in ("1", "true", "yes", "on")
 
 
-def _get_runtime_data(server_args) -> dict[str, Any] | None:
+def _get_runtime_data(
+    server_args, scheduler_info: dict[str, Any] | None = None
+) -> dict[str, Any] | None:
+    runtime_data: dict[str, Any] = {}
     worker_group_id = get_sglang_worker_group_id(server_args)
-    if worker_group_id is None:
-        return None
-    return {SGLANG_WORKER_GROUP_ID_KEY: worker_group_id}
+    if worker_group_id is not None:
+        runtime_data[SGLANG_WORKER_GROUP_ID_KEY] = worker_group_id
+    offloading_capacity = get_hicache_native_offloading_capacity(
+        server_args, scheduler_info or {}
+    )
+    if offloading_capacity is not None:
+        runtime_data[NATIVE_OFFLOADING_CAPACITY_RUNTIME_KEY] = offloading_capacity
+    return runtime_data or None
 
 
 def _local_dp_rank_range(server_args) -> tuple[int, int]:
@@ -236,7 +246,7 @@ class SglangLLMEngine(LLMEngine):
         return EngineConfig(
             model=self.server_args.model_path,
             served_model_name=self.server_args.served_model_name,
-            runtime_data=_get_runtime_data(self.server_args),
+            runtime_data=_get_runtime_data(self.server_args, scheduler_info),
             llm=LlmRegistration(
                 context_length=self.server_args.context_length,
                 kv_cache_block_size=page_size,
