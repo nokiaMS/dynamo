@@ -230,20 +230,8 @@ async fn run_watcher(
     });
 
     // Pass the discovery stream to the watcher
-    let watch_obj_for_watch = Arc::clone(&watch_obj);
-    let namespace_filter_for_watch = namespace_filter.clone();
     let _watcher_task = tokio::spawn(async move {
-        watch_obj_for_watch
-            .watch(discovery_stream, namespace_filter_for_watch)
-            .await;
-    });
-
-    // Spawn a periodic reconcile loop so a transient `handle_put` failure
-    // (= one lost `Added` event, one slow HF download, one etcd hiccup) does
-    // not permanently wedge this replica into perma-404 for an otherwise
-    // healthy model. Watches the same namespace_filter as the main watcher.
-    let _reconcile_task = tokio::spawn(async move {
-        watch_obj.run_reconcile_loop(namespace_filter).await;
+        watch_obj.watch(discovery_stream, namespace_filter).await;
     });
 
     Ok(())
