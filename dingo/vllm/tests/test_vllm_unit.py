@@ -27,10 +27,11 @@ from dingo.vllm.args import (
     update_engine_config_with_dynamo,
 )
 from dingo.vllm.constants import DisaggregationMode
+from dingo.vllm.headless import build_headless_namespace
 from dingo.vllm.tests.conftest import make_cli_args_fixture
 
 # Get path relative to this test file
-REPO_ROOT = Path(__file__).resolve().parents[5]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 TEST_DIR = REPO_ROOT / "tests"
 # Now construct the full path to the shared test fixture
 JINJA_TEMPLATE_PATH = str(
@@ -281,8 +282,6 @@ def test_headless_namespace_has_required_fields(mock_vllm_cli):
     config = parse_args()
     assert config.headless is True
 
-    from dingo.vllm.main import build_headless_namespace
-
     ns = build_headless_namespace(config)
 
     # Required by run_headless()
@@ -344,6 +343,7 @@ def test_unified_from_args_applies_rl_logprobs_default(monkeypatch):
         served_model_name="Qwen/Qwen3-0.6B",
         model="Qwen/Qwen3-0.6B",
         disaggregation_mode=CommonDisaggregationMode.AGGREGATED,
+        headless=False,
         component="backend",
         dyn_tool_call_parser=None,
         dyn_reasoning_parser=None,
