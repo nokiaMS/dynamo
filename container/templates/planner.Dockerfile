@@ -78,14 +78,17 @@ RUN --mount=type=bind,source=./container/deps/requirements.planner.txt,target=/t
         --requirement /tmp/requirements.planner.txt \
         --requirement /tmp/requirements.benchmark.txt \
         /opt/dynamo/wheelhouse/ai_dingo_runtime*.whl \
-        /opt/dynamo/wheelhouse/ai_dingo*any.whl
+        /opt/dynamo/wheelhouse/ai_dingo*any.whl \
+        /opt/dynamo/wheelhouse/aisimulate*.whl
 
 # Copy only the subset of the repository needed for planner/profiler service
-# startup and the component-local planner-family test suites.
+# startup and the component-local planner-family test suites. AI Simulate
+# runtime code comes from the wheel installed above; copy only its tests.
 COPY --chmod=664 --chown=dynamo:0 pyproject.toml /workspace/pyproject.toml
 COPY --chmod=775 --chown=dynamo:0 dingo/planner /workspace/dingo/planner
 COPY --chmod=775 --chown=dynamo:0 dingo/profiler /workspace/dingo/profiler
 COPY --chmod=775 --chown=dynamo:0 dingo/global_planner /workspace/dingo/global_planner
+COPY --chmod=775 --chown=dynamo:0 aisimulate/tests /workspace/aisimulate/tests
 COPY --chmod=775 --chown=dynamo:0 deploy /workspace/deploy
 COPY --chmod=775 --chown=dynamo:0 dev /workspace/dev
 COPY --chmod=775 --chown=dynamo:0 examples /workspace/examples
