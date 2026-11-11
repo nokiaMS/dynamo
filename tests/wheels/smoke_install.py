@@ -17,7 +17,9 @@ from urllib.parse import unquote, urlparse
 
 GLIBC_FLOOR = (2, 28)
 MANYLINUX_POLICY = "manylinux_2_28"
-RUNTIME_PY_TAGS = {"cp310", "cp311", "cp312"}
+# The runtime wheel is built with pyo3 abi3-py310 (lib/bindings/python), so its
+# Python tag is always cp310 regardless of the interpreter used to build it.
+RUNTIME_PY_TAGS = {"cp310"}
 # First-party optional wheel that must ship with the core wheels.
 REQUIRED_OPTIONAL_DIST = "kvbm"
 # Wheels we ship but do not own / do not validate as manylinux: nixl lives under the
@@ -107,13 +109,13 @@ def assert_arch_tag(wheel: Path, target_arch: str | None) -> None:
 
 
 def assert_core_wheel_metadata(wheelhouse: Path, target_arch: str | None) -> None:
-    ai_dynamo = require_one_wheel(wheelhouse, "ai-dynamo")
-    runtime = require_one_wheel(wheelhouse, "ai-dynamo-runtime")
+    ai_dingo = require_one_wheel(wheelhouse, "ai-dingo")
+    runtime = require_one_wheel(wheelhouse, "ai-dingo-runtime")
 
-    py_tag, abi_tag, platform_tag = wheel_tags(ai_dynamo)
+    py_tag, abi_tag, platform_tag = wheel_tags(ai_dingo)
     if (py_tag, abi_tag, platform_tag) != ("py3", "none", "any"):
         raise AssertionError(
-            f"{ai_dynamo.name} should be a pure py3-none-any wheel, "
+            f"{ai_dingo.name} should be a pure py3-none-any wheel, "
             f"got {py_tag}-{abi_tag}-{platform_tag}"
         )
 
@@ -129,16 +131,16 @@ def assert_core_wheel_metadata(wheelhouse: Path, target_arch: str | None) -> Non
             f"{runtime.name} has unexpected Python tag {runtime_py_tag}"
         )
 
-    ai_meta = wheel_metadata(ai_dynamo)
+    dingo_meta = wheel_metadata(ai_dingo)
     runtime_meta = wheel_metadata(runtime)
-    requires = "\n".join(ai_meta.get("Requires-Dist", []))
+    requires = "\n".join(dingo_meta.get("Requires-Dist", []))
     runtime_version = runtime_meta["Version"]
-    if f"ai-dynamo-runtime=={runtime_version}" not in requires.replace(" ", ""):
+    if f"ai-dingo-runtime=={runtime_version}" not in requires.replace(" ", ""):
         raise AssertionError(
-            f"{ai_dynamo.name} does not pin local runtime version {runtime_version}"
+            f"{ai_dingo.name} does not pin local runtime version {runtime_version}"
         )
 
-    for wheel in (ai_dynamo, runtime):
+    for wheel in (ai_dingo, runtime):
         assert_arch_tag(wheel, target_arch)
 
 
@@ -149,7 +151,7 @@ def assert_no_bundled_libraries(wheelhouse: Path) -> None:
     bundled inside the wheel by auditwheel. If this fails, add --exclude flags to the
     auditwheel repair command in container/templates/wheel_builder.Dockerfile.
     """
-    runtime = require_one_wheel(wheelhouse, "ai-dynamo-runtime")
+    runtime = require_one_wheel(wheelhouse, "ai-dingo-runtime")
     with zipfile.ZipFile(runtime) as archive:
         bundled = [
             name for name in archive.namelist() if ".libs/" in name and ".so" in name
@@ -273,7 +275,7 @@ def create_venv(python_spec: str) -> Path:
 
 def pip_install(venv_python: Path, wheelhouse: Path, requirements: list[str]) -> None:
     # --find-links only registers search paths; nixl is pulled from nixl/ only when a
-    # requirement (e.g. kvbm's nixl[cu12]) resolves to it, not installed on its own.
+    # requirement (e.g. kvbm's nixl[cu13]) resolves to it, not installed on its own.
     find_links = []
     for path in (wheelhouse, wheelhouse / "nixl"):
         if path.exists():
@@ -358,14 +360,14 @@ def assert_local_direct_url(
         )
 
 
-def assert_dynamo_local_install(
+def assert_dingo_local_install(
     venv_python: Path,
     wheelhouse: Path,
-    ai_dynamo: Path,
+    ai_dingo: Path,
     runtime: Path,
 ) -> None:
-    assert_local_direct_url(venv_python, "ai-dynamo", ai_dynamo, wheelhouse)
-    assert_local_direct_url(venv_python, "ai-dynamo-runtime", runtime, wheelhouse)
+    assert_local_direct_url(venv_python, "ai-dingo", ai_dingo, wheelhouse)
+    assert_local_direct_url(venv_python, "ai-dingo-runtime", runtime, wheelhouse)
 
 
 def run_core_import_smoke(venv_python: Path) -> None:
@@ -377,7 +379,7 @@ from dynamo._core import __version__
 
 assert runtime
 assert __version__[0].isdigit()
-assert metadata.version("ai-dynamo") == metadata.version("ai-dynamo-runtime")
+assert metadata.version("ai-dingo") == metadata.version("ai-dingo-runtime")
 """
     run([str(venv_python), "-c", code])
 
@@ -388,20 +390,20 @@ OPTIONAL_IMPORT_NAMES = {"kvbm": "kvbm"}
 def install_core(
     wheelhouse: Path, python_spec: str, also: tuple[str, ...] = ()
 ) -> None:
-    ai_dynamo = require_one_wheel(wheelhouse, "ai-dynamo")
-    runtime = require_one_wheel(wheelhouse, "ai-dynamo-runtime")
+    ai_dingo = require_one_wheel(wheelhouse, "ai-dingo")
+    runtime = require_one_wheel(wheelhouse, "ai-dingo-runtime")
     also_wheels = {dist: require_one_wheel(wheelhouse, dist) for dist in also}
 
     venv_python = create_venv(python_spec)
     try:
         requirements = [
             str(runtime),
-            str(ai_dynamo),
+            str(ai_dingo),
             *(str(w) for w in also_wheels.values()),
         ]
         pip_install(venv_python, wheelhouse, requirements)
         pip_check(venv_python)
-        assert_dynamo_local_install(venv_python, wheelhouse, ai_dynamo, runtime)
+        assert_dingo_local_install(venv_python, wheelhouse, ai_dingo, runtime)
         run_core_import_smoke(venv_python)
 
         for dist, wheel in also_wheels.items():

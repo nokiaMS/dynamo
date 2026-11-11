@@ -4,11 +4,12 @@
 """Smoke tests for the Dynamo wheels shipped in the runtime image.
 
 These run as part of the normal CPU test suite inside the dynamo test image, where the
-wheels live at /opt/dynamo/wheelhouse. The tests operate on that directory and install the
-wheels into throwaway venvs (clean of the image's pre-installed dynamo). They spawn no
-docker and need no configuration: the wheelhouse path and target arch are inferred, with
-env overrides available. Nothing is skipped silently — a missing wheelhouse or missing
-tooling is a failure.
+wheels (ai-dingo, ai-dingo-runtime, kvbm, ...) live at /opt/dynamo/wheelhouse. The
+tests operate on that directory and install the wheels into throwaway venvs (clean of
+the image's pre-installed dingo stack). They spawn no docker and need no
+configuration: the wheelhouse path and target arch are inferred, with env overrides
+available. Nothing is skipped silently — a missing wheelhouse or missing tooling is a
+failure.
 
 Each test uses its own unique temp venv with no ports/sockets/services, so the suite is
 xdist-safe (marked ``parallel``).
@@ -77,7 +78,7 @@ def test_core_install_clean_room(wheelhouse: Path, python_spec: str) -> None:
 
 
 def test_core_and_kvbm_install_clean_room(wheelhouse: Path) -> None:
-    # kvbm pins nixl[cu12], which is cp312-only, so it installs on the image Python only.
+    # kvbm pins nixl[cu13], which is cp312-only, so it installs on the image Python only.
     smoke_install.install_core(wheelhouse, sys.executable, also=("kvbm",))
 
 
