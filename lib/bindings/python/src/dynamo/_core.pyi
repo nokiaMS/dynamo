@@ -690,9 +690,9 @@ class SelectionService:
         ...
 
     def list_workers(
-        self, *, model_name: Optional[str] = None, tenant_id: Optional[str] = None
+        self, *, model_name: Optional[str] = None, routing_group: Optional[str] = None
     ) -> JsonLike:
-        """List catalog records, optionally filtered by model and tenant."""
+        """List catalog records, optionally filtered by model and routing group."""
         ...
 
     def ready(self) -> JsonLike:
@@ -730,7 +730,7 @@ class SelectionService:
         ...
 
     def loads(
-        self, *, model_name: Optional[str] = None, tenant_id: Optional[str] = None
+        self, *, model_name: Optional[str] = None, routing_group: Optional[str] = None
     ) -> JsonLike:
         """Current per-model active load (pending counts + per-worker potential loads)."""
         ...
