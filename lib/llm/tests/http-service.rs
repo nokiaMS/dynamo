@@ -416,10 +416,33 @@ async fn test_http_service() {
     assert!(found, "The expected bucket was not found");
     // ==== ChatCompletions / Stream / Success ====
 
+    // ==== ChatCompletions / Unary / Success ====
+    request.stream = Some(false);
+
+    // Use the smallest valid value to keep the CounterEngine delay minimal.
+    request.max_tokens = Some(1);
+
+    let future = client
+        .post(format!("http://localhost:{}/v1/chat/completions", port))
+        .json(&request)
+        .send();
+
+    let response = future.await.unwrap();
+
+    assert!(response.status().is_success(), "{:?}", response);
+    inc_counter(
+        Endpoint::ChatCompletions,
+        RequestType::Unary,
+        Status::Success,
+        &mut foo_counters,
+    );
+    compare_counters(&metrics, "foo", &foo_counters);
+    compare_counters(&metrics, "bar", &bar_counters);
+    // ==== ChatCompletions / Unary / Success ====
     // ==== ChatCompletions / Stream / Error ====
     request.model = "bar".to_string();
 
-    // ALLOW: max_tokens is deprecated in favor of completion_usage_tokens
+    // Keep this request valid so authorization, rather than validation, rejects it.
     request.max_tokens = Some(1);
     request.stream = Some(true);
 
