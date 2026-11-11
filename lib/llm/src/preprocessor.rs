@@ -2367,12 +2367,14 @@ impl OpenAIPreprocessor {
             .filter(|prompt| prompt.segments().is_some())
             .cloned()
         else {
-            return self.encode_with_timing(
-                formatted_prompt
-                    .map(RenderedPrompt::as_str)
-                    .unwrap_or(raw_prompt),
-                tracker,
-            );
+            return self
+                .encode_with_timing(
+                    formatted_prompt
+                        .map(RenderedPrompt::as_str)
+                        .unwrap_or(raw_prompt),
+                    tracker,
+                )
+                .await;
         };
 
         let encode_start = Instant::now();
@@ -2389,7 +2391,6 @@ impl OpenAIPreprocessor {
         }
         Ok(encoding)
     }
-
     /// Preprocess an embedding request, handling both text and token ID inputs.
     ///
     /// For text inputs, tokenizes the text using the configured tokenizer.
@@ -4149,6 +4150,28 @@ mod tests {
     use crate::protocols::common::preprocessor::MultimodalData;
     use crate::protocols::common::{OutputOptions, SamplingOptions, StopConditions};
 
+    #[test]
+    fn prompt_invalid_request_maps_to_invalid_argument() {
+        let error = PromptRenderError::invalid_request("unsupported model parameter").into();
+        let mapped = OpenAIPreprocessor::map_prompt_render_error(error);
+        let mapped = mapped
+            .downcast_ref::<DynamoError>()
+            .expect("prompt validation should map to a DynamoError");
+
+        assert!(matches!(mapped.error_type(), ErrorType::InvalidArgument));
+        assert_eq!(mapped.message(), "unsupported model parameter");
+    }
+
+    #[test]
+    fn ordinary_prompt_error_remains_internal() {
+        let mapped = OpenAIPreprocessor::map_prompt_render_error(anyhow::anyhow!(
+            "template configuration failed"
+        ));
+
+        assert!(mapped.downcast_ref::<DynamoError>().is_none());
+        assert_eq!(mapped.to_string(), "template configuration failed");
+    }
+
     fn url_entry(u: &str) -> MultimodalData {
         MultimodalData::Url(url::Url::parse(u).unwrap())
     }
@@ -4559,6 +4582,22 @@ mod tests {
         // forced-true but parser doesn't need special tokens → fine
         assert!(!f(Some(true), Some("hermes"), None));
         assert!(!f(Some(true), None, None));
+    }
+
+    #[test]
+    fn test_kimi_k3_jail_always_unwraps_xtml_response_channels() {
+        let parser = "kimi_k3".to_string();
+        assert!(OpenAIPreprocessor::should_apply_tool_jail(Some(&parser), None, false).unwrap());
+
+        let alias = "kimi-k3".to_string();
+        assert!(
+            OpenAIPreprocessor::should_apply_tool_jail(
+                Some(&alias),
+                Some(&ChatCompletionToolChoiceOption::None),
+                true,
+            )
+            .unwrap()
+        );
     }
 
     /// Verifies which force-reasoning parsers use guided-output shape detection.
@@ -5299,6 +5338,21 @@ mod tests {
         }
         assert_case(None, None, true, "omitted Kimi default");
 
+        for parser in ["kimi_k3", "kimi-k3"] {
+            let mut request: NvCreateChatCompletionRequest =
+                serde_json::from_value(serde_json::json!({
+                    "messages": [{"role": "user", "content": "hello"}],
+                    "model": "moonshotai/Kimi-K3"
+                }))
+                .unwrap();
+            OpenAIPreprocessor::normalize_thinking_arg(&mut request, Some(parser));
+            assert_eq!(
+                dynamo_renderer::thinking_bool_from_args(request.chat_template_args.as_ref()),
+                Some(true),
+                "{parser} should default to thinking mode",
+            );
+        }
+
         let mut conflicting_request: NvCreateChatCompletionRequest =
             serde_json::from_value(serde_json::json!({
                 "messages": [{"role": "user", "content": "hello"}],
@@ -5323,6 +5377,7 @@ mod tests {
         };
         assert_eq!(rendered.as_str(), "<think>");
     }
+
     /// PRE.2 — Per-request reasoning gate. See `lib/llm/PREPROCESSOR_CASES.md`.
     #[test]
     fn test_is_reasoning_disabled_by_request() {

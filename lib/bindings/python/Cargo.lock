@@ -2386,9 +2386,9 @@ dependencies = [
 
 [[package]]
 name = "dynamo-parsers"
-version = "6.0.2"
+version = "7.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d1b48bce38cc72a6151e73a181123bd254c097588e329d67db6c403cfca34f8e"
+checksum = "c2b103a9482398061b6c314f75c21fb6563255eddee7ada9816e728ff74725c1"
 dependencies = [
  "aho-corasick",
  "anyhow",
