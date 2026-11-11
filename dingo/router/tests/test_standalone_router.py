@@ -30,9 +30,9 @@ def load_standalone_router_handler():
             KvRouter=placeholder_type,
             KvRouterConfig=placeholder_type,
         ),
-        "dynamo.router": stub_module("dynamo.router"),
-        "dynamo.router.args": stub_module(
-            "dynamo.router.args",
+        "dingo.router": stub_module("dingo.router"),
+        "dingo.router.args": stub_module(
+            "dingo.router.args",
             DynamoRouterConfig=placeholder_type,
             build_aic_perf_config=lambda config: config,
             build_kv_router_config=lambda config: config,

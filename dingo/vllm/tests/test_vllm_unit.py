@@ -70,7 +70,7 @@ def _load_vllm_main() -> ModuleType:
     it here would prevent collection of every otherwise dependency-light test
     in this module.
     """
-    return importlib.import_module("dynamo.vllm.main")
+    return importlib.import_module("dingo.vllm.main")
 
 
 def test_custom_jinja_template_invalid_path(mock_vllm_cli):
@@ -1202,7 +1202,7 @@ class TestForwardPassMetricsActivation:
         assert os.environ["DYN_FPM_TRACE"] == "1"
         assert (
             config.engine_args.scheduler_cls
-            == "dynamo.vllm.instrumented_scheduler.InstrumentedScheduler"
+            == "dingo.vllm.instrumented_scheduler.InstrumentedScheduler"
         )
 
     def test_trace_enables_instrumented_scheduler_with_default_port(self, monkeypatch):
@@ -1214,7 +1214,7 @@ class TestForwardPassMetricsActivation:
 
         assert (
             engine_cfg.scheduler_cls
-            == "dynamo.vllm.instrumented_scheduler.InstrumentedScheduler"
+            == "dingo.vllm.instrumented_scheduler.InstrumentedScheduler"
         )
         assert envs.DYN_FORWARDPASS_METRIC_PORT == 20380
 
@@ -1227,7 +1227,7 @@ class TestForwardPassMetricsActivation:
 
         assert (
             engine_cfg.scheduler_cls
-            == "dynamo.vllm.instrumented_scheduler.InstrumentedScheduler"
+            == "dingo.vllm.instrumented_scheduler.InstrumentedScheduler"
         )
         assert envs.DYN_FORWARDPASS_METRIC_PORT == 23456
 
@@ -1263,7 +1263,7 @@ class TestForwardPassMetricsActivation:
             scheduler_cls="example.CustomScheduler"
         )
 
-        with caplog.at_level(logging.WARNING, logger="dynamo.vllm.args"):
+        with caplog.at_level(logging.WARNING, logger="dingo.vllm.args"):
             update_engine_config_with_dynamo(dynamo_cfg, engine_cfg)
 
         assert engine_cfg.scheduler_cls == "example.CustomScheduler"
@@ -1322,7 +1322,7 @@ class TestForwardPassMetricsActivation:
         dynamo_cfg = _make_dynamo_config(fpm_trace=True, **overrides)
         engine_cfg = _make_engine_config_with_runner(scheduler_cls=None)
 
-        with caplog.at_level(logging.WARNING, logger="dynamo.vllm.args"):
+        with caplog.at_level(logging.WARNING, logger="dingo.vllm.args"):
             update_engine_config_with_dynamo(
                 dynamo_cfg,
                 engine_cfg,
@@ -1347,7 +1347,7 @@ class TestForwardPassMetricsActivation:
 
         assert (
             engine_cfg.scheduler_cls
-            == "dynamo.vllm.instrumented_scheduler.InstrumentedScheduler"
+            == "dingo.vllm.instrumented_scheduler.InstrumentedScheduler"
         )
 
     def test_benchmark_does_not_reapply_trace_scheduler(
@@ -1366,12 +1366,12 @@ class TestForwardPassMetricsActivation:
         )
         engine_cfg = _make_engine_config_with_runner(scheduler_cls=None)
 
-        with caplog.at_level(logging.INFO, logger="dynamo.vllm.args"):
+        with caplog.at_level(logging.INFO, logger="dingo.vllm.args"):
             update_engine_config_with_dynamo(dynamo_cfg, engine_cfg)
 
         assert (
             engine_cfg.scheduler_cls
-            == "dynamo.vllm.instrumented_scheduler.InstrumentedScheduler"
+            == "dingo.vllm.instrumented_scheduler.InstrumentedScheduler"
         )
         assert "Forward pass metrics enabled" in caplog.text
         assert "Benchmark mode: auto-enabling InstrumentedScheduler" not in caplog.text
@@ -1459,7 +1459,7 @@ def test_build_sampling_params_openai_maps_max_thinking_tokens():
 
 @pytest.mark.asyncio
 async def test_generate_text_mode_applies_nvext_cache_salt():
-    from dynamo.vllm.handlers import DecodeWorkerHandler
+    from dingo.vllm.handlers import DecodeWorkerHandler
 
     captured = {}
 
