@@ -2563,6 +2563,7 @@ dependencies = [
  "axum 0.8.4",
  "chrono",
  "criterion",
+ "crossbeam-queue",
  "dashmap",
  "derive_builder",
  "dynamo-kv-hashing",

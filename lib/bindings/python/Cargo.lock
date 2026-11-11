@@ -2210,6 +2210,7 @@ dependencies = [
  "async-trait",
  "axum",
  "chrono",
+ "crossbeam-queue",
  "dashmap",
  "derive_builder",
  "dynamo-kv-hashing",
