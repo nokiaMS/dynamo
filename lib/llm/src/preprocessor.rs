@@ -173,6 +173,8 @@ struct ReasoningState {
     stream: Pin<Box<dyn Stream<Item = Annotated<NvCreateChatCompletionStreamResponse>> + Send>>,
     reasoning_parser: Option<Box<dyn ReasoningParser>>,
     bypass_bare_guided_json: bool,
+    // TODO: Track this per choice.index for n > 1. The current bypass
+    // decision and parser state are shared across all streamed choices.
     guided_json_bypass_decision: Option<bool>,
 }
 
@@ -2229,20 +2231,28 @@ impl OpenAIPreprocessor {
             Some(ChatCompletionToolChoiceOption::Required)
                 | Some(ChatCompletionToolChoiceOption::Named(_))
         );
+        let is_structured_response = Self::has_structured_response_format(request);
+        let is_guided_output = is_guided_tool_choice || is_structured_response;
         let reasoning_parser = self.runtime_config.reasoning_parser.as_deref();
         // Force parsers opt in by capability; prompt-seeded parsers opt in per request.
         // Structural-tag tool formats do not use this guided-JSON detection path.
-        let inspect_force_reasoning_guided_output = is_guided_tool_choice
+        let inspect_force_reasoning_guided_output = is_guided_output
             && !uses_tool_call_structural_tag
             && Self::supports_reasoning_before_guided_json(reasoning_parser);
-        let inspect_prompt_injected_guided_output = is_guided_tool_choice
+        let inspect_prompt_injected_guided_output = is_guided_output
             && prompt_injected_reasoning
             && !uses_tool_call_structural_tag
-            && Self::skips_guided_json_when_prompt_injected(reasoning_parser);
-        let bypass_reasoning_for_bare_guided_json =
-            inspect_force_reasoning_guided_output || inspect_prompt_injected_guided_output;
+            && (Self::skips_guided_json_when_prompt_injected(reasoning_parser)
+                || (is_structured_response
+                    && Self::skips_structured_response_when_prompt_injected(reasoning_parser)));
+        let inspect_unsupported_structured_response_reasoning_gate = is_structured_response
+            && !uses_tool_call_structural_tag
+            && !Self::structured_response_supports_sglang_reasoning_gate(reasoning_parser);
+        let bypass_reasoning_for_bare_guided_json = inspect_force_reasoning_guided_output
+            || inspect_prompt_injected_guided_output
+            || inspect_unsupported_structured_response_reasoning_gate;
         // Preserve the legacy bypass for force-reasoning parsers not yet opted in.
-        let skip_reasoning_for_guided_json = is_guided_tool_choice
+        let skip_reasoning_for_guided_json = is_guided_output
             && !uses_tool_call_structural_tag
             && Self::is_force_reasoning_parser(reasoning_parser)
             && !inspect_force_reasoning_guided_output;
@@ -3058,7 +3068,6 @@ impl OpenAIPreprocessor {
         matches!(reasoning_parser, Some("qwen3" | "kimi_k3" | "kimi-k3"))
             || Self::skips_guided_json_when_prompt_injected(reasoning_parser)
     }
-
     fn prompt_injected_reasoning_start(
         reasoning_parser: Option<&str>,
         formatted_prompt: Option<&str>,
@@ -4675,6 +4684,7 @@ mod tests {
 
         assert!(OpenAIPreprocessor::backend_extra_args(&request, true, None).is_none());
     }
+
 
 
     #[test]
