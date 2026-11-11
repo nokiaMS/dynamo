@@ -3,6 +3,8 @@
 
 """Unit tests for SGLang backend components."""
 
+import logging
+import os
 import re
 import sys
 from pathlib import Path
@@ -14,12 +16,15 @@ from sglang.srt.disaggregation.utils import FAKE_BOOTSTRAP_HOST
 from sglang.srt.managers.io_struct import ProfileReq
 
 import dingo.sglang._compat as sglang_compat
-from dingo.common.constants import EmbeddingTransferMode
+import dingo.sglang.llm_engine as sglang_llm_engine
+from dingo.common.constants import DisaggregationMode, EmbeddingTransferMode
+from dingo.common.snapshot.constants import SNAPSHOT_CONTROL_DIR_ENV
 from dingo.sglang._compat import (
     ensure_sglang_top_level_exports,
     filter_supported_async_generate_kwargs,
 )
 from dingo.sglang.args import (
+    _forward_pass_metrics_source,
     _normalize_multimodal_disaggregation_args,
     parse_args,
     should_fetch_model,
@@ -74,6 +79,7 @@ def _make_sglang_config(**overrides):
     config.enable_rl = False
     config.frontend_decoding = False
     config.sglang_trace_level = 2
+    config.fpm_trace = False
     config.disagg_config = None
     config.disagg_config_key = None
     for key, value in overrides.items():
@@ -469,7 +475,7 @@ def test_dedicated_mm_encoder_requires_enable_multimodal():
 @pytest.mark.asyncio
 async def test_forward_pass_metrics_enabled_from_env(monkeypatch, mock_sglang_cli):
     """Dynamo should enable FPM when DYN_FORWARDPASS_METRIC_PORT is set."""
-    monkeypatch.setenv("DYN_FORWARDPASS_METRIC_PORT", "1")
+    monkeypatch.setenv("DYN_FORWARDPASS_METRIC_PORT", "23456")
     mock_sglang_cli("--model", "Qwen/Qwen3-0.6B")
 
     config = await parse_args(sys.argv[1:])
@@ -546,6 +552,165 @@ async def test_start_profile_forwards_profile_request():
     assert tokenizer_manager.request.start_step == body["start_step"]
     assert tokenizer_manager.request.num_steps == body["num_steps"]
     assert response == {"status": "ok", "message": "Profiling started"}
+
+
+@pytest.mark.asyncio
+async def test_explicit_fpm_port_takes_precedence_over_trace(
+    monkeypatch, mock_sglang_cli, caplog
+):
+    """The legacy explicit port remains authoritative even if trace is invalid."""
+    monkeypatch.setenv("DYN_FORWARDPASS_METRIC_PORT", "23456")
+    monkeypatch.setenv("DYN_FPM_TRACE", "sometimes")
+    mock_sglang_cli("--model", "Qwen/Qwen3-0.6B")
+
+    with caplog.at_level(logging.INFO):
+        config = await parse_args(sys.argv[1:])
+
+    assert config.server_args.enable_forward_pass_metrics is True
+    assert (
+        "Enabled forward_pass_metrics from DYN_FORWARDPASS_METRIC_PORT" in caplog.text
+    )
+    assert "Invalid DYN_FPM_TRACE value" not in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_forward_pass_metrics_enabled_from_trace(monkeypatch, mock_sglang_cli):
+    """DYN_FPM_TRACE should enable SGLang's existing FPM publisher."""
+    monkeypatch.delenv("DYN_FORWARDPASS_METRIC_PORT", raising=False)
+    monkeypatch.setenv("DYN_FPM_TRACE", "on")
+    mock_sglang_cli("--model", "Qwen/Qwen3-0.6B")
+
+    config = await parse_args(sys.argv[1:])
+    assert config.server_args.enable_forward_pass_metrics is True
+
+
+@pytest.mark.asyncio
+async def test_forward_pass_metrics_enabled_from_cli_flag(monkeypatch, mock_sglang_cli):
+    """The shared CLI flag should enable both Python and Rust trace handling."""
+    monkeypatch.delenv("DYN_FORWARDPASS_METRIC_PORT", raising=False)
+    monkeypatch.delenv("DYN_FPM_TRACE", raising=False)
+    mock_sglang_cli("--fpm-trace", "--model", "Qwen/Qwen3-0.6B")
+
+    config = await parse_args(sys.argv[1:])
+
+    assert config.dynamo_args.fpm_trace is True
+    assert config.server_args.enable_forward_pass_metrics is True
+    assert os.environ["DYN_FPM_TRACE"] == "1"
+
+
+@pytest.mark.asyncio
+async def test_false_fpm_trace_does_not_enable_metrics(monkeypatch, mock_sglang_cli):
+    monkeypatch.delenv("DYN_FORWARDPASS_METRIC_PORT", raising=False)
+    monkeypatch.setenv("DYN_FPM_TRACE", "off")
+    mock_sglang_cli("--model", "Qwen/Qwen3-0.6B")
+
+    config = await parse_args(sys.argv[1:])
+    assert not config.server_args.enable_forward_pass_metrics
+
+
+@pytest.mark.asyncio
+async def test_invalid_fpm_trace_is_disabled_by_arg_parser(
+    monkeypatch, mock_sglang_cli
+):
+    monkeypatch.delenv("DYN_FORWARDPASS_METRIC_PORT", raising=False)
+    monkeypatch.setenv("DYN_FPM_TRACE", "sometimes")
+    mock_sglang_cli("--model", "Qwen/Qwen3-0.6B")
+
+    config = await parse_args(sys.argv[1:])
+
+    assert not config.server_args.enable_forward_pass_metrics
+    assert os.environ["DYN_FPM_TRACE"] == "0"
+
+
+@pytest.mark.parametrize(
+    ("overrides", "role", "fpm_trace_relay_supported"),
+    [
+        ({}, "unified backend", False),
+        ({"embedding_worker": True}, "embedding", True),
+        ({"multimodal_encode_worker": True}, "dedicated multimodal", True),
+        ({"multimodal_worker": True}, "dedicated multimodal", True),
+        ({"image_diffusion_worker": True}, "image diffusion", True),
+        ({"video_generation_worker": True}, "video generation", True),
+    ],
+)
+def test_trace_does_not_activate_fpm_without_relay(
+    monkeypatch, caplog, overrides, role, fpm_trace_relay_supported
+):
+    monkeypatch.delenv("DYN_FORWARDPASS_METRIC_PORT", raising=False)
+    dynamo_config = _make_sglang_config(fpm_trace=True, **overrides)
+
+    with caplog.at_level(logging.WARNING):
+        source = _forward_pass_metrics_source(
+            dynamo_config,
+            fpm_trace_relay_supported=fpm_trace_relay_supported,
+        )
+
+    assert source is None
+    assert f"SGLang {role} workers do not create a Dynamo FPM relay" in caplog.text
+
+
+def test_explicit_port_preserves_legacy_activation_without_relay(monkeypatch, caplog):
+    monkeypatch.setenv("DYN_FORWARDPASS_METRIC_PORT", "23456")
+    dynamo_config = _make_sglang_config(embedding_worker=True, fpm_trace=True)
+
+    with caplog.at_level(logging.WARNING):
+        source = _forward_pass_metrics_source(
+            dynamo_config,
+            fpm_trace_relay_supported=False,
+        )
+
+    assert source == "DYN_FORWARDPASS_METRIC_PORT"
+    assert "do not create a Dynamo FPM relay" not in caplog.text
+
+
+def test_trace_does_not_activate_fpm_during_snapshot_startup(
+    monkeypatch, caplog, tmp_path
+):
+    monkeypatch.delenv("DYN_FORWARDPASS_METRIC_PORT", raising=False)
+    monkeypatch.setenv(SNAPSHOT_CONTROL_DIR_ENV, str(tmp_path))
+
+    with caplog.at_level(logging.WARNING):
+        source = _forward_pass_metrics_source(_make_sglang_config(fpm_trace=True))
+
+    assert source is None
+    assert "SGLang snapshot workers do not create a Dynamo FPM relay" in caplog.text
+
+
+@pytest.mark.asyncio
+async def test_unified_from_args_marks_fpm_relay_unsupported(monkeypatch):
+    server_args = SimpleNamespace(
+        skip_tokenizer_init=True,
+        model_path="Qwen/Qwen3-0.6B",
+        served_model_name="Qwen/Qwen3-0.6B",
+    )
+    dynamo_args = SimpleNamespace(use_sglang_tokenizer=False)
+    config = SimpleNamespace(
+        server_args=server_args,
+        dynamo_args=dynamo_args,
+        serving_mode=DisaggregationMode.AGGREGATED,
+    )
+    worker_config = object()
+    parse_options = {}
+
+    async def fake_parse_args(argv, *, fpm_trace_relay_supported):
+        parse_options["fpm_trace_relay_supported"] = fpm_trace_relay_supported
+        return config
+
+    monkeypatch.delenv("DYN_ENABLE_TEST_LOGITS_PROCESSOR", raising=False)
+    monkeypatch.setattr(sglang_llm_engine, "parse_args", fake_parse_args)
+    monkeypatch.setattr(
+        sglang_llm_engine.WorkerConfig,
+        "from_runtime_config",
+        lambda *args, **kwargs: worker_config,
+    )
+
+    engine, result_worker_config = await sglang_llm_engine.SglangLLMEngine.from_args(
+        ["--model-path", "Qwen/Qwen3-0.6B"]
+    )
+
+    assert engine.server_args is server_args
+    assert result_worker_config is worker_config
+    assert parse_options["fpm_trace_relay_supported"] is False
 
 
 @pytest.mark.asyncio
