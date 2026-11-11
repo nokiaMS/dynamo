@@ -1159,7 +1159,7 @@ unsafe fn preprocess_request(
         let (token_ids, _) = match handles
             .runtime
             .secondary()
-            .block_on(async { preprocessor.gather_tokens(&request, None, None).await })
+            .block_on(preprocessor.gather_tokens(&request, None, None))
         {
             Ok(tokens) => tokens,
             Err(e) => {

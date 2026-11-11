@@ -39,7 +39,6 @@ use dynamo_runtime::metrics::frontend_perf::{
     DETOKENIZE_TOKEN_COUNT, DETOKENIZE_TOTAL_US, STAGE_DURATION_SECONDS, STAGE_PREPROCESS,
     StageGuard, TEMPLATE_SECONDS, TOKENIZE_SECONDS,
 };
-use std::borrow::Cow;
 use std::{any::Any, collections::HashMap, pin::Pin, sync::Arc};
 use tracing;
 
@@ -1968,7 +1967,7 @@ impl OpenAIPreprocessor {
                         }
                         TextInput::Batch(texts) => {
                             if texts.len() == 1 {
-                                let encoding = self.encode_with_timing(&texts[0], tracker)?;
+                                let encoding = self.encode_with_timing(&texts[0], tracker).await?;
                                 let tokens = encoding.token_ids().to_vec();
                                 token_count = Some(tokens.len());
                                 tokens_out = tokens;
@@ -2015,19 +2014,25 @@ impl OpenAIPreprocessor {
         Ok(())
     }
 
-    fn encode_with_timing(
+    async fn encode_with_timing(
         &self,
         prompt: &str,
         tracker: Option<&RequestTracker>,
     ) -> anyhow::Result<Encoding> {
         let encode_start = Instant::now();
-        let prompt = if prompt.contains('\0') {
+        // Offload the CPU-heavy BPE encode to the bounded blocking pool instead of running it on
+        // the async event loop. For long prompts at high concurrency, a synchronous encode here
+        // stalls the frontend tokio runtime for seconds, starving the I/O tasks that share the
+        // runtime. Own the prompt + clone the tokenizer (Arc) so the closure is 'static + Send;
+        // mirrors the embedding path's spawn_blocking offload.
+        let owned = if prompt.contains('\0') {
             tracing::debug!("Prompt contains null bytes; stripping to avoid tokenizer divergence");
-            Cow::Owned(prompt.replace('\0', ""))
+            prompt.replace('\0', "")
         } else {
-            Cow::Borrowed(prompt)
+            prompt.to_string()
         };
-        let encoding = self.tokenizer.encode(prompt.as_ref())?;
+        let tokenizer = self.tokenizer.clone();
+        let encoding = tokio::task::spawn_blocking(move || tokenizer.encode(&owned)).await??;
         if let Some(t) = tracker {
             t.record_tokenize_latency(encode_start.elapsed());
         }
