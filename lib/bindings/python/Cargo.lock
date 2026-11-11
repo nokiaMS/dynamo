@@ -2385,9 +2385,9 @@ dependencies = [
 
 [[package]]
 name = "dynamo-parsers"
-version = "5.1.3"
+version = "6.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "19147fbb880a3f07b83abad406c34cfb3397aa287c5d5dfc922b55354c3a1df4"
+checksum = "d1b48bce38cc72a6151e73a181123bd254c097588e329d67db6c403cfca34f8e"
 dependencies = [
  "aho-corasick",
  "anyhow",
@@ -2431,18 +2431,19 @@ dependencies = [
 
 [[package]]
 name = "dynamo-parsers-v2"
-version = "0.1.19"
+version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b5a8fca0f27b610454cd33858b5eb01c78c24d3ace7af2728d0723713775a939"
+checksum = "948332d4646bf6eb14796f70fa99a640baec53db5b786119be994f84317274f4"
 dependencies = [
  "anyhow",
- "dynamo-parsers 3.0.0",
+ "num-traits",
  "openai-harmony",
  "regex",
  "serde",
  "serde_json",
  "serde_yaml",
  "tracing",
+ "uuid",
 ]
 
 [[package]]
