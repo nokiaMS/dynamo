@@ -535,7 +535,6 @@ RUN --mount=type=secret,id=aws-web-identity-token,target=/run/secrets/aws-token 
 
 {% endif %}{# builder_image #}
 
-
 ##################################
 ##### runtime_wheel_builder ######
 ##################################
