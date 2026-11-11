@@ -22,7 +22,7 @@ Install Dynamo by following [Install Dynamo](../getting-started/local-installati
 the local environment can import the frontend and Mocker modules:
 
 ```bash
-python -m dynamo.frontend --help >/dev/null
+python -m dingo.frontend --help >/dev/null
 python -m dingo.mocker --help >/dev/null
 ```
 
@@ -31,7 +31,7 @@ python -m dingo.mocker --help >/dev/null
 In the first terminal, start the OpenAI-compatible frontend:
 
 ```bash
-python -m dynamo.frontend --http-port 8000 --discovery-backend file
+python -m dingo.frontend --http-port 8000 --discovery-backend file
 ```
 
 File-based discovery keeps this tutorial on one machine and selects the local event path.

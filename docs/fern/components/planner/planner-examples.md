@@ -14,7 +14,7 @@ reference, see the [Planner Guide](planner-guide.md).
 
 Each YAML block in this section is a standalone `PlannerConfig`. Save the block
 as `planner.yaml` and pass it to
-`python -m dynamo.planner --config planner.yaml`. To use the same fields in a
+`python -m dingo.planner --config planner.yaml`. To use the same fields in a
 DGDR, nest them under `spec.features.planner`.
 
 ### Warm-starting with Trace Data

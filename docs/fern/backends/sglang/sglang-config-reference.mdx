@@ -5,7 +5,7 @@ title: SGLang Configuration (DynamoSGLangConfig)
 subtitle: Field reference for the Dynamo-specific CLI flags and environment variables of the SGLang backend wrapper.
 ---
 
-`DynamoSGLangConfig` holds the Dynamo-specific configuration for the SGLang backend (`python -m dynamo.sglang`). Every field, type, default, and choice on this page comes from the [`DynamoSGLangArgGroup` and `DynamoSGLangConfig`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/backend_args.py) definitions. For features and operational details, see the [SGLang Reference Guide](sglang-reference-guide.md).
+`DynamoSGLangConfig` holds the Dynamo-specific configuration for the SGLang backend (`python -m dingo.sglang`). Every field, type, default, and choice on this page comes from the [`DynamoSGLangArgGroup` and `DynamoSGLangConfig`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/backend_args.py) definitions. For features and operational details, see the [SGLang Reference Guide](sglang-reference-guide.md).
 
 <Note>
   These are **only** the Dynamo wrapper flags. The SGLang backend also accepts every native SGLang `ServerArgs` engine argument (`--model-path`, `--tp-size`, `--mem-fraction-static`, and so on) in the same command, plus the cross-cutting [Dynamo Runtime](../../reference/runtime-config-reference.mdx) flags (`--namespace`, `--endpoint`, tool/reasoning parsers). This page covers neither — only the SGLang-specific `DYN_SGL_*` surface.
@@ -43,7 +43,7 @@ Each field is both a CLI flag and an environment variable. The CLI flag takes pr
     Pass the flags directly on the command line:
 
     ```bash
-    python -m dynamo.sglang \
+    python -m dingo.sglang \
         --model-path Qwen/Qwen3-32B \
         --enable-multimodal \
         --embedding-transfer-mode nixl-read

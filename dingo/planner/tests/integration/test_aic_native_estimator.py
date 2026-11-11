@@ -8,15 +8,15 @@ from __future__ import annotations
 import pytest
 from aiconfigurator_core.sdk.engine import compile_engine
 
-from dynamo.common.forward_pass_metrics import (
+from dingo.common.forward_pass_metrics import (
     ForwardPassMetrics,
     QueuedRequestMetrics,
     ScheduledRequestMetrics,
 )
-from dynamo.planner.config.parallelization import PickedParallelConfig
-from dynamo.planner.config.planner_config import AICPerfModelSpec, PlannerConfig
-from dynamo.planner.core.perf_model.rust_adapter import PlannerEnginePerfModel
-from dynamo.planner.core.types import EngineCapabilities
+from dingo.planner.config.parallelization import PickedParallelConfig
+from dingo.planner.config.planner_config import AICPerfModelSpec, PlannerConfig
+from dingo.planner.core.perf_model.rust_adapter import PlannerEnginePerfModel
+from dingo.planner.core.types import EngineCapabilities
 
 pytestmark = [
     pytest.mark.aiconfigurator,

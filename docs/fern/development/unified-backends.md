@@ -57,7 +57,7 @@ custom backend in a `DynamoGraphDeployment` and follow the
 ## Python Implementation
 > **New — Dynamo's unified backend.** This guide covers the new
 > **unified backend** infrastructure in
-> [`dingo.common.backend`](https://github.com/ai-dynamo/dynamo/tree/main/dingo/common/backend):
+> [`dingo.common.backend`](https://github.com/ai-dynamo/dynamo/tree/main/components/src/dynamo/common/backend):
 > a shared `LLMEngine` ABC that vLLM, SGLang, TRT-LLM, and a sample
 > engine already implement, and that any custom Python engine can plug
 > into the same way. For the Rust version of the same contract, use the
@@ -85,7 +85,7 @@ the git source) and imports `dingo.common.backend`. The steps below
 assume you're starting a fresh package in your own repo.
 
 The reference example is the **sample engine** at
-[`sample_engine.py`](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/sample_engine.py)
+[`sample_engine.py`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/sample_engine.py)
 — a complete, runnable implementation under 120 lines. Read it
 alongside this guide.
 
@@ -93,9 +93,9 @@ alongside this guide.
 
 - This guide — step-by-step walkthrough for someone starting a new
   backend from scratch.
-- [`LLMEngine` ABC docstrings](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/engine.py)
+- [`LLMEngine` ABC docstrings](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/engine.py)
   — authoritative method-by-method contract.
-- [Package README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md)
+- [Package README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md)
   — in-tree reference: `GenerateRequest` / `GenerateChunk` field
   definitions, per-engine cancellation cookbook (vLLM / SGLang /
   TRT-LLM), full `DynamoException` table, file index, and the
@@ -106,7 +106,7 @@ alongside this guide.
 The unified backend is in beta. The summary below is the common
 contract — what every engine on the unified interface gets — plus the
 gaps in the contract itself. Backend-specific details live in the
-[package README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md#feature-gaps).
+[package README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md#feature-gaps).
 
 **Supported today**
 
@@ -406,7 +406,7 @@ request. Called concurrently for multiple in-flight requests.
 
 **Contract** (chunk shape is defined by the `GenerateChunk` TypedDict
 — see
-[Request / Response Types](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md#request--response-types)
+[Request / Response Types](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md#request--response-types)
 in the package README for the field reference):
 
 - Every chunk carries `token_ids` and `index` (use `0` for single
@@ -648,7 +648,7 @@ Pair this with the `[project.scripts]` entry from Step 1's
 **Errors**: the framework wraps non-`DynamoException` errors raised
 from `generate()` (or lifecycle methods) as `Unknown`. For typed
 error reporting, raise a `DynamoException` subclass directly from
-[`dynamo.llm.exceptions`](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md#error-handling)
+[`dynamo.llm.exceptions`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md#error-handling)
 — it propagates unchanged through the Rust bridge:
 
 ```python
@@ -689,7 +689,7 @@ pip install -e ".[dev]"
 ```
 
 The sample engine has a unit-test
-[suite](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/tests/test_engine.py)
+[suite](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/tests/test_engine.py)
 that you can copy as a starting point. The shape of a useful test:
 
 ```python
@@ -790,7 +790,7 @@ the framework configures `tracing` from `DYN_LOG`.
 
 ### Python reference: sample engine
 
-[`sample_engine.py`](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/sample_engine.py)
+[`sample_engine.py`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/sample_engine.py)
 is the canonical minimal reference. Run it as-is:
 
 ```bash
@@ -827,11 +827,11 @@ Before shipping:
 
 ### Python see also
 
-- [`LLMEngine` ABC](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/engine.py)
+- [`LLMEngine` ABC](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/engine.py)
   — authoritative contract.
-- [Package README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md)
+- [Package README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md)
   — feature gaps, error model, request/response contract.
-- [Sample engine](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/sample_engine.py)
+- [Sample engine](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/sample_engine.py)
   — example user guide.
 - Rust tab on this page — the Rust counterpart, same contract,
   lower-level.
@@ -897,7 +897,7 @@ The unified backend is in beta. The summary below is the common
 contract — what every engine on the unified interface gets, whether
 written in Rust directly or plugged in from Python via the PyO3
 `Worker` shim. Backend-specific details live in the
-[Python package README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md#feature-gaps).
+[Python package README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md#feature-gaps).
 
 **Supported today**
 
@@ -1672,7 +1672,7 @@ Before shipping:
 - [Conformance kit](https://github.com/ai-dynamo/dynamo/blob/main/lib/backend-common/src/testing.rs) —
   `run_conformance`, `mock_context`, `cancelling_context`.
 - [Mocker backend](../backends/mocker_backend/README.md) — example user guide.
-- [Python sibling](https://github.com/ai-dynamo/dynamo/blob/main/dingo/common/backend/README.md)
+- [Python sibling](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/common/backend/README.md)
   — Python ABC layered over this crate.
 
 </Tab>

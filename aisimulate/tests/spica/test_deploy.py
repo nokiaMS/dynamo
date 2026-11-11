@@ -104,7 +104,7 @@ def test_agg_scaling_builds_planner_config():
 
 def test_scaling_planner_config_validates_without_prometheus_query_env(monkeypatch):
     """Spica replay must not depend on a Prometheus-only environment variable."""
-    from dynamo.planner.config.planner_config import PlannerConfig
+    from dingo.planner.config.planner_config import PlannerConfig
 
     monkeypatch.delenv("PROMETHEUS_EXTRA_QUERY_PARAMS", raising=False)
     sample = unroll_sample(

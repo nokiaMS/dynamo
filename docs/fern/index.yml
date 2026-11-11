@@ -460,8 +460,6 @@ navigation:
             contents:
               - page: vLLM
                 path: templates/vllm.mdx
-              - page: TensorRT-LLM
-                path: templates/trtllm.mdx
               - page: SGLang
                 path: templates/sglang.mdx
           - page: DGDR

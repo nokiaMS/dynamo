@@ -705,7 +705,6 @@ impl OpenAIPreprocessor {
                 Self::deepseek_renderer_reasoning_enabled(chat_template_args, true)
             }
 
-
             // DeepSeek V3/V3.1 templates are opt-in. The native V3.2/V4
             // renderers default to thinking; all honor the same aliases.
             Some("deepseek_v3" | "deepseek_v3_1") => {
@@ -5308,8 +5307,6 @@ mod tests {
 
         assert!(OpenAIPreprocessor::backend_extra_args(&request, true, None).is_none());
     }
-
-
 
     #[test]
     fn test_internal_preserve_omitted_max_tokens_option() {

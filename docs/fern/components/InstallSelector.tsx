@@ -32,7 +32,6 @@ const HARDWARES: Option<Hardware>[] = [
 
 const BACKENDS: Option<InstallBackend>[] = [
   { id: "sglang", label: "SGLang" },
-  { id: "trtllm", label: "TensorRT-LLM" },
   { id: "vllm", label: "vLLM" },
 ];
 

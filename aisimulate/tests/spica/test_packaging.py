@@ -32,8 +32,8 @@ def test_aisimulate_has_no_console_script():
     assert all(entry.group != "console_scripts" for entry in distribution.entry_points)
 
 
-def test_ai_dynamo_has_no_spica_extra():
-    distribution = importlib.metadata.distribution("ai-dynamo")
+def test_ai_dingo_has_no_spica_extra():
+    distribution = importlib.metadata.distribution("ai-dingo")
 
     assert "spica" not in distribution.metadata.get_all("Provides-Extra", [])
 
@@ -49,12 +49,12 @@ def test_aisimulate_declares_planner_monitoring_dependency():
 
 
 def test_profiler_does_not_publish_or_reexport_spica():
-    assert importlib.util.find_spec("dynamo.profiler.spica") is None
+    assert importlib.util.find_spec("dingo.profiler.spica") is None
     subprocess.run(
         [
             sys.executable,
             "-c",
-            "import dynamo.profiler; assert not hasattr(dynamo.profiler, 'spica')",
+            "import dingo.profiler; assert not hasattr(dingo.profiler, 'spica')",
         ],
         check=True,
         text=True,

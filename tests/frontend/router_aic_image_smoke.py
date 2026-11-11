@@ -17,7 +17,7 @@ def main() -> None:
 
     # Parse the same frontend flags users enable for the live KV-router path.
     sys.argv = [
-        "dynamo.frontend",
+        "dingo.frontend",
         "--router-mode",
         "kv",
         "--router-prefill-load-model",
@@ -36,7 +36,7 @@ def main() -> None:
 
     from aiconfigurator_core.sdk.engine import EngineHandle
 
-    from dynamo.frontend.main import parse_args
+    from dingo.frontend.main import parse_args
     from dynamo.llm import AicPerfConfig
 
     config, _, _ = parse_args()
@@ -46,7 +46,7 @@ def main() -> None:
     assert config.aic_system is not None
     assert config.aic_model_path is not None
 
-    # This is the object passed by dynamo.frontend into the native KV router.
+    # This is the object passed by dingo.frontend into the native KV router.
     assert AicPerfConfig(**config.aic_perf_kwargs())
 
     # Exercise the compiled predictor and packaged perf data that the router's

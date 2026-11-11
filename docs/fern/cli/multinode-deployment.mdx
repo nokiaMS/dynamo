@@ -45,9 +45,9 @@ The worker command is nearly identical on every node — only `--node-rank` chan
 
 ```bash
 # Head node (node-rank 0) — runs the frontend and rank 0
-python -m dynamo.frontend --http-port 8000 &
+python -m dingo.frontend --http-port 8000 &
 
-python -m dynamo.vllm --model <model> \
+python -m dingo.vllm --model <model> \
   --tensor-parallel-size 16 \
   --nnodes 2 --node-rank 0 --master-addr <head-node-ip>
 ```
@@ -57,7 +57,7 @@ python -m dynamo.vllm --model <model> \
 
 ```bash
 # Additional node (node-rank 1) — headless, joins the TP group
-python -m dynamo.vllm --model <model> \
+python -m dingo.vllm --model <model> \
   --tensor-parallel-size 16 \
   --nnodes 2 --node-rank 1 --master-addr <head-node-ip> --headless
 ```
@@ -76,9 +76,9 @@ Choose a port that is reachable from every participating node. Start the fronten
 
 ```bash
 # Head node (node-rank 0) — runs the frontend and rank 0
-python -m dynamo.frontend --http-port 8000 &
+python -m dingo.frontend --http-port 8000 &
 
-python -m dynamo.sglang \
+python -m dingo.sglang \
   --model-path <model> \
   --tp-size 16 \
   --nnodes 2 \
@@ -93,7 +93,7 @@ Run the same SGLang worker command with that machine's rank. Nonzero SGLang rank
 
 ```bash
 # Additional node (node-rank 1) — joins the distributed engine
-python -m dynamo.sglang \
+python -m dingo.sglang \
   --model-path <model> \
   --tp-size 16 \
   --nnodes 2 \

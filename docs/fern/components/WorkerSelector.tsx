@@ -12,7 +12,7 @@ import { useState } from "react";
 import { LOCAL_SELECTOR_CSS } from "./local-selector-styles";
 
 type Hardware = "nvidia" | "intel";
-type Backend = "sglang" | "trtllm" | "vllm";
+type Backend = "sglang" | "vllm";
 
 type Option<T extends string> = { id: T; label: string; sub?: string };
 
@@ -23,19 +23,17 @@ const HARDWARES: Option<Hardware>[] = [
 
 const BACKENDS: Option<Backend>[] = [
   { id: "sglang", label: "SGLang" },
-  { id: "trtllm", label: "TensorRT-LLM" },
   { id: "vllm", label: "vLLM" },
 ];
 
 const COMMANDS: Record<Hardware, Partial<Record<Backend, string>>> = {
   nvidia: {
-    sglang: "python3 -m dynamo.sglang --model-path Qwen/Qwen3-0.6B --discovery-backend file",
-    trtllm: "python3 -m dynamo.trtllm --model-path Qwen/Qwen3-0.6B --discovery-backend file",
-    vllm: "python3 -m dynamo.vllm --model Qwen/Qwen3-0.6B --discovery-backend file",
+    sglang: "python3 -m dingo.sglang --model-path Qwen/Qwen3-0.6B --discovery-backend file",
+    vllm: "python3 -m dingo.vllm --model Qwen/Qwen3-0.6B --discovery-backend file",
   },
   intel: {
-    sglang: "python3 -m dynamo.sglang --model-path Qwen/Qwen3-0.6B --discovery-backend file",
-    vllm: "VLLM_TARGET_DEVICE=xpu \\\n  python3 -m dynamo.vllm --model Qwen/Qwen3-0.6B --discovery-backend file",
+    sglang: "python3 -m dingo.sglang --model-path Qwen/Qwen3-0.6B --discovery-backend file",
+    vllm: "VLLM_TARGET_DEVICE=xpu \\\n  python3 -m dingo.vllm --model Qwen/Qwen3-0.6B --discovery-backend file",
   },
 };
 

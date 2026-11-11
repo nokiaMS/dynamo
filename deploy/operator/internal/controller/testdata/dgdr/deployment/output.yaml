@@ -29,13 +29,13 @@ spec:
                 - --speedup-ratio
                 - "1.0"
                 - --planner-profile-data
-                - /workspace/components/src/dynamo/planner/tests/data/profiling_results/H200_TP1P_TP1D
+                - /workspace/dingo/planner/tests/data/profiling_results/H200_TP1P_TP1D
                 - --disaggregation-mode
                 - decode
               command:
                 - python3
                 - -m
-                - dynamo.mocker
+                - dingo.mocker
               envFrom:
                 - secretRef:
                     name: hf-token-secret
@@ -57,13 +57,13 @@ spec:
                 - --speedup-ratio
                 - "1.0"
                 - --planner-profile-data
-                - /workspace/components/src/dynamo/planner/tests/data/profiling_results/H200_TP1P_TP1D
+                - /workspace/dingo/planner/tests/data/profiling_results/H200_TP1P_TP1D
                 - --disaggregation-mode
                 - prefill
               command:
                 - python3
                 - -m
-                - dynamo.mocker
+                - dingo.mocker
               envFrom:
                 - secretRef:
                     name: hf-token-secret
@@ -99,13 +99,13 @@ spec:
             - --speedup-ratio
             - "1.0"
             - --planner-profile-data
-            - /workspace/components/src/dynamo/planner/tests/data/profiling_results/H200_TP1P_TP1D
+            - /workspace/dingo/planner/tests/data/profiling_results/H200_TP1P_TP1D
             - --disaggregation-mode
             - decode
           command:
             - python3
             - -m
-            - dynamo.mocker
+            - dingo.mocker
           envFrom:
             - secretRef:
                 name: hf-token-secret
@@ -158,13 +158,13 @@ spec:
             - --speedup-ratio
             - "1.0"
             - --planner-profile-data
-            - /workspace/components/src/dynamo/planner/tests/data/profiling_results/H200_TP1P_TP1D
+            - /workspace/dingo/planner/tests/data/profiling_results/H200_TP1P_TP1D
             - --disaggregation-mode
             - decode
           command:
             - python3
             - -m
-            - dynamo.mocker
+            - dingo.mocker
           env:
             - name: DYN_COMPONENT
               value: decode
@@ -304,7 +304,7 @@ spec:
       containers:
         - args:
             - -m
-            - dynamo.frontend
+            - dingo.frontend
           command:
             - python3
           env:
@@ -428,13 +428,13 @@ spec:
             - --speedup-ratio
             - "1.0"
             - --planner-profile-data
-            - /workspace/components/src/dynamo/planner/tests/data/profiling_results/H200_TP1P_TP1D
+            - /workspace/dingo/planner/tests/data/profiling_results/H200_TP1P_TP1D
             - --disaggregation-mode
             - prefill
           command:
             - python3
             - -m
-            - dynamo.mocker
+            - dingo.mocker
           env:
             - name: DYN_COMPONENT
               value: prefill
@@ -586,13 +586,13 @@ spec:
             - --speedup-ratio
             - "1.0"
             - --planner-profile-data
-            - /workspace/components/src/dynamo/planner/tests/data/profiling_results/H200_TP1P_TP1D
+            - /workspace/dingo/planner/tests/data/profiling_results/H200_TP1P_TP1D
             - --disaggregation-mode
             - prefill
           command:
             - python3
             - -m
-            - dynamo.mocker
+            - dingo.mocker
           envFrom:
             - secretRef:
                 name: hf-token-secret

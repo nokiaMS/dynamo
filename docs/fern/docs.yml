@@ -23,7 +23,7 @@ instances:
 title: NVIDIA Dynamo Documentation
 
 # Locales for the docs site. `en` is default; `zh-CN` enables the native
-# language picker (pages under docs/fern/translations/zh-CN/pages/**). (A4)
+# language picker (pages mirror the English paths under translations/zh-CN/**). (A4)
 translations:
   - lang: en
     default: true

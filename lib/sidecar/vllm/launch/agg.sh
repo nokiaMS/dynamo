@@ -72,7 +72,7 @@ print_launch_banner "Launching vLLM Native-gRPC Sidecar (1 GPU)" "$MODEL" "$HTTP
     "vLLM HTTP:  http://127.0.0.1:${VLLM_RS_HTTP_PORT}" \
     "vLLM gRPC:  127.0.0.1:${VLLM_GRPC_PORT}"
 
-python -m dynamo.frontend &
+python -m dingo.frontend &
 
 # vllm-rs manages the headless Python engine and exposes native gRPC on loopback.
 # Arguments after -- are forwarded to the managed engine.

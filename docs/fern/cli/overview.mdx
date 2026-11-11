@@ -8,7 +8,7 @@ description: Deploy and serve models locally with Dynamo backends
 
 This guide walks through the basic **aggregated deployment** flow: a single frontend plus one worker serving a model behind an OpenAI-compatible endpoint. It assumes you have **one node with one or more GPUs** — everything below runs on that single machine. Multi-node and other patterns build on this same flow.
 
-A deployment is always a **frontend** (`python -m dynamo.frontend`, the HTTP ingress) plus **one or more workers** (`python -m dynamo.<backend>`, which wrap an inference engine). Workers register with the frontend automatically on startup. The steps below start one of each.
+A deployment is always a **frontend** (`python -m dingo.frontend`, the HTTP ingress) plus **one or more workers** (`python -m dingo.<backend>`, which wrap an inference engine). Workers register with the frontend automatically on startup. The steps below start one of each.
 
 > **Prerequisites.** Dynamo installed for your backend (see the [installation guide](../getting-started/local-installation.mdx)), and etcd + NATS reachable on localhost so the frontend and worker can discover each other:
 >
@@ -39,7 +39,7 @@ docker exec -it <container_id> bash
     The frontend serves the OpenAI-compatible HTTP API on port 8000 and routes requests to any workers that register with it. This command is the same regardless of which backend or model you use — run it once and leave it running.
 
     ```bash
-    python -m dynamo.frontend --http-port 8000
+    python -m dingo.frontend --http-port 8000
     ```
 
     It will report that it is waiting for workers.
@@ -73,7 +73,7 @@ docker exec -it <container_id> bash
 
         ```bash
         # Example: pool 4 GPUs for one worker
-        python -m dynamo.vllm --model $MODEL --tensor-parallel-size 4
+        python -m dingo.vllm --model $MODEL --tensor-parallel-size 4
         ```
       </Tab>
       <Tab title="SGLang" language="sglang">
@@ -86,7 +86,7 @@ docker exec -it <container_id> bash
 
         ```bash
         # Example: pool 4 GPUs for one worker
-        python -m dynamo.sglang --model-path $MODEL --tp 4
+        python -m dingo.sglang --model-path $MODEL --tp 4
         ```
       </Tab>
       <Tab title="TensorRT-LLM" language="trtllm">
@@ -126,14 +126,14 @@ docker exec -it <container_id> bash
     <Tabs>
       <Tab title="vLLM" language="vllm">
         ```bash
-        python -m dynamo.vllm --model $MODEL --enforce-eager --max-model-len 4096
+        python -m dingo.vllm --model $MODEL --enforce-eager --max-model-len 4096
         ```
 
         `--enforce-eager` and `--max-model-len 4096` keep startup fast and memory low for this walkthrough; drop them for production.
       </Tab>
       <Tab title="SGLang" language="sglang">
         ```bash
-        python -m dynamo.sglang --model-path $MODEL
+        python -m dingo.sglang --model-path $MODEL
         ```
       </Tab>
       <Tab title="TensorRT-LLM" language="trtllm">

@@ -30,10 +30,10 @@ The Planner service loads `PlannerConfig` from a single required `--config` argu
 
     ```bash
     # From a YAML or JSON file
-    python -m dynamo.planner --config planner_config.yaml
+    python -m dingo.planner --config planner_config.yaml
 
     # Or inline JSON
-    python -m dynamo.planner --config '{"mode": "disagg", "backend": "vllm"}'
+    python -m dingo.planner --config '{"mode": "disagg", "backend": "vllm"}'
     ```
   </Tab>
 </Tabs>

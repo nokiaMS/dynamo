@@ -3438,7 +3438,7 @@ func TestGenerateWorkerPodTemplateSpecDoesNotRequireGPUResource(t *testing.T) {
 								},
 								Args: []string{
 									"-m",
-									"dynamo.vllm",
+									"dingo.vllm",
 								},
 								Resources: corev1.ResourceRequirements{
 									Requests: corev1.ResourceList{"cpu": resource.MustParse("1")},

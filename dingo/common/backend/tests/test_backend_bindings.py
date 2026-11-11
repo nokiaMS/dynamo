@@ -144,7 +144,7 @@ def test_worker_config_preserves_legacy_positional_argument_order():
 
 @pytest.mark.unified
 def test_python_worker_config_preserves_legacy_positional_argument_order():
-    from dynamo.common.backend.worker import WorkerConfig
+    from dingo.common.backend.worker import WorkerConfig
 
     config = WorkerConfig(
         "dynamo",  # namespace

@@ -2748,29 +2748,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "dynamo-parsers"
-version = "7.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c2b103a9482398061b6c314f75c21fb6563255eddee7ada9816e728ff74725c1"
-dependencies = [
- "aho-corasick",
- "anyhow",
- "async-stream",
- "dynamo-protocols",
- "futures",
- "num-traits",
- "openai-harmony",
- "regex",
- "rustpython-ruff_python_ast",
- "rustpython-ruff_python_parser",
- "serde",
- "serde_json",
- "tokio",
- "tracing",
- "uuid",
-]
-
-[[package]]
 name = "dynamo-parsers-v2"
 version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -5299,29 +5276,6 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
-]
-
-[[package]]
-name = "manyhow-macros"
-version = "0.11.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "46fce34d199b78b6e6073abf984c9cf5fd3e9330145a93ee0738a7443e371495"
-dependencies = [
- "proc-macro-utils",
- "proc-macro2",
- "quote",
-]
-
-[[package]]
-name = "manyhow"
-version = "0.11.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b33efb3ca6d3b07393750d4030418d594ab1139cee518f0dc88db70fec873587"
-dependencies = [
- "manyhow-macros",
- "proc-macro2",
- "quote",
- "syn 2.0.117",
 ]
 
 [[package]]
@@ -8066,77 +8020,6 @@ dependencies = [
  "ring",
  "rustls-pki-types",
  "untrusted",
-]
-
-[[package]]
-name = "rustpython-ruff_python_ast"
-version = "0.15.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f021ff72cabf5e2cd6d8ec8813d376a8445a228dc610ab56c27bd9054cda70d4"
-dependencies = [
- "aho-corasick",
- "bitflags 2.11.1",
- "compact_str",
- "get-size2",
- "is-macro",
- "memchr",
- "rustc-hash 2.1.2",
- "rustpython-ruff_python_trivia",
- "rustpython-ruff_source_file",
- "rustpython-ruff_text_size",
- "thiserror 2.0.18",
-]
-
-[[package]]
-name = "rustpython-ruff_python_parser"
-version = "0.15.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "01e6ee78bd9671fb5766664b2695fe1f2a92a961f4d9101646c570d8acdb1e0b"
-dependencies = [
- "bitflags 2.11.1",
- "bstr",
- "compact_str",
- "get-size2",
- "memchr",
- "rustc-hash 2.1.2",
- "rustpython-ruff_python_ast",
- "rustpython-ruff_python_trivia",
- "rustpython-ruff_text_size",
- "static_assertions",
- "unicode-ident",
- "unicode-normalization",
- "unicode_names2",
-]
-
-[[package]]
-name = "rustpython-ruff_python_trivia"
-version = "0.15.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "79e7cfd1056f3a02ff0d2d0e4474286ca963260782f878b7b81c1dd87432e682"
-dependencies = [
- "itertools 0.14.0",
- "rustpython-ruff_source_file",
- "rustpython-ruff_text_size",
- "unicode-ident",
-]
-
-[[package]]
-name = "rustpython-ruff_source_file"
-version = "0.15.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "948107aad62ddb12a11fc7bf68a49e52a0b0a3737d415a2505e54f5a9edac737"
-dependencies = [
- "memchr",
- "rustpython-ruff_text_size",
-]
-
-[[package]]
-name = "rustpython-ruff_text_size"
-version = "0.15.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8291ee0f5a779e54ccd4e0151a0c426f8b49a123f99b5b6545db17ccdd4277aa"
-dependencies = [
- "get-size2",
 ]
 
 [[package]]

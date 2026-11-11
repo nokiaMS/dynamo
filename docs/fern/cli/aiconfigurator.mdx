@@ -76,7 +76,7 @@ Choose a highly ranked row that meets the SLA. Translate its output into the loc
 For example, apply a `tp4pp1` recommendation to a vLLM worker:
 
 ```bash
-CUDA_VISIBLE_DEVICES=0,1,2,3 python -m dynamo.vllm \
+CUDA_VISIBLE_DEVICES=0,1,2,3 python -m dingo.vllm \
   --model Qwen/Qwen3-32B-FP8 \
   --tensor-parallel-size 4
 ```

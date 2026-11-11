@@ -103,7 +103,7 @@ python -m dingo.sglang --model-path "$MODEL" $GPU_MEM_ARGS &
 
 # TRT-LLM (JSON merging, separate function)
 OVERRIDE_JSON=$(build_trtllm_override_args_with_mem)
-python -m dynamo.trtllm --model-path "$MODEL" ${OVERRIDE_JSON:+--override-engine-args "$OVERRIDE_JSON"} &
+python -m tensorrt_llm.commands.serve "$MODEL" ${OVERRIDE_JSON:+--extra_llm_api_options "$OVERRIDE_JSON"} &
 ```
 
 When the env var is set, the function returns the corresponding flag.

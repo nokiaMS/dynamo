@@ -10,8 +10,8 @@ from types import SimpleNamespace
 
 import pytest
 
-import dynamo.mocker
-import dynamo.replay.api
+import dingo.mocker
+import dingo.replay.api
 from aisimulate.spica.config import (
     OptimizationGoal,
     OptimizationTarget,
@@ -71,10 +71,10 @@ def _disagg_plan(static):
 
 
 def test_static_agg_uses_plain_path(monkeypatch):
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw) or {"output_throughput_tok_s": 42.0},
     )
@@ -92,10 +92,10 @@ def test_static_agg_uses_plain_path(monkeypatch):
 def test_static_path_threads_goodput_sla(monkeypatch):
     # the mocker is SLA-aware on the plain path too, so a static/disabled candidate
     # still receives the goodput SLA and can emit goodput.
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw)
         or {"goodput_output_throughput_tok_s": 100.0, "gpu_hours": 1.0},
@@ -112,9 +112,9 @@ def test_static_path_threads_goodput_sla(monkeypatch):
 
 
 def test_goodput_goal_fails_closed_without_goodput_metric(monkeypatch):
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kwargs: {
             "output_throughput_tok_s": 77.0,
@@ -132,10 +132,10 @@ def test_goodput_goal_fails_closed_without_goodput_metric(monkeypatch):
 
 
 def test_scaling_agg_threads_planner_config(monkeypatch):
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw)
         or {"gpu_hours": 2.0, "goodput_output_throughput_tok_s": 100.0},
@@ -153,9 +153,9 @@ def test_scaling_agg_threads_planner_config(monkeypatch):
 
 
 def test_scaling_report_preserves_planner_tick_count(monkeypatch):
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: SimpleNamespace(
             trace_report={"output_throughput_tok_s": 42.0},
@@ -173,10 +173,10 @@ def test_kv_router_config_is_built_and_passed(monkeypatch):
     # (round_robin -> None). Regression for the "router_config=None" stub.
     from dynamo._core import KvRouterConfig
 
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw) or {"output_throughput_tok_s": 1.0},
     )
@@ -200,10 +200,10 @@ def test_kv_router_config_is_built_and_passed(monkeypatch):
 def test_static_trace_threads_replay_concurrency(monkeypatch):
     # a closed-loop concurrency cap on a trace reaches run_trace_replay as
     # replay_concurrency (run_trace_replay defaults replay_mode='offline').
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw) or {"output_throughput_tok_s": 1.0},
     )
@@ -215,10 +215,10 @@ def test_static_trace_threads_replay_concurrency(monkeypatch):
 
 
 def test_scaling_trace_threads_replay_concurrency(monkeypatch):
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw)
         or {"gpu_hours": 1.0, "goodput_output_throughput_tok_s": 1.0},
@@ -243,10 +243,10 @@ def _syn_wl(**kw):
 def test_synthetic_static_uses_run_synthetic_trace_replay(monkeypatch):
     # synthetic + static -> a single run_synthetic_trace_replay call with planner_config=None
     # (fixed-fleet replay, no scaling); goodput SLA threaded; in-flight cap = concurrency.
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_synthetic_trace_replay",
         lambda **kw: rec.update(kw)
         or {"goodput_output_throughput_tok_s": 50.0, "gpu_hours": 0.5},
@@ -273,10 +273,10 @@ def test_synthetic_static_uses_run_synthetic_trace_replay(monkeypatch):
 def test_concurrency_override_drives_cap_and_request_count(monkeypatch):
     # KV-load mode derives an absolute concurrency before evaluation; that override sets
     # BOTH the closed-loop in-flight cap and the num_request_ratio-scaled request count.
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_synthetic_trace_replay",
         lambda **kw: rec.update(kw)
         or {"output_throughput_tok_s": 50.0, "gpu_hours": 0.5},
@@ -290,10 +290,10 @@ def test_concurrency_override_drives_cap_and_request_count(monkeypatch):
 
 
 def test_synthetic_planner_threads_planner_config(monkeypatch):
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_synthetic_trace_replay",
         lambda **kw: rec.update(kw)
         or {"gpu_hours": 2.0, "goodput_output_throughput_tok_s": 1.0},
@@ -314,10 +314,10 @@ def test_synthetic_planner_threads_planner_config(monkeypatch):
 def test_static_trace_disagg_uses_plain_path(monkeypatch):
     # disagg + trace + static -> run_trace_replay gets prefill/decode engine args
     # and the per-role worker counts (no agg num_workers/extra_engine_args).
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw) or {"output_throughput_tok_s": 7.0},
     )
@@ -334,10 +334,10 @@ def test_static_trace_disagg_uses_plain_path(monkeypatch):
 def test_scaling_trace_disagg_threads_planner_config(monkeypatch):
     # disagg + trace + planner -> run_trace_replay with per-role workers and planner_config
     # when supported.
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_trace_replay",
         lambda **kw: rec.update(kw)
         or {"gpu_hours": 3.0, "goodput_output_throughput_tok_s": 90.0},
@@ -358,10 +358,10 @@ def test_scaling_trace_disagg_threads_planner_config(monkeypatch):
 def test_synthetic_static_disagg_uses_run_synthetic_trace_replay(monkeypatch):
     # disagg + synthetic + static -> run_synthetic_trace_replay with prefill/decode args and
     # planner_config=None; goodput SLA threaded; closed-loop in-flight cap = concurrency.
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_synthetic_trace_replay",
         lambda **kw: rec.update(kw)
         or {"goodput_output_throughput_tok_s": 60.0, "gpu_hours": 0.75},
@@ -391,10 +391,10 @@ def test_synthetic_static_disagg_uses_run_synthetic_trace_replay(monkeypatch):
 def test_synthetic_planner_disagg_threads_planner_config(monkeypatch):
     # disagg + synthetic + planner -> run_synthetic_trace_replay with per-role workers and
     # planner_config when supported.
-    monkeypatch.setattr(dynamo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
+    monkeypatch.setattr(dingo.mocker, "MockEngineArgs", _FakeArgs, raising=False)
     rec = {}
     monkeypatch.setattr(
-        dynamo.replay.api,
+        dingo.replay.api,
         "run_synthetic_trace_replay",
         lambda **kw: rec.update(kw)
         or {"gpu_hours": 2.0, "goodput_output_throughput_tok_s": 1.0},

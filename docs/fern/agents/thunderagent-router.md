@@ -5,7 +5,7 @@ title: ThunderAgent Program Scheduler
 subtitle: Program-level scheduling with tool-boundary pause/resume on top of KV-aware routing
 ---
 
-> **Experimental — not a released component.** Run it from a source checkout, not from a `pip install ai-dynamo`. The CLI flags, session headers, and lifecycle hooks are all unstable and will change. Build and launch specifics live next to the code in [`dingo/thunderagent_router/README.md`](https://github.com/ai-dynamo/dynamo/blob/main/dingo/thunderagent_router/README.md).
+> **Experimental — not a released component.** Run it from a source checkout, not from a `pip install ai-dynamo`. The CLI flags, session headers, and lifecycle hooks are all unstable and will change. Build and launch specifics live next to the code in [`dingo/thunderagent_router/README.md`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/thunderagent_router/README.md).
 
 `dingo.thunderagent_router` is a standalone Dynamo router that schedules at the granularity of an agent run — the whole `LLM turn → tool call → next turn` loop — instead of individual requests. It wraps Dynamo's native KV router and adds a program-level scheduler with tool-boundary pause/resume on top of KV-aware routing, porting the scheduler from the [ThunderAgent](https://arxiv.org/abs/2602.13692) paper (Kang et al., 2026).
 
@@ -64,7 +64,7 @@ Pause/resume is driven by per-worker utilization — the program working set as 
 
 > **Constraint:** `pause-target <= pause-threshold`. The service rejects configs that violate it (along with `0 <= resume-hysteresis <= pause-threshold` and `0 <= soft-demote-threshold <= pause-threshold`).
 
-All `KvRouter` flags from `dingo.router` (`--router-temperature`, `--use-kv-events`, `--router-track-output-blocks`, …) are also accepted and forwarded. See the [folder README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/thunderagent_router/README.md) for the remaining service flags (`--endpoint`, `--model-name`, `--model-path`, tool-call and reasoning parsers).
+All `KvRouter` flags from `dingo.router` (`--router-temperature`, `--use-kv-events`, `--router-track-output-blocks`, …) are also accepted and forwarded. See the [folder README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/thunderagent_router/README.md) for the remaining service flags (`--endpoint`, `--model-name`, `--model-path`, tool-call and reasoning parsers).
 
 ## Architecture
 
@@ -128,7 +128,7 @@ For per-request tracing (token counts, cache hits, worker placement), the router
 
 ## Reproducing with upstream Harbor and Pi
 
-The maintained end-to-end path uses upstream Harbor to create SWE-bench containers and Pi with the Dynamo provider inside each container. The complete source build, ThunderAgent arm, stock KV arm, stable-session setup, and scaling procedure live in the [`thunderagent_router` README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/thunderagent_router/README.md#harborpi-ab-walkthrough).
+The maintained end-to-end path uses upstream Harbor to create SWE-bench containers and Pi with the Dynamo provider inside each container. The complete source build, ThunderAgent arm, stock KV arm, stable-session setup, and scaling procedure live in the [`thunderagent_router` README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/thunderagent_router/README.md#harborpi-ab-walkthrough).
 
 ## References
 

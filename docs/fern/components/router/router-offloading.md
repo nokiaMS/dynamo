@@ -30,7 +30,7 @@ Legend: ✅ tier-aware routing · 🟡 router-visible, tier-agnostic · 🚧 Dyn
 Every combination starts the frontend the same way:
 
 ```bash
-python -m dynamo.frontend --http-port 8000 --router-mode kv
+python -m dingo.frontend --http-port 8000 --router-mode kv
 ```
 
 ### Verify Router Visibility
@@ -53,7 +53,7 @@ offloading configuration with the tiers it observes.
 Start each vLLM worker with native CPU offloading and router-usable KV events:
 
 ```bash
-PYTHONHASHSEED=0 python3 -m dynamo.vllm \
+PYTHONHASHSEED=0 python3 -m dingo.vllm \
   --model Qwen/Qwen3-0.6B \
   --block-size 16 \
   --kv-transfer-config '{"kv_connector":"OffloadingConnector","kv_role":"kv_both","kv_connector_extra_config":{"cpu_bytes_to_use":17179869184,"block_size":256,"self_describing_kv_events":true}}' \
@@ -71,7 +71,7 @@ See [Native KV Offloading](../../backends/vllm/vllm-native-kv-offloading.md) for
 Start each SGLang worker with HiCache and KV event publishing:
 
 ```bash
-python3 -m dynamo.sglang \
+python3 -m dingo.sglang \
   --model-path Qwen/Qwen3-0.6B \
   --page-size 64 \
   --enable-hierarchical-cache \

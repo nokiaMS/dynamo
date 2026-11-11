@@ -9,7 +9,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Literal, Optional, Sequence, Tuple
 
-from dynamo.planner.core.types import TrafficObservation
+from dingo.planner.core.types import TrafficObservation
 
 TraceFormat = Literal["mooncake", "dynamo"]
 TraceRow = Tuple[float, int, int]

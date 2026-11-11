@@ -3,7 +3,7 @@
 
 """End-to-end test for the frontend route extension mechanism.
 
-Launches ``python -m dynamo.frontend`` with ``--frontend-route-extension``
+Launches ``python -m dingo.frontend`` with ``--frontend-route-extension``
 pointing at a custom route provider, then calls the custom route and validates
 the response. No worker or model is needed — extension routes are served by the
 frontend independently of the inference path.

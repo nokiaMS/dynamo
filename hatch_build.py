@@ -12,38 +12,19 @@ def get_components():
     Scan component package directories to get the list of available components.
     Returns full paths to component directories and RuntimeError if no components are found.
     """
-    root = os.path.dirname(__file__)
-    components_dir = os.path.join(root, "components", "src", "dynamo")
+    components_dir = os.path.join(os.path.dirname(__file__), "dingo")
 
     components = []
-    if os.path.exists(components_dir):
+    if os.path.isdir(components_dir):
         for item in os.listdir(components_dir):
             item_path = os.path.join(components_dir, item)
-            if os.path.isdir(item_path) and not item.startswith("."):
+            if not item.startswith(".") and os.path.isfile(
+                os.path.join(item_path, "__init__.py")
+            ):
                 components.append(item_path)
 
-    for component_name in (
-        "common",
-        "frontend",
-        "global_planner",
-        "global_router",
-        "mocker",
-        "planner",
-        "profiler",
-        "replay",
-        "router",
-        "sglang",
-        "thunderagent_router",
-        "vllm",
-    ):
-        dingo_component = os.path.join(root, "dingo", component_name)
-        if os.path.isdir(dingo_component):
-            components.append(dingo_component)
-
     if not components:
-        raise RuntimeError(
-            f"No components found in {components_dir} or {os.path.join(root, 'dingo')}"
-        )
+        raise RuntimeError(f"No components found in {components_dir}")
 
     return components
 

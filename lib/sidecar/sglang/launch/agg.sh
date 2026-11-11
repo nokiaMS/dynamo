@@ -69,7 +69,7 @@ print_launch_banner "Launching SGLang Native-gRPC Sidecar (1 GPU)" "$MODEL" "$HT
     "SGLang HTTP: http://${SGLANG_HOST}:${SGLANG_HTTP_PORT}" \
     "SGLang gRPC: ${SGLANG_HOST}:${SGLANG_GRPC_PORT}"
 
-python3 -m dynamo.frontend &
+python3 -m dingo.frontend &
 
 # --grpc-port enables the native Rust gRPC server alongside SGLang's HTTP API.
 # shellcheck disable=SC2086 # GPU_MEM_ARGS intentionally expands into multiple flags.

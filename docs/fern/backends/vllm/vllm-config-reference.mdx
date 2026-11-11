@@ -5,7 +5,7 @@ title: vLLM Configuration (DynamoVllmConfig)
 subtitle: Field reference for the Dynamo-specific CLI flags and environment variables of the vLLM backend wrapper.
 ---
 
-`DynamoVllmConfig` holds the Dynamo-specific configuration for the vLLM backend (`python -m dynamo.vllm`). Every field, type, default, and choice on this page comes from the [`DynamoVllmArgGroup` and `DynamoVllmConfig`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/vllm/backend_args.py) definitions. For features and operational details, see the [vLLM Reference Guide](vllm-reference-guide.md).
+`DynamoVllmConfig` holds the Dynamo-specific configuration for the vLLM backend (`python -m dingo.vllm`). Every field, type, default, and choice on this page comes from the [`DynamoVllmArgGroup` and `DynamoVllmConfig`](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/vllm/backend_args.py) definitions. For features and operational details, see the [vLLM Reference Guide](vllm-reference-guide.md).
 
 <Note>
   These are **only** the Dynamo wrapper flags. The vLLM backend also accepts every native vLLM `EngineArgs` argument (`--model`, `--tensor-parallel-size`, `--max-model-len`, and so on) in the same command, plus the cross-cutting [Dynamo Runtime](../../reference/runtime-config-reference.mdx) flags (`--namespace`, `--endpoint`, and others). Except for the KV event interoperability note below, this page covers neither — only the vLLM-specific `DYN_VLLM_*` surface.
@@ -44,7 +44,7 @@ Each field is both a CLI flag and an environment variable. The CLI flag takes pr
     Pass the flags directly on the command line:
 
     ```bash
-    python -m dynamo.vllm \
+    python -m dingo.vllm \
         --model meta-llama/Llama-3.1-8B-Instruct \
         --disaggregation-mode decode \
         --embedding-transfer-mode nixl-read
@@ -62,7 +62,7 @@ Starting the frontend with `--router-mode kv` does not configure event publishin
 </Info>
 
 ```bash
-python -m dynamo.vllm \
+python -m dingo.vllm \
   --model Qwen/Qwen3-0.6B \
   --enable-prefix-caching \
   --kv-events-config '{"enable_kv_cache_events":true,"publisher":"zmq","topic":"kv-events","endpoint":"tcp://*:5557"}'

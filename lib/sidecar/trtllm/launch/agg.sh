@@ -78,7 +78,7 @@ print_launch_banner "Launching TensorRT-LLM Native-gRPC Sidecar (1 GPU)" "$MODEL
     "TensorRT-LLM gRPC: 127.0.0.1:${TRTLLM_GRPC_PORT}" \
     "Context length:    ${TRTLLM_CONTEXT_LENGTH}"
 
-python3 -m dynamo.frontend &
+python3 -m dingo.frontend &
 
 # TensorRT-LLM's native gRPC listener is unauthenticated; keep it on loopback.
 CUDA_VISIBLE_DEVICES="$CUDA_VISIBLE_DEVICES" \

@@ -27,7 +27,7 @@ def _offline_aic(monkeypatch: pytest.MonkeyPatch) -> None:
 
 
 def _engine_args(worker_type: str | None = None):
-    from dynamo.mocker import MockEngineArgs
+    from dingo.mocker import MockEngineArgs
 
     worker_options = {"worker_type": worker_type} if worker_type is not None else {}
     return MockEngineArgs(
@@ -64,7 +64,7 @@ def test_real_aic_memory_estimates_gpu_blocks() -> None:
 def test_aggregated_replay_uses_native_aic_engine() -> None:
     from aiconfigurator_core.sdk.engine import compile_engine
 
-    from dynamo.replay import run_synthetic_trace_replay
+    from dingo.replay import run_synthetic_trace_replay
 
     assert callable(compile_engine)
     report = run_synthetic_trace_replay(
@@ -81,7 +81,7 @@ def test_aggregated_replay_uses_native_aic_engine() -> None:
 
 
 def test_disaggregated_replay_uses_native_aic_engine() -> None:
-    from dynamo.replay import run_synthetic_trace_replay
+    from dingo.replay import run_synthetic_trace_replay
 
     report = run_synthetic_trace_replay(
         128,

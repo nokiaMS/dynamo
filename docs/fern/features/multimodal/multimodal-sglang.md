@@ -84,7 +84,7 @@ The launcher configures KV events on each worker and sets `--router-mode kv` wit
 | `NUM_WORKERS` | `2` | Number of SGLang workers |
 | `BLOCK_SIZE` | `16` | Worker page size and frontend KV block size |
 | `KV_EVENTS_PORT_BASE` | `29090` | Starting port for per-worker KV event publishers |
-| `SGLANG_EXTRA_ARGS` | unset | Additional arguments for `python -m dynamo.sglang` |
+| `SGLANG_EXTRA_ARGS` | unset | Additional arguments for `python -m dingo.sglang` |
 
 ### Source-Build Requirements
 
@@ -131,7 +131,7 @@ git checkout $(git describe --tags $(git rev-list --tags --max-count=1))
 
 ### Components
 
-- worker: [DecodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/llm/decode_handler.py) handles encoding, prefilling, and decoding in a single process.
+- worker: [DecodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/llm/decode_handler.py) handles encoding, prefilling, and decoding in a single process.
 
 ### Workflow
 
@@ -213,8 +213,8 @@ curl http://localhost:8000/v1/chat/completions \
 ### Components
 
 - workers:
-  - [PrefillWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/llm/prefill_handler.py) receives raw multimodal metadata and lets SGLang perform media loading, encoding, token expansion, and KV production during prefill.
-  - [DecodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/llm/decode_handler.py) receives matching multimodal metadata so token layout stays aligned with the transferred KV cache.
+  - [PrefillWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/llm/prefill_handler.py) receives raw multimodal metadata and lets SGLang perform media loading, encoding, token expansion, and KV production during prefill.
+  - [DecodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/llm/decode_handler.py) receives matching multimodal metadata so token layout stays aligned with the transferred KV cache.
 
 ### Workflow
 
@@ -257,8 +257,8 @@ These launchers pass `--enable-multimodal` to the prefill and decode workers but
 ### Components
 
 - workers:
-  - [MultimodalEncodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/multimodal/encode_worker_handler.py) for image encoding and embeddings generation
-  - [MultimodalWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/multimodal/worker_handler.py) for prefilling and decoding.
+  - [MultimodalEncodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/multimodal/encode_worker_handler.py) for image encoding and embeddings generation
+  - [MultimodalWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/multimodal/worker_handler.py) for prefilling and decoding.
 
 ### Workflow
 
@@ -315,9 +315,9 @@ curl http://localhost:8000/v1/chat/completions \
 ### Components
 
 - workers:
-  - [MultimodalEncodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/multimodal/encode_worker_handler.py) for image encoding and embeddings generation
-  - [MultimodalWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/multimodal/worker_handler.py) for decoding
-  - [MultimodalPrefillWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/dingo/sglang/request_handlers/multimodal/worker_handler.py) for prefilling
+  - [MultimodalEncodeWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/multimodal/encode_worker_handler.py) for image encoding and embeddings generation
+  - [MultimodalWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/multimodal/worker_handler.py) for decoding
+  - [MultimodalPrefillWorkerHandler](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/sglang/request_handlers/multimodal/worker_handler.py) for prefilling
 
 ### Workflow
 

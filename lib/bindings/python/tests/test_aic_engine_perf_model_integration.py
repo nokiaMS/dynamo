@@ -32,7 +32,7 @@ def _offline_aic(monkeypatch: pytest.MonkeyPatch) -> None:
 def _native_model(worker_type: str):
     from aiconfigurator_core.sdk.engine import compile_engine
 
-    from dynamo.mocker import AicEngineConfig, EnginePerfLimits, RustEnginePerfModel
+    from dingo.mocker import AicEngineConfig, EnginePerfLimits, RustEnginePerfModel
 
     assert callable(compile_engine)
     return RustEnginePerfModel.from_native(
@@ -54,11 +54,11 @@ def _native_model(worker_type: str):
 
 
 def test_native_aic_model_estimates_prefill_and_decode() -> None:
-    from dynamo.common.forward_pass_metrics import (
+    from dingo.common.forward_pass_metrics import (
         ForwardPassMetrics,
         ScheduledRequestMetrics,
     )
-    from dynamo.mocker import EngineCapacityRequest
+    from dingo.mocker import EngineCapacityRequest
 
     prefill_model = _native_model("prefill")
     decode_model = _native_model("decode")

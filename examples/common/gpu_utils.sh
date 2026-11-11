@@ -88,12 +88,12 @@ build_sglang_gpu_mem_args() {
 # Usage:
 #   # TensorRT-LLM: simple case (no existing overrides)
 #   JSON=$(build_trtllm_override_args_with_mem)
-#   python -m dynamo.trtllm --model-path "$MODEL" ${JSON:+--override-engine-args "$JSON"} &
+#   python -m tensorrt_llm.commands.serve "$MODEL" ${JSON:+--extra_llm_api_options "$JSON"} &
 #
 #   # TensorRT-LLM: merge with existing JSON
 #   EXISTING='{"return_perf_metrics": true}'
 #   JSON=$(build_trtllm_override_args_with_mem --merge-with-json "$EXISTING")
-#   python -m dynamo.trtllm --model-path "$MODEL" --override-engine-args "$JSON" &
+#   python -m tensorrt_llm.commands.serve "$MODEL" --extra_llm_api_options "$JSON" &
 # ---------------------------------------------------------------------------
 build_trtllm_override_args_with_mem() {
     local merge_json=""

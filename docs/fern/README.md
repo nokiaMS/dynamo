@@ -364,10 +364,11 @@ npm install -g fern-api
 
 ### Validate configuration
 
-Run `fern check` from the repo root to validate that `fern/docs.yml`,
-`fern/fern.config.json`, and the navigation files are syntactically correct:
+Run `fern check` from `docs/` to validate `docs/fern/docs.yml`,
+`docs/fern/fern.config.json`, and the navigation files. From the repository root:
 
 ```bash
+cd docs
 fern check
 ```
 
@@ -382,19 +383,6 @@ fern docs broken-links
 
 This is the same check that runs in CI on every pull request.
 
-### Dry-run a version release
-
-Build a tagged snapshot in temporary worktrees and run the release validation
-without committing, pushing, or publishing:
-
-```bash
-fern/release_dryrun.sh v1.2.1
-```
-
-The script requires `git`, `fern`, `yq`, `jq`, `rsync`, and Python 3.10 or
-newer. Set `PYTHON=.venv/bin/python` to select a non-default interpreter, and
-set `KEEP=1` to retain the temporary worktrees for inspection.
-
 ### Start a local preview server
 
 Run `fern docs dev` to build the site and serve it locally with hot-reload:
@@ -405,6 +393,9 @@ fern docs dev
 
 The local server lets you see exactly how pages will look on the live site,
 including navigation, version dropdowns, and custom styling.
+
+Content already lives under the Fern root (`docs/fern/`), so native hot reload
+works without relocating directories or running a separate watcher.
 
 ---
 

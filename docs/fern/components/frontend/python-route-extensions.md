@@ -68,13 +68,13 @@ pip install -e .
 Select the registered provider by name:
 
 ```bash
-python -m dynamo.frontend --frontend-route-extension hello-world
+python -m dingo.frontend --frontend-route-extension hello-world
 ```
 
 The equivalent environment-variable form is:
 
 ```bash
-DYN_FRONTEND_ROUTE_EXTENSIONS="hello-world" python -m dynamo.frontend
+DYN_FRONTEND_ROUTE_EXTENSIONS="hello-world" python -m dingo.frontend
 ```
 
 Call the added route:
@@ -95,7 +95,7 @@ For development or a one-off deployment, pass an importable `module:function` pa
 be importable, for example by being available on `PYTHONPATH`.
 
 ```bash
-python -m dynamo.frontend \
+python -m dingo.frontend \
   --frontend-route-extension hello_routes:hello_world_routes
 ```
 
@@ -141,7 +141,7 @@ fast and non-blocking:
 Repeat `--frontend-route-extension` to load multiple providers:
 
 ```bash
-python -m dynamo.frontend \
+python -m dingo.frontend \
   --frontend-route-extension health-routes \
   --frontend-route-extension metadata-routes
 ```
@@ -150,7 +150,7 @@ For the environment variable, use whitespace-separated values:
 
 ```bash
 DYN_FRONTEND_ROUTE_EXTENSIONS="health-routes metadata-routes" \
-  python -m dynamo.frontend
+  python -m dingo.frontend
 ```
 
 Provider names are de-duplicated. An unknown name fails startup and reports the available registered

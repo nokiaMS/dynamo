@@ -37,7 +37,7 @@ Dynamo 通过将服务、控制和状态传播拆分为明确的平面与控制�
 
 ## 架构概览
 
-![Dynamo 架构，展示 Request Plane（Client、Frontend、Router、Prefill/Decode workers）、Control Plane（Planner、Dynamo Operator、Dynamo Graph、Grove、Model Express、Runtime Resources）以及 Storage &amp; Events Plane（KVBM、NIXL、Local SSD/NFS/Remote Storage）](../../../../assets/img/dynamo-architecture.svg "Dynamo Architecture")
+![Dynamo 架构，展示 Request Plane（Client、Frontend、Router、Prefill/Decode workers）、Control Plane（Planner、Dynamo Operator、Dynamo Graph、Grove、Model Express、Runtime Resources）以及 Storage &amp; Events Plane（KVBM、NIXL、Local SSD/NFS/Remote Storage）](../../../assets/img/dynamo-architecture.svg "Dynamo Architecture")
 
 ## 系统模型
 
@@ -86,8 +86,8 @@ storage/events plane 负责缓存状态可见性和移动：
 8. **KV Events** 更新缓存可见性，供未来路由决策使用。
 9. **KVBM** 可以根据压力和复用潜力 offload 或 recall KV blocks。
 
-有关流程级细节，请参阅 [Architecture Flow](../../../../design-docs/dynamo-flow.md)。
-有关请求传输选项，请参阅 [Request Plane](../../../../design-docs/request-plane.md)。
+有关流程级细节，请参阅 [Architecture Flow](../../../design-docs/dynamo-flow.md)。
+有关请求传输选项，请参阅 [Request Plane](../../../design-docs/request-plane.md)。
 
 ## 控制循环
 
@@ -115,7 +115,7 @@ Planner 支持基于吞吐量和基于负载的策略。请参阅 [Planner 设�
 - Request migration/cancellation 控制正在处理中的行为。
 - Load shedding 防止过载下的级联崩溃。
 
-请参阅 [Fault Tolerance](../../../../fault-tolerance/README.md)。
+请参阅 [Fault Tolerance](../../../fault-tolerance/README.md)。
 
 ## Kubernetes 原生实现（CRD + Grove）
 
@@ -147,7 +147,7 @@ Fault tolerance 嵌入在各层中：
 
 分离 prefill 和 decode 可以提升利用率，并支持按阶段扩缩容。
 
-![两个散点图，对比 disagg 和 baseline 配置在单节点与双节点上的性能](../../../../assets/img/disagg-perf-benefit.png)
+![两个散点图，对比 disagg 和 baseline 配置在单节点与双节点上的性能](../../../assets/img/disagg-perf-benefit.png)
 
 *在 H100 上使用 vLLM 运行 R1 Distilled Llama 70B FP8 进行测试。3K ISL / 150 OSL。*
 
@@ -156,7 +156,7 @@ Fault tolerance 嵌入在各层中：
 结合缓存重叠和负载信号的路由可以减少 prefill 重新计算并改善延迟。
 有关外部生产案例研究，请参阅 [How Baseten achieved 2x faster inference with NVIDIA Dynamo](https://www.baseten.co/blog/how-baseten-achieved-2x-faster-inference-with-nvidia-dynamo/#how-baseten-uses-nvidia-dynamo)。
 
-![两个柱状图，对比 Random routing 和带 KV aware routing 的 Dynamo 在 Time To First Token（Dynamo 快 3 倍）与 Avg request latency（Dynamo 快 2 倍）上的表现。](../../../../assets/img/kv-routing.png)
+![两个柱状图，对比 Random routing 和带 KV aware routing 的 Dynamo 在 Time To First Token（Dynamo 快 3 倍）与 Avg request latency（Dynamo 快 2 倍）上的表现。](../../../assets/img/kv-routing.png)
 
 *使用 2 个 H100 节点上的 R1 Distilled Llama 70B FP8，对 R1 发起 100K 个请求进行测试。平均 4K ISL / 800 OSL。*
 
@@ -164,7 +164,7 @@ Fault tolerance 嵌入在各层中：
 
 KVBM 通过多层内存 offload/recall 扩展有效缓存容量。
 
-![折线图，对比 Pure GPU prefix caching with vLLM 和 KVBM host offloading 在 TTFT（Time To First Token）上的表现](../../../../assets/img/kvbm-agg-performance.png)
+![折线图，对比 Pure GPU prefix caching with vLLM 和 KVBM host offloading 在 TTFT（Time To First Token）上的表现](../../../assets/img/kvbm-agg-performance.png)
 
 *使用 H100 上的 Qwen3-8B，在不同 QPS 值下测试。平均 20K ISL / 100 OSL。*
 
@@ -180,14 +180,14 @@ NIXL 通过优化跨异构内存的 worker 间传输行为，降低分布式服�
 
 ## 相关文档
 
-- [Architecture Flow](../../../../design-docs/dynamo-flow.md)
-- [Router Design](../../../../design-docs/router-design.md)
+- [Architecture Flow](../../../design-docs/dynamo-flow.md)
+- [Router Design](../../../design-docs/router-design.md)
 - [Planner 设计](planner-design.md)
-- [Discovery Plane](../../../../design-docs/discovery-plane.md)
-- [Event Plane](../../../../design-docs/event-plane.md)
-- [Request Plane](../../../../design-docs/request-plane.md)
-- [Fault Tolerance](../../../../fault-tolerance/README.md)
-- [Grove](../../../../kubernetes/grove.md)
+- [Discovery Plane](../../../design-docs/discovery-plane.md)
+- [Event Plane](../../../design-docs/event-plane.md)
+- [Request Plane](../../../design-docs/request-plane.md)
+- [Fault Tolerance](../../../fault-tolerance/README.md)
+- [Grove](../../../kubernetes/grove.md)
 
 ## 致谢
 

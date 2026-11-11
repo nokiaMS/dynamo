@@ -40,7 +40,7 @@ Environment variables:
   DYN_TENSOR_PARALLEL_SIZE  Tensor parallel size (default: 1)
   DYN_MEDIA_OUTPUT_FS_URL   Media output filesystem URL (default: file:///tmp/dynamo_media)
 
-Any arguments after '--' are passed through to python -m dynamo.vllm.omni.
+Any arguments after '--' are passed through to python -m dingo.vllm.omni.
 USAGE
             exit 0
             ;;
@@ -75,7 +75,7 @@ echo "  curl -s -X DELETE http://localhost:${SYSTEM_PORT}/v1/loras/my-lora | jq 
 
 echo ""
 echo "Starting frontend..."
-python -m dynamo.frontend --http-port "$HTTP_PORT" &
+python -m dingo.frontend --http-port "$HTTP_PORT" &
 FRONTEND_PID=$!
 
 if ! wait_for_ready "http://localhost:${HTTP_PORT}/health" 60; then
@@ -86,7 +86,7 @@ fi
 echo "Starting Omni worker..."
 DYN_SYSTEM_ENABLED=true \
 DYN_SYSTEM_PORT="$SYSTEM_PORT" \
-    python -m dynamo.vllm.omni \
+    python -m dingo.vllm.omni \
     --model "$MODEL" \
     --output-modalities image \
     --enable-lora \

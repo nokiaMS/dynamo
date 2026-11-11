@@ -3,7 +3,7 @@
 `dynamo-sglang-sidecar` connects Dynamo's unified worker lifecycle to an
 out-of-process SGLang engine through SGLang's native gRPC service. It is a
 standalone Rust executable and is also compiled into `ai-dynamo-runtime` for
-the importable `dynamo.sglang.sidecar` launcher.
+the importable `dingo.sglang.sidecar` launcher.
 
 Build and run it directly from the Dynamo workspace:
 
@@ -24,7 +24,7 @@ SGLang can load the Python entry point and supply the gRPC endpoint arguments:
 python3 -m sglang.launch_server \
     <args> \
     --grpc-port 30001 \
-    --sidecar dynamo.sglang.sidecar
+    --sidecar dingo.sglang.sidecar
 ```
 
 The entry point configures Dynamo logging when `main()` runs, then calls the

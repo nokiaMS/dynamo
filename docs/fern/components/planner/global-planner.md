@@ -348,7 +348,7 @@ Clients can pass request targets through `extra_args`:
 }
 ```
 
-For more details, see [Global Router README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/global_router/README.md).
+For more details, see [Global Router README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/global_router/README.md).
 
 ## Step 5: Deploy In Order
 
@@ -422,6 +422,6 @@ This keeps profiling and pool selection simple while still giving you one public
 - [Planner Guide](planner-guide.md) — Planner configuration reference
 - [DGDR Templates](../../templates/dgdr.mdx) — DGDR examples for generating per-pool configs
 - [Profiler Guide](../profiler/profiler-guide.md) — Pre-deployment profiling workflow
-- [Global Planner README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/global_planner/README.md) — Centralized scale execution
-- [Global Router README](https://github.com/ai-dynamo/dynamo/blob/main/dingo/global_router/README.md) — Cross-pool request routing
+- [Global Planner README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/global_planner/README.md) — Centralized scale execution
+- [Global Router README](https://github.com/ai-dynamo/dynamo/blob/main/components/src/dynamo/global_router/README.md) — Cross-pool request routing
 - [vLLM global planner example](https://github.com/ai-dynamo/dynamo/blob/main/examples/global_planner/global-planner-vllm-test.yaml) — End-to-end reference manifest

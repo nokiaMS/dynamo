@@ -8,7 +8,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from dynamo.sglang.capacity import (
+from dingo.sglang.capacity import (
     local_dp_rank_bounds,
     model_card_dp_rank_bounds,
     publishes_kv_events,

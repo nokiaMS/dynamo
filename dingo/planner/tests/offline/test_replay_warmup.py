@@ -7,8 +7,8 @@ import json
 
 import pytest
 
-import dynamo.planner.offline.replay_adapter as replay_adapter_module
-import dynamo.replay.main as replay_main
+import dingo.planner.offline.replay_adapter as replay_adapter_module
+import dingo.replay.main as replay_main
 
 pytestmark = [
     pytest.mark.gpu_0,

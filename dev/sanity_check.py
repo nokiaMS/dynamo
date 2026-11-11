@@ -87,7 +87,6 @@ System info (hostname=jensen-linux, IP=10.111.122.133)
    │  └─ ✅ dynamo.runtime           $HOME/dynamo/lib/bindings/python/src/dynamo/runtime/__init__.py
    └─ ✅ Framework components: ai-dingo 0.5.0
       ├─ ✅ dingo.frontend  $HOME/dynamo/dingo/frontend/__init__.py
-      ├─ ✅ dynamo.llama_cpp $HOME/dynamo/components/src/dynamo/llama_cpp/__init__.py
       ├─ ✅ dingo.sglang    $HOME/dynamo/dingo/sglang/__init__.py
       └─ ✅ dingo.vllm      $HOME/dynamo/dingo/vllm/__init__.py
 
@@ -3704,29 +3703,23 @@ class DynamoFrameworkInfo(NodeInfo):
             List of framework component module names
             Example: ['dingo.frontend', 'dingo.planner', 'dingo.vllm', 'dingo.sglang']
 
-        Note: Scans components/src/dynamo/... directory for modules with __init__.py files.
+        Note: Scans dingo/... for component packages with __init__.py files.
         """
         components: List[str] = []
 
         if not workspace_dir:
             return components
 
-        dingo_frontend_path = os.path.join(
-            workspace_dir, "dingo", "frontend", "__init__.py"
-        )
-        if os.path.exists(dingo_frontend_path):
-            components.append("dingo.frontend")
-
-        # Scan the components/src/dynamo/... Python directory for __init__.py files
-        components_path = os.path.join(workspace_dir, "components", "src", "dynamo")
+        # Scan the relocated Dingo component packages.
+        components_path = os.path.join(workspace_dir, "dingo")
         if os.path.exists(components_path):
             for item in os.listdir(components_path):
                 item_path = os.path.join(components_path, item)
                 if os.path.isdir(item_path):
-                    # Check for dynamo module in src
+                    # Check for a component package.
                     module_path = os.path.join(item_path, "__init__.py")
                     if os.path.exists(module_path):
-                        components.append(f"dynamo.{item}")
+                        components.append(f"dingo.{item}")
 
         return components
 

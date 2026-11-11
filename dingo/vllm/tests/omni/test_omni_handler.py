@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dynamo.common.lora.manager import LoRAInfo
+from dingo.common.lora.manager import LoRAInfo
 
 try:
     from PIL import Image
@@ -510,7 +510,7 @@ class TestLoraEnablement:
         handler.config.engine_args.enable_lora = True
 
         with patch(
-            "dynamo.vllm.omni.omni_handler.get_lora_manager",
+            "dingo.vllm.omni.omni_handler.get_lora_manager",
             return_value=MagicMock(),
         ):
             with pytest.raises(ValueError, match="unknown model or LoRA adapter"):
@@ -520,7 +520,7 @@ class TestLoraEnablement:
         handler = _make_handler()
         handler.config.engine_args.enable_lora = True
 
-        with patch("dynamo.vllm.omni.omni_handler.get_lora_manager", return_value=None):
+        with patch("dingo.vllm.omni.omni_handler.get_lora_manager", return_value=None):
             assert handler._resolve_lora_request("ghost-adapter") is None
 
     def test_resolve_lora_request_served_alias_is_treated_as_base_model(self):
@@ -530,7 +530,7 @@ class TestLoraEnablement:
         handler._served_model_aliases = tuple(handler.config.served_model_aliases)
 
         with patch(
-            "dynamo.vllm.omni.omni_handler.get_lora_manager",
+            "dingo.vllm.omni.omni_handler.get_lora_manager",
             return_value=MagicMock(),
         ):
             assert handler._resolve_lora_request("test-model-alias") is None
@@ -539,7 +539,7 @@ class TestLoraEnablement:
 class TestLoraCapacity:
     def test_resolve_lora_capacity_uses_configured_max_loras(self):
         """Omni Base handler should defer LoRA capacity to configured max_loras."""
-        from dynamo.vllm.omni.base_handler import BaseOmniHandler
+        from dingo.vllm.omni.base_handler import BaseOmniHandler
 
         handler = BaseOmniHandler.__new__(BaseOmniHandler)
         config = SimpleNamespace(

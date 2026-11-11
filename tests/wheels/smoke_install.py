@@ -396,11 +396,11 @@ os.environ["TRANSFORMERS_OFFLINE"] = "1"
 import aiconfigurator_core
 from aiconfigurator_core.sdk.engine import compile_engine
 from aiconfigurator_core.sdk.memory import estimate_num_gpu_blocks
-from dynamo.common.forward_pass_metrics import (
+from dingo.common.forward_pass_metrics import (
     ForwardPassMetrics,
     ScheduledRequestMetrics,
 )
-from dynamo.mocker import AicEngineConfig, EnginePerfLimits, RustEnginePerfModel
+from dingo.mocker import AicEngineConfig, EnginePerfLimits, RustEnginePerfModel
 
 assert aiconfigurator_core and compile_engine and estimate_num_gpu_blocks
 

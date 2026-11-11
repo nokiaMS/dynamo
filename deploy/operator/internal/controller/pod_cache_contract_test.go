@@ -56,7 +56,7 @@ func TestProjectedPodSupportsControllerContract(t *testing.T) {
 			Containers: []corev1.Container{{
 				Name:    consts.MainContainerName,
 				Command: []string{"python"},
-				Args:    []string{"-m", "dynamo.vllm"},
+				Args:    []string{"-m", "dingo.vllm"},
 			}},
 			Volumes: []corev1.Volume{{
 				Name: "topology",

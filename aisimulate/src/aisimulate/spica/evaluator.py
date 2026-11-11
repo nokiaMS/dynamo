@@ -157,8 +157,8 @@ class ReplayEvaluator:
     # -- trace workloads -------------------------------------------------------
 
     def _evaluate_trace(self, plan: DeploymentPlan) -> dict[str, float]:
-        from dynamo.mocker import MockEngineArgs
-        from dynamo.replay.api import run_trace_replay
+        from dingo.mocker import MockEngineArgs
+        from dingo.replay.api import run_trace_replay
 
         wl = self.workload
         common = dict(
@@ -197,8 +197,8 @@ class ReplayEvaluator:
     def _evaluate_synthetic(
         self, plan: DeploymentPlan, *, concurrency_override: int | None = None
     ) -> dict[str, float]:
-        from dynamo.mocker import MockEngineArgs
-        from dynamo.replay.api import run_synthetic_trace_replay
+        from dingo.mocker import MockEngineArgs
+        from dingo.replay.api import run_synthetic_trace_replay
 
         common = dict(
             router_mode=plan.router_mode,

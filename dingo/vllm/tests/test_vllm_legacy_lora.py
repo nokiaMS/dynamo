@@ -58,7 +58,7 @@ def _make_prefill_handler():
     handler.generate_endpoint = object()
     handler.model_max_len = 8192
     # Initialize LoRA state
-    from dynamo.vllm.lora_state import LoRAState
+    from dingo.vllm.lora_state import LoRAState
 
     handler.engine_args = handler.config.engine_args
     handler._served_model_name = "llama2-7b"

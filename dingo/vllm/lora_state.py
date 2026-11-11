@@ -7,7 +7,7 @@ import weakref
 
 from vllm.lora.request import LoRARequest
 
-from dynamo.common.lora.manager import LoRAInfo
+from dingo.common.lora.manager import LoRAInfo
 
 
 class LoRAState:

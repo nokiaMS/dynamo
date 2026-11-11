@@ -42,7 +42,7 @@ func TestWithPodIdentityClassifiesLoRAFallback(t *testing.T) {
 				consts.KubeLabelDynamoComponentType:       consts.ComponentTypePrefill,
 				consts.KubeLabelDynamoGraphDeploymentName: "graph",
 			},
-			command:   []string{"python3", "-m", "dynamo.vllm"},
+			command:   []string{"python3", "-m", "dingo.vllm"},
 			wantAllow: true,
 			wantGroup: "graph:graph",
 		},
@@ -54,7 +54,7 @@ func TestWithPodIdentityClassifiesLoRAFallback(t *testing.T) {
 				consts.KubeLabelDynamoSelector:         "standalone-prefill",
 			},
 			command:   []string{"python3"},
-			args:      []string{"-m", "dynamo.vllm"},
+			args:      []string{"-m", "dingo.vllm"},
 			wantAllow: true,
 			wantGroup: "workload:standalone-prefill",
 		},
@@ -64,7 +64,7 @@ func TestWithPodIdentityClassifiesLoRAFallback(t *testing.T) {
 				consts.KubeLabelDynamoComponentType:       consts.ComponentTypeDecode,
 				consts.KubeLabelDynamoGraphDeploymentName: "graph",
 			},
-			command: []string{"python3", "-m", "dynamo.vllm"},
+			command: []string{"python3", "-m", "dingo.vllm"},
 		},
 		{
 			name: "SGLang prefill",
@@ -72,14 +72,14 @@ func TestWithPodIdentityClassifiesLoRAFallback(t *testing.T) {
 				consts.KubeLabelDynamoComponentType:       consts.ComponentTypePrefill,
 				consts.KubeLabelDynamoGraphDeploymentName: "graph",
 			},
-			command: []string{"python3", "-m", "dynamo.sglang"},
+			command: []string{"python3", "-m", "dingo.sglang"},
 		},
 		{
 			name: "vLLM prefill without topology",
 			labels: map[string]string{
 				consts.KubeLabelDynamoComponentType: consts.ComponentTypePrefill,
 			},
-			command: []string{"python3", "-m", "dynamo.vllm"},
+			command: []string{"python3", "-m", "dingo.vllm"},
 		},
 	}
 

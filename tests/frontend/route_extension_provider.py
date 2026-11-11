@@ -7,7 +7,7 @@ The e2e test registers this provider under the ``dynamo.frontend.routes``
 entry-point group (via a throwaway ``.dist-info`` on ``PYTHONPATH``, so no real
 package install is required) and launches::
 
-    python -m dynamo.frontend --frontend-route-extension <name>
+    python -m dingo.frontend --frontend-route-extension <name>
 
 then calls ``/hello_world`` and validates the response. ``FrontendRoute`` is
 imported lazily inside ``routes()`` so this module stays importable (for the

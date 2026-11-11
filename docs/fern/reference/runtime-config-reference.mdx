@@ -48,20 +48,20 @@ Unless a field is marked environment-only, it has both a CLI flag and an environ
 
     ```bash
     # Frontend
-    python -m dynamo.frontend \
+    python -m dingo.frontend \
         --namespace my-cluster \
         --discovery-backend etcd \
         --endpoint-types chat
 
     # vLLM worker
-    python -m dynamo.vllm \
+    python -m dingo.vllm \
         --namespace my-cluster \
         --model meta-llama/Llama-3.1-8B-Instruct \
         --dyn-tool-call-parser llama3_json \
         --exclude-tools-when-tool-choice-none
 
     # SGLang worker
-    python -m dynamo.sglang \
+    python -m dingo.sglang \
         --namespace my-cluster \
         --model-path Qwen/Qwen3-32B
     ```
@@ -129,13 +129,13 @@ Unless a field is marked environment-only, it has both a CLI flag and an environ
 ## Parsing
 
 <ParamField path="--dyn-tool-call-parser" type="string" default="null">
-  Tool call parser name for the model. When unset, the backend's default tool call parsing is used. Valid parser names are determined at runtime by the installed `dynamo._core` extension — run `python -m dynamo.vllm --help` to see the available choices on your installation.
+  Tool call parser name for the model. When unset, the backend's default tool call parsing is used. Valid parser names are determined at runtime by the installed `dynamo._core` extension — run `python -m dingo.vllm --help` to see the available choices on your installation.
 
   Environment variable: `DYN_TOOL_CALL_PARSER`
 </ParamField>
 
 <ParamField path="--dyn-reasoning-parser" type="string" default="null">
-  Reasoning/chain-of-thought parser name for the model. When unset, no reasoning parsing is performed. Valid parser names are determined at runtime by the installed `dynamo._core` extension — run `python -m dynamo.vllm --help` to see the available choices on your installation.
+  Reasoning/chain-of-thought parser name for the model. When unset, no reasoning parsing is performed. Valid parser names are determined at runtime by the installed `dynamo._core` extension — run `python -m dingo.vllm --help` to see the available choices on your installation.
 
   Environment variable: `DYN_REASONING_PARSER`
 </ParamField>

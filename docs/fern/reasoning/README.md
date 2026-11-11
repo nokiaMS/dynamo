@@ -18,13 +18,13 @@ Some models emit reasoning separately from their final response. Dynamo can spli
     To inspect the available worker flags, run:
 
     ```bash
-    python -m dynamo.<backend> --help
+    python -m dingo.<backend> --help
     ```
 
     The following example starts an SGLang worker for Qwen3.5:
 
     ```bash
-    python -m dynamo.sglang \
+    python -m dingo.sglang \
       --model Qwen/Qwen3.5-4B \
       --dyn-tool-call-parser qwen3_coder \
       --reasoning-parser qwen3 \
@@ -55,7 +55,7 @@ Some models emit reasoning separately from their final response. Dynamo can spli
     Start the Dynamo frontend in another terminal:
 
     ```bash
-    python -m dynamo.frontend
+    python -m dingo.frontend
     ```
   </Step>
 
@@ -120,7 +120,7 @@ chat template. The option works with vLLM, SGLang, and TensorRT-LLM workers.
 For example, make thinking disabled by default for a Qwen3 deployment:
 
 ```bash
-python -m dynamo.vllm \
+python -m dingo.vllm \
   --model Qwen/Qwen3-0.6B \
   --dyn-default-thinking-mode disabled
 ```
@@ -129,7 +129,7 @@ You can configure the same value through the environment:
 
 ```bash
 DYN_DEFAULT_THINKING_MODE=disabled \
-  python -m dynamo.vllm --model Qwen/Qwen3-0.6B
+  python -m dingo.vllm --model Qwen/Qwen3-0.6B
 ```
 
 Use the same setting on every worker that serves the model. When the option is

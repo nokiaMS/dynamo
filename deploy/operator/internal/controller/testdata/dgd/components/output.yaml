@@ -215,7 +215,7 @@ spec:
             containers:
                 - args:
                     - -m
-                    - dynamo.frontend
+                    - dingo.frontend
                   command:
                     - python3
                   env:

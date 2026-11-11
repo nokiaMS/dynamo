@@ -4,7 +4,7 @@
 """Score a replay ``trace_report`` against the optimization goal.
 
 Three steps, mirroring the existing profiler replay optimizer
-(``components/src/dynamo/profiler/utils/replay_optimize``) adapted to spica's
+(``dingo/profiler/utils/replay_optimize``) adapted to spica's
 ``Candidate`` / ``OptimizationGoal`` and the merged replay report keys:
 
 1. **objective** — map the goal target to a number from the report. The

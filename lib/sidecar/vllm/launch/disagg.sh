@@ -86,7 +86,7 @@ print_launch_banner "Launching vLLM Native-gRPC Sidecar Disaggregated Serving (2
     "Decode:      GPU ${VLLM_DECODE_GPU}, gRPC 127.0.0.1:${VLLM_DECODE_GRPC_PORT}" \
     "Prefill:     GPU ${VLLM_PREFILL_GPU}, gRPC 127.0.0.1:${VLLM_PREFILL_GRPC_PORT}"
 
-python -m dynamo.frontend &
+python -m dingo.frontend &
 
 # vllm-rs manages the headless Python engines and exposes native gRPC on
 # loopback. Arguments after -- are forwarded to each managed engine.

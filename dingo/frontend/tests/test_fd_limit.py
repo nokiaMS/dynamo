@@ -11,7 +11,7 @@ import builtins
 
 import pytest
 
-from dynamo.frontend.main import FRONTEND_FD_LIMIT_TARGET, _raise_fd_limit
+from dingo.frontend.main import FRONTEND_FD_LIMIT_TARGET, _raise_fd_limit
 
 pytestmark = [
     pytest.mark.unit,

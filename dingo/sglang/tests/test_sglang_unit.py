@@ -238,7 +238,7 @@ async def test_parse_args_enables_incremental_streaming_before_resolution(
         )
         return server_args
 
-    monkeypatch.setattr("dynamo.sglang.args.ServerArgs.from_cli_args", resolve)
+    monkeypatch.setattr("dingo.sglang.args.ServerArgs.from_cli_args", resolve)
     mock_sglang_cli(model="/tmp")
 
     config = await parse_args(sys.argv[1:])
@@ -265,7 +265,7 @@ async def test_parse_args_applies_dynamo_defaults_before_resolution(
         assert parsed_args.max_running_requests == 8
         return server_args
 
-    monkeypatch.setattr("dynamo.sglang.args.ServerArgs.from_cli_args", resolve)
+    monkeypatch.setattr("dingo.sglang.args.ServerArgs.from_cli_args", resolve)
     mock_sglang_cli("--model", "/tmp", "--dllm-algorithm", "dream")
 
     await parse_args(sys.argv[1:])

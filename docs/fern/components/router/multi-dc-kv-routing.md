@@ -165,7 +165,7 @@ old ready set may finish under the documented weak-read contract.
 Start one Relay process with a control-plane-stable DC name:
 
 ```bash
-python -m dynamo.kv_dc_relay --dc-id <stable-dc-id>
+python -m dingo.kv_dc_relay --dc-id <stable-dc-id>
 ```
 
 The Relay discovers compatible local endpoints, consumes their KV events, and exposes health.

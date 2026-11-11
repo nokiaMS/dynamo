@@ -81,7 +81,7 @@ print_launch_banner "Launching SGLang Native-gRPC Sidecar (Disaggregated, 2 GPUs
     "Decode:      GPU ${SGLANG_DECODE_GPU}, HTTP http://${SGLANG_HOST}:${SGLANG_DECODE_HTTP_PORT}, gRPC ${SGLANG_HOST}:${SGLANG_DECODE_GRPC_PORT}" \
     "Bootstrap:   ${SGLANG_BOOTSTRAP_HOST}:${SGLANG_DISAGGREGATION_BOOTSTRAP_PORT}"
 
-python3 -m dynamo.frontend &
+python3 -m dingo.frontend &
 
 # shellcheck disable=SC2086 # GPU_MEM_ARGS intentionally expands into multiple flags.
 CUDA_VISIBLE_DEVICES="$SGLANG_PREFILL_GPU" \

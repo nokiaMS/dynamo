@@ -39,7 +39,7 @@ For reasoning models with structured output (`response_format`, JSON schema,
 or required/named tool choice), configure both reasoning parsers on the worker:
 
 ```bash
-python -m dynamo.vllm --model <model> \
+python -m dingo.vllm --model <model> \
   --reasoning-parser <vllm-parser> \
   --dyn-reasoning-parser <dynamo-parser>
 ```
