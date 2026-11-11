@@ -386,6 +386,7 @@ impl OpenAIPreprocessor {
     fn backend_extra_args<R: OAIChatLikeRequest + NvExtProvider>(
         request: &R,
         reasoning_parser_configured: bool,
+        reasoning_ended: Option<bool>,
     ) -> Option<serde_json::Value> {
         let mut extra_args = serde_json::Map::new();
 
@@ -414,6 +415,9 @@ impl OpenAIPreprocessor {
                 "reasoning_parser_kwargs".to_string(),
                 serde_json::json!({ "chat_template_kwargs": chat_template_args }),
             );
+        }
+        if reasoning_parser_configured && let Some(reasoning_ended) = reasoning_ended {
+            extra_args.insert("reasoning_ended".to_string(), reasoning_ended.into());
         }
 
         if extra_args.is_empty() {
@@ -483,6 +487,7 @@ impl OpenAIPreprocessor {
             Some("minimax_m2") => {
                 Self::deepseek_renderer_reasoning_enabled(chat_template_args, true)
             }
+
 
             // DeepSeek V3/V3.1 templates are opt-in. The native V3.2/V4
             // renderers default to thinking; all honor the same aliases.
@@ -1123,9 +1128,11 @@ impl OpenAIPreprocessor {
             }));
         }
 
-        if let Some(extra_args) =
-            Self::backend_extra_args(request, self.runtime_config.reasoning_parser.is_some())
-        {
+        if let Some(extra_args) = Self::backend_extra_args(
+            request,
+            self.runtime_config.reasoning_parser.is_some(),
+            None,
+        ) {
             builder.extra_args(Some(extra_args));
         }
 
@@ -1543,9 +1550,14 @@ impl OpenAIPreprocessor {
                 extra_args["formatted_prompt"] = serde_json::Value::String(prompt.to_string());
             }
 
-            if let Some(serde_json::Value::Object(backend_extra_args)) =
-                Self::backend_extra_args(request, self.runtime_config.reasoning_parser.is_some())
-            {
+            if let Some(serde_json::Value::Object(backend_extra_args)) = Self::backend_extra_args(
+                request,
+                self.runtime_config.reasoning_parser.is_some(),
+                Self::prompt_injected_reasoning_ended_arg(
+                    self.runtime_config.reasoning_parser.as_deref(),
+                    formatted_prompt,
+                ),
+            ) {
                 let extra_args_obj = extra_args
                     .as_object_mut()
                     .expect("multimodal extra_args must be an object");
@@ -2989,6 +3001,7 @@ impl OpenAIPreprocessor {
                     | "step3"
                     | "kimi_k25"
                     | "mistral"
+                    | "minimax_m2"
                     | "minimax_append_think"
                     | "nemotron_nano"
                     | "nemotron3"
@@ -3011,6 +3024,7 @@ impl OpenAIPreprocessor {
                     | "step3"
                     | "kimi_k25"
                     | "mistral"
+                    | "minimax_m2"
                     | "nemotron_nano"
                     | "nemotron3"
                     | "nemotron_v3"
@@ -3076,7 +3090,6 @@ impl OpenAIPreprocessor {
             None
         }
     }
-
     /// Check if reasoning parsing should be disabled based on per-request parameters.
     /// For kimi_k25/K3: disabled when chat_template_args contains "thinking": false.
     /// For Nemotron force-reasoning aliases: disabled when chat_template_args
@@ -3118,7 +3131,8 @@ impl OpenAIPreprocessor {
                 !Self::deepseek_renderer_reasoning_enabled(chat_template_args, false)
             }
             Some(
-                "deepseek_r1" | "deepseek_v3_2" | "deepseek_v4" | "deepseek-v4" | "deepseekv4",
+                "deepseek_r1" | "deepseek_v3_2" | "deepseek_v4" | "deepseek-v4" | "deepseekv4"
+                | "minimax_m2",
             ) => !Self::deepseek_renderer_reasoning_enabled(chat_template_args, true),
             Some("gemma4") | Some("gemma-4") => {
                 if let Some(enabled) = dynamo_renderer::thinking_bool_from_args(chat_template_args)
@@ -4156,6 +4170,7 @@ mod tests {
             "step3",
             "kimi_k25",
             "mistral",
+            "minimax_m2",
             "nemotron_nano",
             "nemotron3",
             "nemotron_v3",
@@ -4340,7 +4355,7 @@ mod tests {
         }))
         .unwrap();
 
-        let extra_args = OpenAIPreprocessor::backend_extra_args(&request, false).unwrap();
+        let extra_args = OpenAIPreprocessor::backend_extra_args(&request, false, None).unwrap();
 
         assert_eq!(extra_args["nvext"]["cache_salt"], "step_7");
         assert_eq!(
@@ -4614,7 +4629,8 @@ mod tests {
                 }))
                 .unwrap();
 
-            let extra_args = OpenAIPreprocessor::backend_extra_args(&request, true).unwrap();
+            let extra_args =
+                OpenAIPreprocessor::backend_extra_args(&request, true, Some(false)).unwrap();
 
             assert_eq!(
                 extra_args["reasoning_parser_kwargs"]["chat_template_kwargs"],
@@ -4623,6 +4639,7 @@ mod tests {
                     "reasoning_effort": "high"
                 })
             );
+            assert_eq!(extra_args["reasoning_ended"], false);
         }
     }
 
@@ -4639,10 +4656,12 @@ mod tests {
         }))
         .unwrap();
 
-        let extra_args = OpenAIPreprocessor::backend_extra_args(&request, false).unwrap();
+        let extra_args =
+            OpenAIPreprocessor::backend_extra_args(&request, false, Some(false)).unwrap();
 
         assert_eq!(extra_args["sampling_options"]["detokenize"], false);
         assert!(extra_args.get("reasoning_parser_kwargs").is_none());
+        assert!(extra_args.get("reasoning_ended").is_none());
     }
 
     /// Verifies no parser metadata is added when template arguments are absent.
@@ -4654,8 +4673,9 @@ mod tests {
         }))
         .unwrap();
 
-        assert!(OpenAIPreprocessor::backend_extra_args(&request, true).is_none());
+        assert!(OpenAIPreprocessor::backend_extra_args(&request, true, None).is_none());
     }
+
 
     #[test]
     fn test_internal_preserve_omitted_max_tokens_option() {
@@ -4978,6 +4998,24 @@ mod tests {
                 Some(&thinking_false),
                 true,
                 "deepseek_v3_2 + thinking=false → disabled",
+            ),
+            (
+                Some("minimax_m2"),
+                Some(&thinking_false),
+                true,
+                "minimax_m2 + thinking=false → disabled",
+            ),
+            (
+                Some("minimax_m2"),
+                Some(&thinking_true),
+                false,
+                "minimax_m2 + thinking=true → enabled",
+            ),
+            (
+                Some("minimax_m2"),
+                None,
+                false,
+                "minimax_m2 + no args → enabled",
             ),
             (
                 Some("basic"),
