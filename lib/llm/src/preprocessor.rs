@@ -1376,13 +1376,33 @@ impl OpenAIPreprocessor {
                 } else {
                     let (type_str, url) = match content_part {
                         ChatCompletionRequestUserMessageContentPart::ImageUrl(p) => {
-                            ("image_url", p.image_url.as_ref().unwrap().url.clone())
+                            let url = p
+                                .image_url
+                                .as_ref()
+                                .context(
+                                    "Cannot decode an image content part without a URL; UUID-only parts must be resolved by the backend cache",
+                                )?
+                                .url
+                                .clone();
+                            ("image_url", url)
                         }
                         ChatCompletionRequestUserMessageContentPart::VideoUrl(p) => {
-                            ("video_url", p.video_url.as_ref().unwrap().url.clone())
+                            let url = p
+                                .video_url
+                                .as_ref()
+                                .context("video_url content part is missing a URL")?
+                                .url
+                                .clone();
+                            ("video_url", url)
                         }
                         ChatCompletionRequestUserMessageContentPart::AudioUrl(p) => {
-                            ("audio_url", p.audio_url.as_ref().unwrap().url.clone())
+                            let url = p
+                                .audio_url
+                                .as_ref()
+                                .context("audio_url content part is missing a URL")?
+                                .url
+                                .clone();
+                            ("audio_url", url)
                         }
                         _ => continue,
                     };
@@ -1422,9 +1442,14 @@ impl OpenAIPreprocessor {
                         let h = shape[0] as u32;
                         let w = shape[1] as u32;
                         let url_str = match _content_part {
-                            ChatCompletionRequestUserMessageContentPart::ImageUrl(p) => {
-                                p.image_url.as_ref().unwrap().url.as_str()
-                            }
+                            ChatCompletionRequestUserMessageContentPart::ImageUrl(p) => p
+                                .image_url
+                                .as_ref()
+                                .context(
+                                    "Cannot decode an image content part without a URL; UUID-only parts must be resolved by the backend cache",
+                                )?
+                                .url
+                                .as_str(),
                             _ => unreachable!(
                                 "rdma image_url descriptor only originates from ImageUrl content parts"
                             ),

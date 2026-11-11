@@ -87,9 +87,12 @@ fn instrumented_tokenizer_cache(
     cache_bytes: usize,
     cache_extend: bool,
     model: &str,
-) -> anyhow::Result<Arc<dyn crate::tokenizers::traits::Tokenizer>> {
+) -> Result<Arc<dyn crate::tokenizers::traits::Tokenizer>> {
+    let cached = crate::tokenizers::CachedTokenizer::new(raw, special_tokens, cache_bytes)
+        .context("failed to initialize tokenizer prefix cache")?;
+
     Ok(Arc::new(
-        crate::tokenizers::CachedTokenizer::new(raw, special_tokens, cache_bytes)?
+        cached
             .with_extend(cache_extend)
             .with_observer(
                 Arc::new(|| {
