@@ -124,7 +124,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.frontend
+            - dingo.frontend
           args:
             - --router-mode
             - round-robin
@@ -147,7 +147,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.global_router
+            - dingo.global_router
           args:
             - --config
             - /config/global_router_config.json
@@ -169,7 +169,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.global_planner
+            - dingo.global_planner
 ---
 apiVersion: nvidia.com/v1alpha1
 kind: DynamoGraphDeployment
@@ -190,7 +190,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.router
+            - dingo.router
           args:
             - --endpoint
             - ${K8S_NAMESPACE}-gp-prefill-0.prefill.generate
@@ -234,7 +234,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.vllm
+            - dingo.vllm
           args:
             - --model
             - ${MODEL_NAME}
@@ -263,7 +263,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.planner
+            - dingo.planner
           args:
             - --config
             - '{"environment":"global-planner","global_planner_namespace":"${K8S_NAMESPACE}-gp-ctrl","backend":"vllm","mode":"prefill","optimization_target":"sla","enable_load_scaling":false,"enable_throughput_scaling":true,"throughput_metrics_source":"router","ttft_ms":2000,"max_gpu_budget":-1,"prefill_engine_num_gpu":1,"model_name":"${MODEL_NAME}","profile_results_dir":"/workspace/profiling_results"}'
@@ -291,7 +291,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.router
+            - dingo.router
           args:
             - --endpoint
             - ${K8S_NAMESPACE}-gp-prefill-1.prefill.generate
@@ -335,7 +335,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.vllm
+            - dingo.vllm
           args:
             - --model
             - ${MODEL_NAME}
@@ -364,7 +364,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.planner
+            - dingo.planner
           args:
             - --config
             - '{"environment":"global-planner","global_planner_namespace":"${K8S_NAMESPACE}-gp-ctrl","backend":"vllm","mode":"prefill","optimization_target":"sla","enable_load_scaling":false,"enable_throughput_scaling":true,"throughput_metrics_source":"router","ttft_ms":2000,"max_gpu_budget":-1,"prefill_engine_num_gpu":1,"model_name":"${MODEL_NAME}","profile_results_dir":"/workspace/profiling_results"}'
@@ -392,7 +392,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.router
+            - dingo.router
           args:
             - --endpoint
             - ${K8S_NAMESPACE}-gp-decode-0.backend.generate
@@ -437,7 +437,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.vllm
+            - dingo.vllm
           args:
             - --model
             - ${MODEL_NAME}
@@ -464,7 +464,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.planner
+            - dingo.planner
           args:
             - --config
             - '{"environment":"global-planner","global_planner_namespace":"${K8S_NAMESPACE}-gp-ctrl","backend":"vllm","mode":"decode","optimization_target":"sla","enable_load_scaling":false,"enable_throughput_scaling":true,"throughput_metrics_source":"router","itl_ms":200,"max_gpu_budget":-1,"decode_engine_num_gpu":1,"model_name":"${MODEL_NAME}","profile_results_dir":"/workspace/profiling_results"}'

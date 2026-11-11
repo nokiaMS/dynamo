@@ -4,7 +4,7 @@
 """Capacity backend contract for the GlobalPlanner — reads and writes scaling state.
 
 :class:`CapacityManager` is the infrastructure-facing base class the
-:class:`~dynamo.global_planner.orchestrator.Orchestrator` drives to **observe**
+:class:`~dingo.global_planner.orchestrator.Orchestrator` drives to **observe**
 current pool state and **scale** replicas. It defines a neutral,
 infrastructure-agnostic surface (``observe`` / ``scale`` / ``discover`` /
 ``ensure_participant`` / ``participant_exists`` / ``remember_roles`` /
@@ -12,7 +12,7 @@ infrastructure-agnostic surface (``observe`` / ``scale`` / ``discover`` /
 sees Kubernetes concepts.
 
 The concrete Kubernetes backend is
-:class:`~dynamo.global_planner.kubernetes_capacity_manager.KubernetesCapacityManager`.
+:class:`~dingo.global_planner.kubernetes_capacity_manager.KubernetesCapacityManager`.
 """
 
 from __future__ import annotations
@@ -20,7 +20,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from dynamo.planner import TargetReplica
+from dingo.planner import TargetReplica
 
 
 @dataclass

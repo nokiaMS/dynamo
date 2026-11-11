@@ -5,8 +5,8 @@
 # Aggregated serving with a CustomEncoder.
 #
 # Architecture: single aggregated worker
-#   - Frontend: dynamo.frontend (OpenAI-compatible HTTP gateway)
-#   - Worker:   dynamo.vllm with a CustomEncoder loaded in-process
+#   - Frontend: dingo.frontend (OpenAI-compatible HTTP gateway)
+#   - Worker:   dingo.vllm with a CustomEncoder loaded in-process
 #
 # The CustomEncoder is called for each multimodal request:
 #   1. encoder.encode(image_urls) → list[(n_visual_tokens, lm_hidden_dim)]
@@ -107,7 +107,7 @@ export DYN_HTTP_BODY_LIMIT_MB=200
 
 # ── Frontend ──────────────────────────────────────────────────────────────────
 echo "[1/2] Starting frontend (port $HTTP_PORT)..."
-python -m dynamo.frontend &
+python -m dingo.frontend &
 
 # ── Aggregated worker ─────────────────────────────────────────────────────────
 echo "[2/2] Starting aggregated worker (model=$MODEL, GPU=$WORKER_GPU)..."
@@ -115,7 +115,7 @@ JINJA_ARG=()
 [[ -n "$CUSTOM_JINJA_TEMPLATE" ]] && JINJA_ARG=(--custom-jinja-template "$CUSTOM_JINJA_TEMPLATE")
 CUDA_VISIBLE_DEVICES=$WORKER_GPU \
 DYN_SYSTEM_PORT=${DYN_SYSTEM_PORT:-8081} \
-python -m dynamo.vllm \
+python -m dingo.vllm \
     --model "$MODEL" \
     --custom-encoder-class "$ENCODER_CLASS" \
     --enable-multimodal \

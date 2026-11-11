@@ -5,8 +5,8 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from dynamo.planner import __main__ as planner_main
-from dynamo.planner.config.planner_config import PlannerConfig
+from dingo.planner import __main__ as planner_main
+from dingo.planner.config.planner_config import PlannerConfig
 
 pytestmark = [
     pytest.mark.gpu_0,

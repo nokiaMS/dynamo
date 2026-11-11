@@ -5,7 +5,7 @@ import os
 
 import pytest
 
-from dynamo.common.utils.paths import WORKSPACE_DIR
+from dingo.common.utils.paths import WORKSPACE_DIR
 from tests.utils.multimodal import (
     MmCase,
     MultimodalModelProfile,

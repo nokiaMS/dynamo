@@ -14,7 +14,7 @@ from pathlib import Path
 
 import pytest
 
-from dynamo.profiler.utils.dgd_override import apply_dgd_overrides
+from dingo.profiler.utils.dgd_override import apply_dgd_overrides
 
 _RUN_INTEGRATION_ENV = "DYNAMO_RUN_DGD_OVERRIDE_GO_INTEGRATION"
 
@@ -37,7 +37,7 @@ def go_override_binary(tmp_path_factory: pytest.TempPathFactory) -> Path:
     if go is None:
         pytest.fail("Go is required when the DGD override integration test is enabled")
 
-    repository_root = Path(__file__).resolve().parents[6]
+    repository_root = Path(__file__).resolve().parents[4]
     operator_dir = repository_root / "deploy" / "operator"
     binary = tmp_path_factory.mktemp("dgd-override-go") / "dgd-apply-overrides"
     environment = os.environ.copy()

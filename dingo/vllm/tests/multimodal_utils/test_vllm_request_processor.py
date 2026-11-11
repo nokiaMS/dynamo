@@ -7,9 +7,9 @@ from unittest.mock import AsyncMock, MagicMock
 import pytest
 from PIL import Image
 
-from dynamo.common.constants import DisaggregationMode
-from dynamo.vllm.multimodal_utils import request_processor as mod
-from dynamo.vllm.multimodal_utils.models import qwen as qwen_mod
+from dingo.common.constants import DisaggregationMode
+from dingo.vllm.multimodal_utils import request_processor as mod
+from dingo.vllm.multimodal_utils.models import qwen as qwen_mod
 
 pytestmark = [
     pytest.mark.unit,

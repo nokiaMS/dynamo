@@ -5,7 +5,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from dynamo.planner.core.throughput_scaling import ThroughputScalingMixin
+from dingo.planner.core.throughput_scaling import ThroughputScalingMixin
 
 pytestmark = [
     pytest.mark.gpu_0,

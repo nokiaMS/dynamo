@@ -149,7 +149,7 @@ class TestCacheSaltWiring:
         assert prompt["cache_salt"] == "dynamo-cache-salt:top_level"
 
     def test_empty_cache_salt_is_absent(self):
-        from dynamo.vllm.handlers import _apply_nvext_cache_salt
+        from dingo.vllm.handlers import _apply_nvext_cache_salt
 
         req = self._build_token_mode_request(cache_salt="")
         prompt = {"prompt_token_ids": req["token_ids"]}
@@ -158,7 +158,7 @@ class TestCacheSaltWiring:
         assert "cache_salt" not in prompt
 
     def test_cache_salt_prefix_is_escaped_by_reprefixing(self):
-        from dynamo.vllm.handlers import _apply_nvext_cache_salt
+        from dingo.vllm.handlers import _apply_nvext_cache_salt
 
         req = self._build_token_mode_request(cache_salt="dynamo-cache-salt:tenant-a")
         prompt = {"prompt_token_ids": req["token_ids"]}

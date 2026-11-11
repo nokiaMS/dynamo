@@ -7,14 +7,14 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from dynamo.planner.config.defaults import SubComponentType
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.core.adapters import AggPlanner
-from dynamo.planner.core.types import PlannerEffects, ScalingDecision, ScheduledTick
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.monitoring.traffic_metrics import Metrics
-from dynamo.planner.monitoring.worker_info import WorkerInfo
-from dynamo.planner.plugins.builtins.observe import (
+from dingo.planner.config.defaults import SubComponentType
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.core.adapters import AggPlanner
+from dingo.planner.core.types import PlannerEffects, ScalingDecision, ScheduledTick
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.monitoring.traffic_metrics import Metrics
+from dingo.planner.monitoring.worker_info import WorkerInfo
+from dingo.planner.plugins.builtins.observe import (
     EnvironmentObservePlugin,
     ObserveStageRequest,
 )
@@ -94,7 +94,7 @@ async def test_complete_tick_applies_scaling_only_when_not_advisory(advisory):
         report_interval_hours=None,
     )
     with patch(
-        "dynamo.planner.core.base.PlannerPrometheusMetrics",
+        "dingo.planner.core.base.PlannerPrometheusMetrics",
         return_value=MagicMock(),
     ):
         planner = RecordingAggPlanner(None, config, environment)

@@ -719,7 +719,7 @@ async def test_set_component_replicas_deployment_not_ready_can_raise_for_global_
     """Let GlobalPlanner opt in to retryable not-ready rejection."""
     # Arrange
     monkeypatch.setattr(
-        "dynamo.planner.connectors.kubernetes.KubernetesAPI", mock_kube_api_class
+        "dingo.planner.connectors.kubernetes.KubernetesAPI", mock_kube_api_class
     )
     with patch.dict(os.environ, {"DYN_PARENT_DGD_K8S_NAME": "test-graph"}):
         connector = KubernetesConnector("test-dynamo-namespace", raise_not_ready=True)

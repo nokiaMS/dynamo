@@ -3,9 +3,9 @@
 
 import pytest
 
-from dynamo.planner.core.types import FpmObservations, ScheduledTick, TrafficObservation
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.plugins.builtins.observe import (
+from dingo.planner.core.types import FpmObservations, ScheduledTick, TrafficObservation
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.plugins.builtins.observe import (
     EnvironmentObservePlugin,
     ObserveStageRequest,
 )

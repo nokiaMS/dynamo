@@ -48,7 +48,7 @@ spec:
             - python3
           args:
             - -m
-            - dynamo.frontend
+            - dingo.frontend
             - --router-mode
             - kv
             - --no-kv-events
@@ -85,7 +85,7 @@ spec:
           command:
             - python3
             - -m
-            - dynamo.vllm
+            - dingo.vllm
           args:
             - --model
             - Qwen/Qwen3-0.6B

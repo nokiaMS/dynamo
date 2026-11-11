@@ -127,11 +127,11 @@ class TestRunNaiveFallback:
         dgdr = _make_dgdr(sla=SLASpec(ttft=1.0, itl=1.0))
         with (
             patch(
-                "dynamo.profiler.rapid.build_naive_generator_params",
+                "dingo.profiler.rapid.build_naive_generator_params",
                 return_value=copy.deepcopy(_FAKE_GENERATOR_PARAMS),
             ),
             patch(
-                "dynamo.profiler.rapid.generate_backend_artifacts",
+                "dingo.profiler.rapid.generate_backend_artifacts",
                 return_value={},
             ),
             caplog.at_level(logging.WARNING),
@@ -149,11 +149,11 @@ class TestRunNaiveFallback:
         dgdr = _make_dgdr(sla=SLASpec(ttft=None, itl=None, e2eLatency=35000.0))
         with (
             patch(
-                "dynamo.profiler.rapid.build_naive_generator_params",
+                "dingo.profiler.rapid.build_naive_generator_params",
                 return_value=copy.deepcopy(_FAKE_GENERATOR_PARAMS),
             ),
             patch(
-                "dynamo.profiler.rapid.generate_backend_artifacts",
+                "dingo.profiler.rapid.generate_backend_artifacts",
                 return_value={},
             ),
             caplog.at_level(logging.WARNING),
@@ -171,11 +171,11 @@ class TestRunNaiveFallback:
         dgdr = _make_dgdr(sla=SLASpec(ttft=None, itl=None, e2eLatency=None))
         with (
             patch(
-                "dynamo.profiler.rapid.build_naive_generator_params",
+                "dingo.profiler.rapid.build_naive_generator_params",
                 return_value=copy.deepcopy(_FAKE_GENERATOR_PARAMS),
             ),
             patch(
-                "dynamo.profiler.rapid.generate_backend_artifacts",
+                "dingo.profiler.rapid.generate_backend_artifacts",
                 return_value={},
             ),
             caplog.at_level(logging.WARNING),

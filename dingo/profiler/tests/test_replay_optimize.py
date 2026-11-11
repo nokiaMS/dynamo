@@ -235,7 +235,7 @@ def test_run_replay_for_state_uses_request_rate_as_poisson_open_loop(
         return {"output_throughput_tok_s": 1.0}
 
     monkeypatch.setattr(
-        "dynamo.profiler.utils.replay_optimize.evaluate.run_synthetic_trace_replay",
+        "dingo.profiler.utils.replay_optimize.evaluate.run_synthetic_trace_replay",
         fake_run_synthetic_trace_replay,
     )
 

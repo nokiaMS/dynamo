@@ -9,7 +9,7 @@ token layout the transferred KV depends on.
 import logging
 from typing import Any, Dict, Optional
 
-from dynamo.common.multimodal.cache_uuid import reject_unsupported_multimodal_uuids
+from dingo.common.multimodal.cache_uuid import reject_unsupported_multimodal_uuids
 
 logger = logging.getLogger(__name__)
 

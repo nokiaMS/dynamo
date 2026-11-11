@@ -157,7 +157,7 @@ def test_frontend_route_extension_rejects_duplicate_routes(tmp_path):
             [
                 sys.executable,
                 "-m",
-                "dynamo.frontend",
+                "dingo.frontend",
                 "--http-port",
                 str(port),
                 "--router-mode",

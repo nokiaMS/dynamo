@@ -10,13 +10,13 @@ import logging
 from enum import Enum
 from typing import Any
 
-from dynamo.profiler.utils.config_modifiers import CONFIG_MODIFIERS
-from dynamo.profiler.utils.dgd_override import apply_dgd_overrides
-from dynamo.profiler.utils.model_info import (
+from dingo.profiler.utils.config_modifiers import CONFIG_MODIFIERS
+from dingo.profiler.utils.dgd_override import apply_dgd_overrides
+from dingo.profiler.utils.model_info import (
     model_has_auto_map,
     model_ref_allows_implicit_trust_remote_code,
 )
-from dynamo.profiler.utils.profile_common import inject_tolerations_into_dgd
+from dingo.profiler.utils.profile_common import inject_tolerations_into_dgd
 
 logger = logging.getLogger(__name__)
 
@@ -167,7 +167,7 @@ def _all_workers_already_have_trust_flag(config: dict) -> bool:
 
         # Skip mocker workers — they never carry the flag.
         all_tokens = " ".join(str(t) for t in (list(cmd) + list(args)))
-        if "dynamo.mocker" in all_tokens:
+        if "dingo.mocker" in all_tokens:
             continue
 
         is_shell_c = (
@@ -198,7 +198,7 @@ def _inject_trust_remote_code_flag(config: dict) -> None:
     rather than as a second list element (which would become ``$0`` and break
     the worker).
 
-    Mocker workers (``python3 -m dynamo.mocker``) are skipped because their
+    Mocker workers (``python3 -m dingo.mocker``) are skipped because their
     argparse does not accept ``--trust-remote-code``.
     """
     services = config.get("spec", {}).get("services", {})
@@ -217,7 +217,7 @@ def _inject_trust_remote_code_flag(config: dict) -> None:
 
         # Skip mocker workers — their argparse does not accept the flag.
         all_tokens = " ".join(str(t) for t in (list(cmd) + list(args)))
-        if "dynamo.mocker" in all_tokens:
+        if "dingo.mocker" in all_tokens:
             continue
 
         # Detect shell form: command=["sh","-c"] with a single-string args.

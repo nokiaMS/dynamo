@@ -27,8 +27,8 @@ from dingo.planner.core.load.predictors import (
     KalmanPredictor,
     ProphetPredictor,
 )
-from dynamo.planner.core.types import TrafficObservation, WorkerCapabilities
-from dynamo.planner.plugins.builtins.local_planner import BuiltinLoadPredict
+from dingo.planner.core.types import TrafficObservation, WorkerCapabilities
+from dingo.planner.plugins.builtins.local_planner import BuiltinLoadPredict
 
 pytestmark = [
     pytest.mark.gpu_0,

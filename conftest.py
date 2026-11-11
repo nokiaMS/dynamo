@@ -3,7 +3,7 @@
 
 """Block dingo.vllm/sglang from shadowing the installed vllm/sglang.
 
-Pytest collection puts components/src/dynamo on sys.path, which makes
+Pytest collection may put dingo/ on sys.path, which makes
 `import vllm` resolve to dingo.vllm. Spawned subprocesses (EngineCore,
 sglang scheduler) inherit that and crash on `from vllm.v1 ...`.
 """
@@ -26,9 +26,7 @@ for _name in ("vllm", "sglang"):
 # under the bare name "vllm".
 os.environ.setdefault("PY_IGNORE_IMPORTMISMATCH", "1")
 
-_BAD_DYNAMO_PATH = str(
-    Path(__file__).resolve().parent / "components" / "src" / "dynamo"
-)
+_BAD_DYNAMO_PATH = str(Path(__file__).resolve().parent / "dingo")
 
 
 def _strip_bad_path() -> None:

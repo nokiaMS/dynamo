@@ -6,14 +6,14 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.core.types import TrafficObservation
-from dynamo.planner.environment.interface import (
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.core.types import TrafficObservation
+from dingo.planner.environment.interface import (
     DeploymentStateSource,
     RuntimeNamespaceSource,
 )
-from dynamo.planner.environment.metrics_provider.interface import TrafficMetricsProvider
-from dynamo.planner.monitoring.traffic_metrics import Metrics, PrometheusAPIClient
+from dingo.planner.environment.metrics_provider.interface import TrafficMetricsProvider
+from dingo.planner.monitoring.traffic_metrics import Metrics, PrometheusAPIClient
 
 logger = logging.getLogger(__name__)
 

@@ -7,7 +7,7 @@ from types import SimpleNamespace
 
 import pytest
 
-from dynamo.planner.core.base import NativePlannerBase
+from dingo.planner.core.base import NativePlannerBase
 
 pytestmark = [
     pytest.mark.gpu_0,

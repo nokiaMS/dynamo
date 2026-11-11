@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dynamo.profiler.utils.aiperf import (
+from dingo.profiler.utils.aiperf import (
     _get_common_aiperf_cmd,
     benchmark_decode,
     benchmark_prefill,
@@ -43,8 +43,8 @@ def test_benchmark_prefill_logs_stdout_and_stderr(caplog):
     process = _failed_process("request rejected", "profile failed")
 
     with (
-        patch("dynamo.profiler.utils.aiperf.subprocess.Popen", return_value=process),
-        caplog.at_level(logging.ERROR, logger="dynamo.profiler.utils.aiperf"),
+        patch("dingo.profiler.utils.aiperf.subprocess.Popen", return_value=process),
+        caplog.at_level(logging.ERROR, logger="dingo.profiler.utils.aiperf"),
     ):
         result = benchmark_prefill(
             100,
@@ -65,10 +65,10 @@ def test_benchmark_decode_logs_stdout_and_stderr(caplog):
 
     with (
         patch(
-            "dynamo.profiler.utils.aiperf.subprocess.Popen",
+            "dingo.profiler.utils.aiperf.subprocess.Popen",
             side_effect=[warmup_process, profile_process],
         ),
-        caplog.at_level(logging.ERROR, logger="dynamo.profiler.utils.aiperf"),
+        caplog.at_level(logging.ERROR, logger="dingo.profiler.utils.aiperf"),
     ):
         result = benchmark_decode(
             100,
@@ -89,10 +89,10 @@ def test_benchmark_decode_stops_when_warmup_fails(caplog):
 
     with (
         patch(
-            "dynamo.profiler.utils.aiperf.subprocess.Popen",
+            "dingo.profiler.utils.aiperf.subprocess.Popen",
             return_value=warmup_process,
         ) as mock_popen,
-        caplog.at_level(logging.ERROR, logger="dynamo.profiler.utils.aiperf"),
+        caplog.at_level(logging.ERROR, logger="dingo.profiler.utils.aiperf"),
     ):
         result = benchmark_decode(
             100,

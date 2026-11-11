@@ -87,7 +87,7 @@ async def test_prefill_rejects_cache_uuid_before_building_media_kwargs(
         return {}
 
     monkeypatch.setattr(
-        "dynamo.sglang.request_handlers.llm.prefill_handler.build_disagg_mm_kwargs",
+        "dingo.sglang.request_handlers.llm.prefill_handler.build_disagg_mm_kwargs",
         record_build_media_kwargs,
     )
 

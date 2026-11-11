@@ -64,7 +64,7 @@ def _load_vllm_main() -> ModuleType:
     """Load the entrypoint only in tests that need it.
 
     The lightweight pre-commit collection environment intentionally omits
-    uvloop, which ``dynamo.vllm.main`` imports at module scope. Eagerly loading
+    uvloop, which ``dingo.vllm.main`` imports at module scope. Eagerly loading
     it here would prevent collection of every otherwise dependency-light test
     in this module.
     """
@@ -93,7 +93,7 @@ def test_kv_event_block_size_prefers_cached_main_attention_value():
     size (configured at engine setup) wins over cache_config.block_size, so
     adapter cards carry the same block size as the base-model card on
     hybrid-attention models where vLLM inflates the attention block size."""
-    from dynamo.vllm.cache_info import (
+    from dingo.vllm.cache_info import (
         DYNAMO_KV_EVENT_BLOCK_SIZE_KEY,
         get_configured_kv_event_block_size,
     )
@@ -106,7 +106,7 @@ def test_kv_event_block_size_prefers_cached_main_attention_value():
 
 
 def test_kv_event_block_size_falls_back_to_cache_config():
-    from dynamo.vllm.cache_info import get_configured_kv_event_block_size
+    from dingo.vllm.cache_info import get_configured_kv_event_block_size
 
     vllm_config = SimpleNamespace(
         additional_config=None,
@@ -1170,7 +1170,7 @@ def test_build_sampling_params_maps_max_thinking_tokens():
 def test_build_sampling_params_maps_guided_decoding(constraint_name, constraint_value):
     from vllm.sampling_params import StructuredOutputsParams
 
-    from dynamo.vllm.handlers import build_sampling_params
+    from dingo.vllm.handlers import build_sampling_params
 
     request = {
         "token_ids": [1, 2, 3],

@@ -17,7 +17,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "$SCRIPT_DIR/../../../common/gpu_utils.sh"
 source "$SCRIPT_DIR/../../../common/launch_utils.sh"
 
-WORKER_MODULE="dynamo.vllm"
+WORKER_MODULE="dingo.vllm"
 
 # Default values
 MODEL_NAME="${DYN_MODEL_NAME:-Qwen/Qwen3-VL-30B-A3B-Instruct-FP8}"

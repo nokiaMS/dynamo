@@ -25,7 +25,7 @@ from dingo.vllm.multimodal_utils.protocol import (
     PatchedTokensPrompt,
     vLLMMultimodalRequest,
 )
-from dynamo.vllm.multimodal_utils.request_processor import (
+from dingo.vllm.multimodal_utils.request_processor import (
     PreparedMultimodalInput,
     VllmMultimodalRequestProcessor,
 )

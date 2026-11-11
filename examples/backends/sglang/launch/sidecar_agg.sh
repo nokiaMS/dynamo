@@ -39,7 +39,7 @@ GPU_MEM_ARGS=$(build_sglang_gpu_mem_args)
 
 print_launch_banner "Launching SGLang Native-gRPC Sidecar (1 GPU)" "$MODEL" "$HTTP_PORT"
 
-python3 -m dynamo.frontend &
+python3 -m dingo.frontend &
 
 # --grpc-port enables the native Rust gRPC server alongside SGLang's HTTP API.
 python3 -m sglang.launch_server \

@@ -498,7 +498,7 @@ def _run_mocked_thorough(dgdr, ops, backend: str):
     thorough_patches = _make_thorough_patches(backend)
     kv_patch = _patch_kv_cache_log(backend)
     trust_patch = patch(
-        "dynamo.profiler.utils.dgd_materialization."
+        "dingo.profiler.utils.dgd_materialization."
         "model_ref_allows_implicit_trust_remote_code",
         return_value=True,
     )
@@ -528,7 +528,7 @@ def mock_dgd_override_engine(monkeypatch) -> MagicMock:
 
     engine = MagicMock(side_effect=return_marked_copy)
     monkeypatch.setattr(
-        "dynamo.profiler.utils.dgd_materialization.apply_dgd_overrides",
+        "dingo.profiler.utils.dgd_materialization.apply_dgd_overrides",
         engine,
     )
     return engine

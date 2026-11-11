@@ -7,11 +7,11 @@ from unittest.mock import AsyncMock
 import pytest
 import torch
 
-from dynamo.vllm.handlers import DecodeWorkerHandler
-from dynamo.vllm.multimodal_utils.custom_encoder_adapter import (
+from dingo.vllm.handlers import DecodeWorkerHandler
+from dingo.vllm.multimodal_utils.custom_encoder_adapter import (
     create_custom_encoder_adapter,
 )
-from dynamo.vllm.multimodal_utils.vision_encoder_backend import VisionEncoderBackend
+from dingo.vllm.multimodal_utils.vision_encoder_backend import VisionEncoderBackend
 
 pytestmark = [
     pytest.mark.unit,

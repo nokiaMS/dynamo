@@ -18,8 +18,8 @@ pytestmark = [
 ]
 
 try:
-    from dynamo.profiler.utils import dgd_materialization
-    from dynamo.profiler.utils.dgd_materialization import (
+    from dingo.profiler.utils import dgd_materialization
+    from dingo.profiler.utils.dgd_materialization import (
         DGDMaterializationPurpose,
         materialize_dgd,
     )

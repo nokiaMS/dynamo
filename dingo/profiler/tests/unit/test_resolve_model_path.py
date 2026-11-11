@@ -420,19 +420,19 @@ class TestThoroughResolvesModelPath:
 
         with (
             patch(
-                "dynamo.profiler.thorough.enumerate_profiling_configs",
+                "dingo.profiler.thorough.enumerate_profiling_configs",
                 return_value=([prefill], [decode]),
             ),
             patch(
-                "dynamo.profiler.thorough.materialize_dgd",
+                "dingo.profiler.thorough.materialize_dgd",
                 side_effect=_materialize,
             ) as materialize,
             patch(
-                "dynamo.profiler.thorough._benchmark_prefill_candidates",
+                "dingo.profiler.thorough._benchmark_prefill_candidates",
                 new=AsyncMock(return_value=pd.DataFrame()),
             ),
             patch(
-                "dynamo.profiler.thorough._benchmark_decode_candidates",
+                "dingo.profiler.thorough._benchmark_decode_candidates",
                 new=AsyncMock(return_value=pd.DataFrame()),
             ),
         ):
@@ -553,19 +553,19 @@ class TestThoroughResolvesModelPath:
 
         with (
             patch(
-                "dynamo.profiler.thorough.enumerate_profiling_configs",
+                "dingo.profiler.thorough.enumerate_profiling_configs",
                 return_value=([prefill], [decode], True, 1),
             ),
             patch(
-                "dynamo.profiler.utils.dgd_materialization.apply_dgd_overrides",
+                "dingo.profiler.utils.dgd_materialization.apply_dgd_overrides",
                 side_effect=_apply_override,
             ) as apply_override,
             patch(
-                "dynamo.profiler.thorough._benchmark_prefill_candidates",
+                "dingo.profiler.thorough._benchmark_prefill_candidates",
                 new=AsyncMock(return_value=pd.DataFrame()),
             ),
             patch(
-                "dynamo.profiler.thorough._benchmark_decode_candidates",
+                "dingo.profiler.thorough._benchmark_decode_candidates",
                 new=AsyncMock(return_value=pd.DataFrame()),
             ),
         ):

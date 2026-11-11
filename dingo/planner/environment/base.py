@@ -6,22 +6,22 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from dynamo.planner.config.backend_components import WORKER_COMPONENT_NAMES
-from dynamo.planner.config.defaults import SubComponentType, TargetReplica
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.connectors.base import PlannerConnector
-from dynamo.planner.core.types import FpmObservations, TrafficObservation
-from dynamo.planner.environment.interface import (
+from dingo.planner.config.backend_components import WORKER_COMPONENT_NAMES
+from dingo.planner.config.defaults import SubComponentType, TargetReplica
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.connectors.base import PlannerConnector
+from dingo.planner.core.types import FpmObservations, TrafficObservation
+from dingo.planner.environment.interface import (
     PlannerEnvironment,
     RuntimeNamespaceSource,
 )
-from dynamo.planner.environment.metrics_provider.interface import (
+from dingo.planner.environment.metrics_provider.interface import (
     FpmMetricsProvider,
     TrafficMetricsProvider,
 )
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.errors import DeploymentValidationError
-from dynamo.planner.monitoring.traffic_metrics import Metrics
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.errors import DeploymentValidationError
+from dingo.planner.monitoring.traffic_metrics import Metrics
 
 logger = logging.getLogger(__name__)
 

@@ -70,7 +70,7 @@ def test_eagle_enabled_for_speculative_algorithm(speculative_algorithm, expected
     # NOTE: import lazily. register.py does `from sglang.srt.environ import envs`, which is absent in
     # the lint/collection env of the `pytest-marker-report` pre-commit hook (unlike the sglang-free
     # `capacity` module imported at top), so a module-level import breaks that hook's collection.
-    from dynamo.sglang.register import _eagle_enabled_for
+    from dingo.sglang.register import _eagle_enabled_for
 
     assert _eagle_enabled_for(speculative_algorithm) is expected
 
@@ -136,7 +136,7 @@ def test_hicache_write_through_ignores_fully_overlapped_host_pool():
 
 @pytest.mark.asyncio
 async def test_hicache_publish_failure_preserves_core_capacity(monkeypatch, caplog):
-    from dynamo.sglang import register
+    from dingo.sglang import register
 
     server_args = SimpleNamespace(
         context_length=4096,

@@ -14,7 +14,7 @@ import json
 import logging
 from typing import Optional
 
-from dynamo.common.native_offloading import get_native_offloading_capacity_tokens
+from dingo.common.native_offloading import get_native_offloading_capacity_tokens
 from dynamo.llm import FpmEventSubscriber
 from dynamo.runtime import Endpoint
 

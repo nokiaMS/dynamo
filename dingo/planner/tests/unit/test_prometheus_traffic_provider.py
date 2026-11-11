@@ -5,13 +5,13 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.environment.metrics_provider.prometheus_traffic_provider import (
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.environment.metrics_provider.prometheus_traffic_provider import (
     PrometheusTrafficProvider,
 )
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.monitoring.traffic_metrics import Metrics
-from dynamo.planner.monitoring.worker_info import WorkerInfo
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.monitoring.traffic_metrics import Metrics
+from dingo.planner.monitoring.worker_info import WorkerInfo
 
 pytestmark = [
     pytest.mark.gpu_0,
@@ -44,7 +44,7 @@ def _state_source() -> MagicMock:
 
 def _provider(namespace_source=None):
     client_patch = patch(
-        "dynamo.planner.environment.metrics_provider."
+        "dingo.planner.environment.metrics_provider."
         "prometheus_traffic_provider.PrometheusAPIClient"
     )
     client_class = client_patch.start()

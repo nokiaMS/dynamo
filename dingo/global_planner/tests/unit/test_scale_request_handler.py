@@ -745,7 +745,7 @@ async def test_cross_dgd_pair_second_patch_not_ready_self_corrects(
 
     req = _scale_req(dgd="dgd-a", caller_ns="default-dgd-a", prefill=2)
     with caplog.at_level(
-        _logging.WARNING, logger="dynamo.global_planner.scale_handler"
+        _logging.WARNING, logger="dingo.global_planner.scale_handler"
     ):
         results = await _run(handler, req)
 

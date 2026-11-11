@@ -46,11 +46,11 @@ The first LoRA inference can take longer while vLLM initializes its LoRA kernels
 ==========================================
 CURL_EOF
 
-python3 -m dynamo.frontend &
+python3 -m dingo.frontend &
 
 # shellcheck disable=SC2086 # GPU_MEM_ARGS intentionally contains multiple CLI arguments.
 DYN_SYSTEM_PORT="$SYSTEM_PORT" \
-python3 -m dynamo.vllm \
+python3 -m dingo.vllm \
     --model "$MODEL" \
     --enforce-eager \
     --max-model-len "$MAX_MODEL_LEN" \

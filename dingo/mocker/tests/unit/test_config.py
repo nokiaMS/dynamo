@@ -493,7 +493,7 @@ def test_replay_engine_args_preserves_explicit_max_model_len():
 
 
 def test_replay_attention_dp_sets_rank_topology_with_explicit_kv_capacity():
-    import dynamo.replay.main as replay_main
+    import dingo.replay.main as replay_main
 
     engine_args = replay_main._load_engine_args(
         json.dumps(
@@ -509,7 +509,7 @@ def test_replay_attention_dp_sets_rank_topology_with_explicit_kv_capacity():
 
 
 def test_replay_rejects_mismatched_dp_topology():
-    import dynamo.replay.main as replay_main
+    import dingo.replay.main as replay_main
 
     with pytest.raises(ValueError, match="dp_size must match"):
         replay_main._load_engine_args(
@@ -524,7 +524,7 @@ def test_replay_rejects_mismatched_dp_topology():
 
 
 def test_replay_rejects_dp_topology_without_aic_attention_dp():
-    import dynamo.replay.main as replay_main
+    import dingo.replay.main as replay_main
 
     with pytest.raises(ValueError, match="dp_size must match"):
         replay_main._load_engine_args(

@@ -5,27 +5,27 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING, Optional, cast
 
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.connectors.base import PlannerConnector, WorkerInfoProvider
-from dynamo.planner.connectors.global_planner import GlobalPlannerConnector
-from dynamo.planner.connectors.kubernetes import KubernetesConnector
-from dynamo.planner.connectors.virtual import VirtualConnector
-from dynamo.planner.environment.base import PlannerEnvironmentImpl
-from dynamo.planner.environment.interface import PlannerEnvironment
-from dynamo.planner.environment.metrics_provider.prometheus_traffic_provider import (
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.connectors.base import PlannerConnector, WorkerInfoProvider
+from dingo.planner.connectors.global_planner import GlobalPlannerConnector
+from dingo.planner.connectors.kubernetes import KubernetesConnector
+from dingo.planner.connectors.virtual import VirtualConnector
+from dingo.planner.environment.base import PlannerEnvironmentImpl
+from dingo.planner.environment.interface import PlannerEnvironment
+from dingo.planner.environment.metrics_provider.prometheus_traffic_provider import (
     PrometheusTrafficProvider,
 )
-from dynamo.planner.environment.metrics_provider.runtime_provider import (
+from dingo.planner.environment.metrics_provider.runtime_provider import (
     RuntimeFpmProvider,
 )
-from dynamo.planner.environment.runtime import (
+from dingo.planner.environment.runtime import (
     RuntimeNamespaceBinding,
     RuntimeNamespaceResolver,
 )
 from dynamo.runtime import DistributedRuntime
 
 if TYPE_CHECKING:
-    from dynamo.planner.core.base import NativePlannerBase
+    from dingo.planner.core.base import NativePlannerBase
 
 
 def construct_connector(
@@ -143,7 +143,7 @@ def construct_planner(
     config: PlannerConfig,
 ) -> NativePlannerBase:
     # Connector/environment-only callers should not import the planner/plugin graph.
-    from dynamo.planner.core.adapters import (
+    from dingo.planner.core.adapters import (
         AggPlanner,
         DecodePlanner,
         DisaggPlanner,

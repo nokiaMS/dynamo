@@ -35,9 +35,9 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.core.base import NativePlannerBase
-from dynamo.planner.core.types import ScheduledTick, TickDiagnostics
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.core.base import NativePlannerBase
+from dingo.planner.core.types import ScheduledTick, TickDiagnostics
 
 pytestmark = [
     pytest.mark.gpu_0,
@@ -50,9 +50,9 @@ pytestmark = [
 def _make_planner(prometheus_enabled: bool = True) -> NativePlannerBase:
     """Minimal NativePlannerBase with a mocked Prometheus metrics object."""
     with patch(
-        "dynamo.planner.core.base.PlannerPrometheusMetrics"
-    ) as mock_metrics, patch("dynamo.planner.core.base.start_http_server"), patch(
-        "dynamo.planner.connectors.kubernetes.KubernetesAPI"
+        "dingo.planner.core.base.PlannerPrometheusMetrics"
+    ) as mock_metrics, patch("dingo.planner.core.base.start_http_server"), patch(
+        "dingo.planner.connectors.kubernetes.KubernetesAPI"
     ), patch.dict(
         os.environ, {"DYN_PARENT_DGD_K8S_NAME": "test-graph"}
     ):

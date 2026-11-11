@@ -108,7 +108,7 @@ async def test_wait_and_load_benchmark_rejects_invalid_results(monkeypatch, tmp_
         )
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
     )
 
     with pytest.raises(RuntimeError, match="incomplete results") as exc_info:
@@ -125,7 +125,7 @@ async def test_wait_and_load_benchmark_accepts_timeout_partial(monkeypatch, tmp_
         json.dumps(_single_rank_benchmark_payload(status="partial", expected_points=2))
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
     )
 
     merged = await _wait_and_load_benchmark(
@@ -155,14 +155,14 @@ async def test_wait_and_load_benchmark_warns_then_waits_for_partial(
         output_path.write_text(json.dumps(payload))
 
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory._time.monotonic",
+        "dingo.vllm.worker_factory._time.monotonic",
         lambda: next(monotonic_times, 2.0),
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.asyncio.sleep", finish_current_iteration
+        "dingo.vllm.worker_factory.asyncio.sleep", finish_current_iteration
     )
     caplog.set_level(logging.WARNING)
 
@@ -186,16 +186,16 @@ async def test_wait_and_load_benchmark_bounds_post_timeout_grace(
         return None
 
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.BENCHMARK_SOFT_TIMEOUT_GRACE_SECONDS", 1
+        "dingo.vllm.worker_factory.BENCHMARK_SOFT_TIMEOUT_GRACE_SECONDS", 1
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory._time.monotonic",
+        "dingo.vllm.worker_factory._time.monotonic",
         lambda: next(monotonic_times, 3.0),
     )
-    monkeypatch.setattr("dynamo.vllm.worker_factory.asyncio.sleep", no_result)
+    monkeypatch.setattr("dingo.vllm.worker_factory.asyncio.sleep", no_result)
     caplog.set_level(logging.WARNING)
 
     with pytest.raises(TimeoutError, match="cleanup grace"):
@@ -230,7 +230,7 @@ async def test_wait_and_load_benchmark_rejects_inconsistent_status(
             payload["skipped_points"] = [{"reason": "shape mismatch"}]
     output_path.write_text(json.dumps(payload))
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
     )
 
     with pytest.raises(RuntimeError, match="incomplete results"):
@@ -300,7 +300,7 @@ async def test_wait_and_load_benchmark_aggregates_dp_coverage(monkeypatch, tmp_p
     base_path.write_text(json.dumps(rank_payload(0, 0.01)))
     (tmp_path / "benchmark_dp1.json").write_text(json.dumps(rank_payload(1, 0.02)))
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 2)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 2)
     )
 
     merged = await _wait_and_load_benchmark(
@@ -432,7 +432,7 @@ async def test_wait_and_load_benchmark_external_dp_keeps_global_group(
         )
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
+        "dingo.vllm.worker_factory.get_dp_range_for_worker", lambda _config: (0, 1)
     )
 
     merged = await _wait_and_load_benchmark(
@@ -715,11 +715,11 @@ async def test_prefill_serves_lora_lifecycle_endpoints_when_enabled(
     handler = Mock(embedding_cache_manager=None)
     handler.cleanup = Mock()
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.PrefillWorkerHandler",
+        "dingo.vllm.worker_factory.PrefillWorkerHandler",
         Mock(return_value=handler),
     )
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.VllmPrefillHealthCheckPayload",
+        "dingo.vllm.worker_factory.VllmPrefillHealthCheckPayload",
         Mock(return_value=Mock(to_dict=Mock(return_value={}))),
     )
 
@@ -727,7 +727,7 @@ async def test_prefill_serves_lora_lifecycle_endpoints_when_enabled(
         return None
 
     monkeypatch.setattr(
-        "dynamo.vllm.worker_factory.configure_kv_event_block_size", _noop
+        "dingo.vllm.worker_factory.configure_kv_event_block_size", _noop
     )
 
     endpoints: dict[str, Mock] = {}

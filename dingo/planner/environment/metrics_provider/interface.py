@@ -5,8 +5,8 @@ from __future__ import annotations
 
 from typing import Optional, Protocol
 
-from dynamo.planner.core.types import FpmObservations, TrafficObservation
-from dynamo.planner.environment.state import DeploymentState
+from dingo.planner.core.types import FpmObservations, TrafficObservation
+from dingo.planner.environment.state import DeploymentState
 
 
 class TrafficMetricsProvider(Protocol):

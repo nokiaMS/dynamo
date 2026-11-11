@@ -10,9 +10,9 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from dynamo.global_planner.capacity_manager import PoolSpec
-from dynamo.global_planner.kubernetes_capacity_manager import KubernetesCapacityManager
-from dynamo.planner import SubComponentType, TargetReplica
+from dingo.global_planner.capacity_manager import PoolSpec
+from dingo.global_planner.kubernetes_capacity_manager import KubernetesCapacityManager
+from dingo.planner import SubComponentType, TargetReplica
 
 pytestmark = [
     pytest.mark.gpu_0,
@@ -117,10 +117,10 @@ def test_discover_explicit_mode():
     cm = KubernetesCapacityManager("default")
     with (
         patch(
-            "dynamo.global_planner.kubernetes_capacity_manager.KubernetesAPI"
+            "dingo.global_planner.kubernetes_capacity_manager.KubernetesAPI"
         ) as mock_kube_cls,
         patch(
-            "dynamo.global_planner.kubernetes_capacity_manager.KubernetesConnector"
+            "dingo.global_planner.kubernetes_capacity_manager.KubernetesConnector"
         ) as mock_connector_cls,
     ):
         mock_kube = MagicMock()
@@ -145,10 +145,10 @@ def test_discover_implicit_mode():
     cm = KubernetesCapacityManager("default")
     with (
         patch(
-            "dynamo.global_planner.kubernetes_capacity_manager.KubernetesAPI"
+            "dingo.global_planner.kubernetes_capacity_manager.KubernetesAPI"
         ) as mock_kube_cls,
         patch(
-            "dynamo.global_planner.kubernetes_capacity_manager.KubernetesConnector"
+            "dingo.global_planner.kubernetes_capacity_manager.KubernetesConnector"
         ) as mock_connector_cls,
     ):
         mock_kube = MagicMock()
@@ -170,7 +170,7 @@ def test_discover_implicit_mode():
 def test_discover_tolerates_api_failure():
     cm = KubernetesCapacityManager("default")
     with patch(
-        "dynamo.global_planner.kubernetes_capacity_manager.KubernetesAPI",
+        "dingo.global_planner.kubernetes_capacity_manager.KubernetesAPI",
         side_effect=RuntimeError("no cluster"),
     ):
         # Best-effort: must not raise, returns nothing discovered.
@@ -186,7 +186,7 @@ def test_discover_tolerates_api_failure():
 def test_ensure_participant_idempotent():
     cm = KubernetesCapacityManager("default")
     with patch(
-        "dynamo.global_planner.kubernetes_capacity_manager.KubernetesConnector"
+        "dingo.global_planner.kubernetes_capacity_manager.KubernetesConnector"
     ) as mock_connector_cls:
         mock_connector_cls.return_value = MagicMock()
         cm.ensure_participant(

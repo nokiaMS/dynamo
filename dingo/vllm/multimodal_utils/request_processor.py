@@ -21,18 +21,18 @@ import torch
 from vllm.inputs import TokensPrompt
 from vllm.multimodal.inputs import MultiModalKwargsItem, PlaceholderRange
 
-from dynamo.common.constants import DisaggregationMode
-from dynamo.common.multimodal.audio_loader import AudioLoader
-from dynamo.common.multimodal.image_loader import ImageLoader
-from dynamo.common.multimodal.mm_kwargs_transfer import (
+from dingo.common.constants import DisaggregationMode
+from dingo.common.multimodal.audio_loader import AudioLoader
+from dingo.common.multimodal.image_loader import ImageLoader
+from dingo.common.multimodal.mm_kwargs_transfer import (
     MmKwargsNixlReceiver,
     MmKwargsReceiver,
     MmKwargsShmReceiver,
     MmKwargsShmTransferMetadata,
     MmKwargsTransferMetadata,
 )
-from dynamo.common.multimodal.video_loader import VideoLoader
-from dynamo.common.utils import nvtx_utils as _nvtx
+from dingo.common.multimodal.video_loader import VideoLoader
+from dingo.common.utils import nvtx_utils as _nvtx
 
 from .hash_utils import compute_mm_uuids_from_images
 from .model import ModelFamily, construct_qwen_decode_mm_data, resolve_model_family

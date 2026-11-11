@@ -36,7 +36,7 @@ def configure_multimodal_embedding_cache(
             ec_role="ec_both",
             ec_connector="DynamoMultimodalEmbeddingCacheConnector",
             ec_connector_module_path=(
-                "dynamo.vllm.multimodal_utils.multimodal_embedding_cache_connector"
+                "dingo.vllm.multimodal_utils.multimodal_embedding_cache_connector"
             ),
             ec_connector_extra_config={
                 "multimodal_embedding_cache_capacity_gb": capacity_gb,

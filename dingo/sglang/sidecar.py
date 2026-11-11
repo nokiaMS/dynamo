@@ -11,7 +11,7 @@ from dynamo.runtime.logging import configure_dynamo_logging
 
 def main(argv: list[str] | None = None) -> None:
     """Run the Dynamo sidecar against SGLang's injected gRPC endpoint."""
-    configure_dynamo_logging(service_name="dynamo.sglang.sidecar")
+    configure_dynamo_logging(service_name="dingo.sglang.sidecar")
     _backend._run_sglang_sidecar(sys.argv[1:] if argv is None else argv)
 
 

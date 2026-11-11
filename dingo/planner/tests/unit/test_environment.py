@@ -5,10 +5,10 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.environment.base import PlannerEnvironmentImpl
-from dynamo.planner.errors import DeploymentValidationError
-from dynamo.planner.monitoring.worker_info import (
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.environment.base import PlannerEnvironmentImpl
+from dingo.planner.errors import DeploymentValidationError
+from dingo.planner.monitoring.worker_info import (
     WorkerInfo,
     build_worker_info_from_defaults,
 )

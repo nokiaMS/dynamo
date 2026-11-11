@@ -150,8 +150,8 @@ class NativePlannerBase:
         if self._engine is not None:
             return self._engine
         # Deliberately lazy: importing planner core should not load the plugin stack.
-        from dynamo.planner.plugins.builtins.observe import EnvironmentObservePlugin
-        from dynamo.planner.plugins.orchestrator.engine_adapter import (
+        from dingo.planner.plugins.builtins.observe import EnvironmentObservePlugin
+        from dingo.planner.plugins.orchestrator.engine_adapter import (
             OrchestratorEngineAdapter,
         )
 

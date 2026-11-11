@@ -7,18 +7,18 @@ import json
 import logging
 from typing import Optional
 
-from dynamo.common.forward_pass_metrics import ForwardPassMetrics
-from dynamo.planner.config.defaults import SubComponentType
-from dynamo.planner.connectors.base import WorkerInfoProvider
-from dynamo.planner.connectors.mdc import MdcEntry, select_entry, worker_info_from_mdc
-from dynamo.planner.core.types import FpmObservations
-from dynamo.planner.environment.interface import (
+from dingo.common.forward_pass_metrics import ForwardPassMetrics
+from dingo.planner.config.defaults import SubComponentType
+from dingo.planner.connectors.base import WorkerInfoProvider
+from dingo.planner.connectors.mdc import MdcEntry, select_entry, worker_info_from_mdc
+from dingo.planner.core.types import FpmObservations
+from dingo.planner.environment.interface import (
     DeploymentStateSource,
     RuntimeNamespaceSource,
 )
-from dynamo.planner.environment.metrics_provider.interface import FpmMetricsProvider
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.monitoring.worker_info import (
+from dingo.planner.environment.metrics_provider.interface import FpmMetricsProvider
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.monitoring.worker_info import (
     WorkerInfo,
     build_worker_info_from_defaults,
 )
@@ -179,7 +179,7 @@ class RuntimeFpmProvider(FpmMetricsProvider, WorkerInfoProvider):
         self, subscriber
     ) -> dict[tuple[str, int], ForwardPassMetrics]:
         # Match the subscriber's lazy binding path; decoding is optional at startup.
-        from dynamo.common.forward_pass_metrics import decode as decode_fpm
+        from dingo.common.forward_pass_metrics import decode as decode_fpm
 
         if subscriber is None:
             return {}

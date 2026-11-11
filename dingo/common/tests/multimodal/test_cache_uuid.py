@@ -3,7 +3,7 @@
 
 import pytest
 
-from dynamo.common.multimodal.cache_uuid import reject_unsupported_multimodal_uuids
+from dingo.common.multimodal.cache_uuid import reject_unsupported_multimodal_uuids
 
 pytestmark = [
     pytest.mark.unit,

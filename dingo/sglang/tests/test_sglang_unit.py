@@ -48,7 +48,7 @@ except ImportError:
     sglang_register = None
 
 # Get path relative to this test file
-REPO_ROOT = Path(__file__).resolve().parents[5]
+REPO_ROOT = Path(__file__).resolve().parents[3]
 TEST_DIR = REPO_ROOT / "tests"
 # Now construct the full path to the shared test fixture
 JINJA_TEMPLATE_PATH = str(
@@ -207,10 +207,10 @@ async def test_tensor_image_size_compat_uses_resolved_model_capability(
     )
     install_calls = []
     monkeypatch.setattr(
-        "dynamo.sglang.args.ServerArgs.from_cli_args", lambda _: server_args
+        "dingo.sglang.args.ServerArgs.from_cli_args", lambda _: server_args
     )
     monkeypatch.setattr(
-        "dynamo.sglang.args.ensure_sglang_tensor_image_size",
+        "dingo.sglang.args.ensure_sglang_tensor_image_size",
         lambda: install_calls.append(True),
     )
     mock_sglang_cli(model="/tmp")

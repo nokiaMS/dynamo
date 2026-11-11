@@ -120,7 +120,7 @@ def test_aic_support_check_uses_local_pvc_config(tmp_path) -> None:
     )
 
     with patch(
-        "dynamo.profiler.profile_sla.check_model_hardware_support",
+        "dingo.profiler.profile_sla.check_model_hardware_support",
         return_value=True,
     ) as mock_check:
         assert _check_dgdr_aic_support(dgdr, "vllm", "h200_sxm")
@@ -143,7 +143,7 @@ def test_aic_support_check_auto_uses_local_pvc_config(tmp_path) -> None:
     )
 
     with patch(
-        "dynamo.profiler.profile_sla._check_auto_backend_support",
+        "dingo.profiler.profile_sla._check_auto_backend_support",
         return_value=True,
     ) as mock_check:
         assert _check_dgdr_aic_support(dgdr, "auto", "h200_sxm")
@@ -156,7 +156,7 @@ def test_aic_support_check_without_pvc_uses_dgdr_model() -> None:
     dgdr = _make_dgdr(backend="vllm")
 
     with patch(
-        "dynamo.profiler.profile_sla.check_model_hardware_support",
+        "dingo.profiler.profile_sla.check_model_hardware_support",
         return_value=True,
     ) as mock_check:
         assert _check_dgdr_aic_support(dgdr, "vllm", "h200_sxm")

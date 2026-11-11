@@ -8,9 +8,9 @@ dynamo-runtime endpoint contract, caller authorization, no-operation mode, and
 translation between the wire DTOs (``ScaleRequest`` / ``ScaleResponse``) and the
 orchestrator. All budget arbitration and execution live below it:
 
-- :class:`~dynamo.global_planner.orchestrator.Orchestrator` — participants,
+- :class:`~dingo.global_planner.orchestrator.Orchestrator` — participants,
   authorization, GPU-budget arbitration, and observe -> decide -> scale
-- :class:`~dynamo.global_planner.capacity_manager.CapacityManager` — Kubernetes
+- :class:`~dingo.global_planner.capacity_manager.CapacityManager` — Kubernetes
   observe/scale backend
 
 Behavior is unchanged from the pre-refactor monolithic handler.

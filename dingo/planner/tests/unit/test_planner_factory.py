@@ -5,12 +5,12 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.core.planner_factory import (
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.core.planner_factory import (
     construct_connector,
     construct_environment,
 )
-from dynamo.planner.environment.runtime import RuntimeNamespaceBinding
+from dingo.planner.environment.runtime import RuntimeNamespaceBinding
 
 pytestmark = [
     pytest.mark.gpu_0,
@@ -36,14 +36,14 @@ def test_construct_environment_shares_runtime_namespace_binding():
     runtime = MagicMock()
     with (
         patch(
-            "dynamo.planner.core.planner_factory.construct_connector",
+            "dingo.planner.core.planner_factory.construct_connector",
             return_value=connector,
         ),
         patch(
-            "dynamo.planner.core.planner_factory.RuntimeFpmProvider"
+            "dingo.planner.core.planner_factory.RuntimeFpmProvider"
         ) as fpm_provider_class,
         patch(
-            "dynamo.planner.core.planner_factory.PrometheusTrafficProvider"
+            "dingo.planner.core.planner_factory.PrometheusTrafficProvider"
         ) as traffic_provider_class,
     ):
         environment = construct_environment(
@@ -78,14 +78,14 @@ def test_construct_environment_binds_namespace_without_runtime():
     connector = MagicMock()
     with (
         patch(
-            "dynamo.planner.core.planner_factory.construct_connector",
+            "dingo.planner.core.planner_factory.construct_connector",
             return_value=connector,
         ),
         patch(
-            "dynamo.planner.core.planner_factory.RuntimeFpmProvider"
+            "dingo.planner.core.planner_factory.RuntimeFpmProvider"
         ) as fpm_provider_class,
         patch(
-            "dynamo.planner.core.planner_factory.PrometheusTrafficProvider"
+            "dingo.planner.core.planner_factory.PrometheusTrafficProvider"
         ) as traffic_provider_class,
     ):
         environment = construct_environment(

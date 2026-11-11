@@ -34,8 +34,8 @@ from typing import Generic, List
 
 import torch
 
-from dynamo.vllm.multimodal_utils.threaded_micro_batcher import ThreadedMicroBatcher
-from dynamo.vllm.multimodal_utils.vision_encoder_backend import (
+from dingo.vllm.multimodal_utils.threaded_micro_batcher import ThreadedMicroBatcher
+from dingo.vllm.multimodal_utils.vision_encoder_backend import (
     ItemT,
     Preprocessed,
     RawT,

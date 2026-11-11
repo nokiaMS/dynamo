@@ -8,7 +8,7 @@ import pytest
 import torch
 
 try:
-    from dynamo.vllm.omni.connectors import nixl_connector as nixl_module
+    from dingo.vllm.omni.connectors import nixl_connector as nixl_module
 except ImportError:
     pytest.skip("vLLM omni dependencies not available", allow_module_level=True)
 

@@ -9,7 +9,7 @@ from typing import Protocol
 from kubernetes.client import ApiException
 from kubernetes.config.config_exception import ConfigException
 
-from dynamo.planner.errors import PlannerError
+from dingo.planner.errors import PlannerError
 
 logger = logging.getLogger(__name__)
 

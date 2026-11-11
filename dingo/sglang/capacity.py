@@ -6,7 +6,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Any
 
-from dynamo.common.native_offloading import native_offloading_capacity
+from dingo.common.native_offloading import native_offloading_capacity
 
 
 @dataclass(frozen=True)

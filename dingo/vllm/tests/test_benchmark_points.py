@@ -6,7 +6,7 @@ import json
 import pytest
 from pydantic import ValidationError
 
-from dynamo.vllm.benchmark_points import BenchmarkPoints, load_benchmark_points_file
+from dingo.vllm.benchmark_points import BenchmarkPoints, load_benchmark_points_file
 
 pytestmark = [pytest.mark.unit, pytest.mark.pre_merge, pytest.mark.gpu_0]
 

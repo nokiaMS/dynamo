@@ -7,7 +7,7 @@
 zone**. It owns the participant registry and authorization, the GPU-budget
 arbitration (ceiling/floor bounds, multi-partner pairing, intent cache), and the
 observe -> decide -> scale loop, delegating the infrastructure reads/writes to
-a :class:`~dynamo.global_planner.capacity_manager.CapacityManager`. Its vocabulary
+a :class:`~dingo.global_planner.capacity_manager.CapacityManager`. Its vocabulary
 is neutral — ``participant_id`` / ``caller_name`` / ``deployment_name`` /
 ``namespace`` — and it imports no Kubernetes SDK and no transport types. The
 API layer maps wire fields onto these neutral names; a concrete backend maps them
@@ -29,18 +29,18 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Callable, Iterator, Optional
 
-from dynamo.global_planner.capacity_manager import (
+from dingo.global_planner.capacity_manager import (
     CapacityManager,
     PoolSnapshot,
     PoolSpec,
 )
-from dynamo.planner import SubComponentType, TargetReplica
-from dynamo.planner.connectors.protocol import ScaleStatus
-from dynamo.planner.core import budget
+from dingo.planner import SubComponentType, TargetReplica
+from dingo.planner.connectors.protocol import ScaleStatus
+from dingo.planner.core import budget
 
 # Planner-level "not ready" signal a backend may raise from ``scale``; the
 # orchestrator treats it as a soft rejection. Not a Kubernetes SDK type.
-from dynamo.planner.errors import DynamoGraphDeploymentNotReadyError
+from dingo.planner.errors import DynamoGraphDeploymentNotReadyError
 
 logger = logging.getLogger(__name__)
 

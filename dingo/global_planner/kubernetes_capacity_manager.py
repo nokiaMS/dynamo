@@ -4,7 +4,7 @@
 """Kubernetes backend for the GlobalPlanner capacity control loop.
 
 :class:`KubernetesCapacityManager` is the concrete
-:class:`~dynamo.global_planner.capacity_manager.CapacityManager` — the only place
+:class:`~dingo.global_planner.capacity_manager.CapacityManager` — the only place
 in the control loop that touches Kubernetes. A ``participant_id`` is
 ``"{namespace}/{deployment_name}"``.
 
@@ -19,14 +19,14 @@ from __future__ import annotations
 import logging
 from typing import Optional
 
-from dynamo.global_planner.capacity_manager import (
+from dingo.global_planner.capacity_manager import (
     CapacityManager,
     PoolSnapshot,
     PoolSpec,
 )
-from dynamo.planner import KubernetesConnector, TargetReplica
-from dynamo.planner.connectors.clients.kubernetes_api import KubernetesAPI
-from dynamo.planner.monitoring.dgd_services import (
+from dingo.planner import KubernetesConnector, TargetReplica
+from dingo.planner.connectors.clients.kubernetes_api import KubernetesAPI
+from dingo.planner.monitoring.dgd_services import (
     V1BETA1_GENERIC_WORKER_COMPONENT_TYPE,
     Service,
     get_component_type,

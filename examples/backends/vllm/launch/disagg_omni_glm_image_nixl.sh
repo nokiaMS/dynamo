@@ -101,7 +101,7 @@ CURL
     DYN_SYSTEM_PORT=${DYN_SYSTEM_PORT_AR:-8081} \
     NATS_SERVER=${NATS_SERVER} \
     ETCD_ENDPOINTS=${ETCD_ENDPOINTS} \
-        python -m dynamo.vllm.omni \
+        python -m dingo.vllm.omni \
         --model "$MODEL" \
         --stage-id 0 \
         --stage-configs-path "$STAGE_CONFIG" \
@@ -118,7 +118,7 @@ CURL
     DYN_SYSTEM_PORT=${DYN_SYSTEM_PORT_ROUTER:-8083} \
     NATS_SERVER=${NATS_SERVER} \
     ETCD_ENDPOINTS=${ETCD_ENDPOINTS} \
-        python -m dynamo.vllm.omni \
+        python -m dingo.vllm.omni \
         --model "$MODEL" \
         --omni-router \
         --stage-configs-path "$STAGE_CONFIG" \
@@ -130,7 +130,7 @@ CURL
     echo "Starting Frontend..."
     NATS_SERVER=${NATS_SERVER} \
     ETCD_ENDPOINTS=${ETCD_ENDPOINTS} \
-        python -m dynamo.frontend &
+        python -m dingo.frontend &
 
     wait_any_exit
 
@@ -147,7 +147,7 @@ elif [[ "${ROLE,,}" == "dit" ]]; then
     DYN_SYSTEM_PORT=${DYN_SYSTEM_PORT_DIT:-8082} \
     NATS_SERVER=${NATS_SERVER} \
     ETCD_ENDPOINTS=${ETCD_ENDPOINTS} \
-        python -m dynamo.vllm.omni \
+        python -m dingo.vllm.omni \
         --model "$MODEL" \
         --stage-id 1 \
         --stage-configs-path "$STAGE_CONFIG" \

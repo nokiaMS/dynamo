@@ -5,8 +5,8 @@ from __future__ import annotations
 
 from typing import Optional
 
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.monitoring.worker_info import WorkerInfo
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.monitoring.worker_info import WorkerInfo
 
 _MDC_REFRESH_FIELDS = (
     "total_kv_blocks",

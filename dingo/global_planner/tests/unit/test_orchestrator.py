@@ -12,10 +12,10 @@ backend into the same orchestrator, including the ``use_lock`` toggle.
 
 import pytest
 
-from dynamo.global_planner.capacity_manager import CapacityManager, PoolSpec
-from dynamo.global_planner.orchestrator import Orchestrator
-from dynamo.planner import SubComponentType, TargetReplica
-from dynamo.planner.connectors.protocol import ScaleStatus
+from dingo.global_planner.capacity_manager import CapacityManager, PoolSpec
+from dingo.global_planner.orchestrator import Orchestrator
+from dingo.planner import SubComponentType, TargetReplica
+from dingo.planner.connectors.protocol import ScaleStatus
 
 pytestmark = [
     pytest.mark.gpu_0,

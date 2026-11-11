@@ -8,8 +8,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Protocol
 
-from dynamo.planner.core.types import ScheduledTick, TickInput, WorkerCounts
-from dynamo.planner.environment.interface import PlannerEnvironment
+from dingo.planner.core.types import ScheduledTick, TickInput, WorkerCounts
+from dingo.planner.environment.interface import PlannerEnvironment
 
 
 @dataclass

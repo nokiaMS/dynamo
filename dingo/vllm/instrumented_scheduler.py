@@ -112,7 +112,7 @@ from dingo.common.forward_pass_metrics import (
     encode,
 )
 from dynamo.runtime.logging import configure_dynamo_logging
-from dynamo.vllm.benchmark_points import (
+from dingo.vllm.benchmark_points import (
     BENCHMARK_MODES,
     BenchmarkMode,
     BenchmarkPoints,

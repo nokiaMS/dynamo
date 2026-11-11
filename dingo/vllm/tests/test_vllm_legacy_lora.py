@@ -15,11 +15,11 @@ import pytest
 
 pytest.importorskip("vllm.lora.request")
 
-from dynamo.common.constants import DisaggregationMode  # noqa: E402
-from dynamo.common.lora.manager import LoRAInfo  # noqa: E402
+from dingo.common.constants import DisaggregationMode  # noqa: E402
+from dingo.common.lora.manager import LoRAInfo  # noqa: E402
 from dynamo.llm import ModelType, WorkerType  # noqa: E402
-from dynamo.vllm import handlers as handlers_mod  # noqa: E402
-from dynamo.vllm.cache_info import DYNAMO_KV_EVENT_BLOCK_SIZE_KEY  # noqa: E402
+from dingo.vllm import handlers as handlers_mod  # noqa: E402
+from dingo.vllm.cache_info import DYNAMO_KV_EVENT_BLOCK_SIZE_KEY  # noqa: E402
 
 pytestmark = [
     pytest.mark.unit,

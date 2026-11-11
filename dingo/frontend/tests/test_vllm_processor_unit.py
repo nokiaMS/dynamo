@@ -17,7 +17,7 @@ from transformers import AutoTokenizer
 
 from dingo.frontend.prepost import _prepare_request
 
-# NOTE: dynamo.frontend.vllm_processor is imported lazily inside the tests that
+# NOTE: dingo.frontend.vllm_processor is imported lazily inside the tests that
 # need it (and via the vllm_processor_module fixture). Importing it at module
 # top level would run its `from vllm.tasks import ...` /
 # `from vllm.v1.engine.parallel_sampling import ...` imports during pytest
@@ -299,7 +299,7 @@ class TestMultimodalFeatureMetadata:
         )
 
     def test_groups_hashes_and_placeholders_by_modality(self):
-        from dynamo.frontend.vllm_processor import _group_mm_feature_metadata
+        from dingo.frontend.vllm_processor import _group_mm_feature_metadata
 
         features = [
             self._feature("image", "image_hash", 4, 8),
@@ -325,7 +325,7 @@ class TestMultimodalFeatureMetadata:
         }
 
     def test_image_only_metadata_keeps_legacy_flat_fields(self):
-        from dynamo.frontend.vllm_processor import _group_mm_feature_metadata
+        from dingo.frontend.vllm_processor import _group_mm_feature_metadata
 
         features = [
             self._feature("image", "image_hash_0", 4, 8),
@@ -345,7 +345,7 @@ class TestMultimodalFeatureMetadata:
         assert placeholders_by_modality == {"image": [(4, 8), (20, 6)]}
 
     def test_placeholder_metadata_preserves_is_embed_mask(self):
-        from dynamo.frontend.vllm_processor import _group_mm_feature_metadata
+        from dingo.frontend.vllm_processor import _group_mm_feature_metadata
 
         mask = [False, True, True, False]
         features = [
@@ -361,7 +361,7 @@ class TestMultimodalFeatureMetadata:
         assert placeholders_by_modality == {"image": [expected]}
 
     def test_missing_hash_skips_only_that_feature(self):
-        from dynamo.frontend.vllm_processor import _group_mm_feature_metadata
+        from dingo.frontend.vllm_processor import _group_mm_feature_metadata
 
         features = [
             self._feature("image", "image_hash", 4, 8),
@@ -376,7 +376,7 @@ class TestMultimodalFeatureMetadata:
         )
 
     def test_single_transfer_modality_rejects_mixed_features(self):
-        from dynamo.frontend.vllm_processor import _single_transfer_modality
+        from dingo.frontend.vllm_processor import _single_transfer_modality
 
         assert (
             _single_transfer_modality(

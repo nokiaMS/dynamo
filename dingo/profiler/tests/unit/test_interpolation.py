@@ -7,7 +7,7 @@ from unittest.mock import AsyncMock
 import pytest
 
 from deploy.utils.dynamo_deployment import DeploymentFailedError, DynamoDeploymentClient
-from dynamo.profiler.interpolation import _wait_for_required_interpolation_deployment
+from dingo.profiler.interpolation import _wait_for_required_interpolation_deployment
 
 pytestmark = [
     pytest.mark.unit,

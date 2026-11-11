@@ -11,8 +11,8 @@ from typing import Any, Sequence
 import torch
 from vllm.inputs import EmbedsPrompt, TokensPrompt
 
-from dynamo.vllm.multimodal_utils.embed_assembler import build_mixed_embeds
-from dynamo.vllm.multimodal_utils.vision_encoder_backend import VisionEncoderBackend
+from dingo.vllm.multimodal_utils.embed_assembler import build_mixed_embeds
+from dingo.vllm.multimodal_utils.vision_encoder_backend import VisionEncoderBackend
 
 
 class CustomEncoderAdapter(ABC):

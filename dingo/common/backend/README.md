@@ -16,7 +16,7 @@ guided decoding / structural tag.
 > path. See [Feature Gaps](#feature-gaps) for the per-engine matrix.
 
 > **Looking for a walkthrough?** Start with the
-> [Writing Unified Backends](../../../../../docs/development/unified-backends.md)
+> [Writing Unified Backends](../../../docs/fern/development/unified-backends.md)
 > guide and choose the Python tab. This README is the in-tree reference:
 > file layout, per-engine cancellation cookbook, disaggregation contract,
 > error-handling table, and the feature-gap matrix.
@@ -526,7 +526,7 @@ Lifecycle and runtime:
   least 80 GiB per GPU for weights and runtime headroom.
 - **Headless multi-node (vLLM)** — `--headless` secondary nodes run
   vLLM workers only (multi-node TP/PP with `--data-parallel-backend mp`),
-  bypassing DistributedRuntime; `dynamo.vllm.main` routes them to
+  bypassing DistributedRuntime; `dingo.vllm.main` routes them to
   `run_dynamo_headless` before the Worker/engine path. Distinct from
   elastic EP, which uses the Ray backend above.
 - **Disaggregated serving** (`agg`/`prefill`/`decode`) — KV transfer

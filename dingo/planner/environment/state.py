@@ -7,7 +7,7 @@ from copy import deepcopy
 from dataclasses import dataclass, field
 from typing import Optional
 
-from dynamo.planner.monitoring.worker_info import WorkerInfo
+from dingo.planner.monitoring.worker_info import WorkerInfo
 
 
 @dataclass

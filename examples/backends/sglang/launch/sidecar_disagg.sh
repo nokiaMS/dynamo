@@ -55,7 +55,7 @@ GPU_MEM_ARGS=$(build_sglang_gpu_mem_args)
 
 print_launch_banner "Launching SGLang Native-gRPC Disaggregated Serving (2 GPUs)" "$MODEL" "$HTTP_PORT"
 
-python3 -m dynamo.frontend &
+python3 -m dingo.frontend &
 
 CUDA_VISIBLE_DEVICES="$SGLANG_PREFILL_GPU" \
     "$SGLANG_PYTHON" -m sglang.launch_server \

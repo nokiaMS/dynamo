@@ -6,9 +6,9 @@ from unittest.mock import AsyncMock, MagicMock
 
 import pytest
 
-from dynamo.planner.config.defaults import SubComponentType
-from dynamo.planner.connectors import virtual
-from dynamo.planner.monitoring.worker_info import WorkerInfo
+from dingo.planner.config.defaults import SubComponentType
+from dingo.planner.connectors import virtual
+from dingo.planner.monitoring.worker_info import WorkerInfo
 
 pytestmark = [
     pytest.mark.gpu_0,

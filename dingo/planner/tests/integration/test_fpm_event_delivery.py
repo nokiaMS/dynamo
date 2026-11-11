@@ -16,20 +16,20 @@ from dynamo.llm import (
     WorkerType,
     register_model,
 )
-from dynamo.planner.config.planner_config import PlannerConfig
-from dynamo.planner.core.base import NativePlannerBase
-from dynamo.planner.core.state_machine import PlannerScalingState
-from dynamo.planner.core.types import (
+from dingo.planner.config.planner_config import PlannerConfig
+from dingo.planner.core.base import NativePlannerBase
+from dingo.planner.core.state_machine import PlannerScalingState
+from dingo.planner.core.types import (
     EngineCapabilities,
     ScheduledTick,
     WorkerCapabilities,
     WorkerCounts,
 )
-from dynamo.planner.environment.metrics_provider.runtime_provider import (
+from dingo.planner.environment.metrics_provider.runtime_provider import (
     RuntimeFpmProvider,
 )
-from dynamo.planner.environment.state import DeploymentState
-from dynamo.planner.monitoring.worker_info import WorkerInfo
+from dingo.planner.environment.state import DeploymentState
+from dingo.planner.monitoring.worker_info import WorkerInfo
 from dynamo.runtime import DistributedRuntime
 
 pytestmark = [

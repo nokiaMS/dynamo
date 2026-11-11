@@ -9,8 +9,8 @@ import os
 
 import pytest
 
-import dynamo.common.configuration.groups.runtime_args as runtime_args
-from dynamo.common.configuration.groups.runtime_args import (
+import dingo.common.configuration.groups.runtime_args as runtime_args
+from dingo.common.configuration.groups.runtime_args import (
     DynamoRuntimeArgGroup,
     DynamoRuntimeConfig,
 )
