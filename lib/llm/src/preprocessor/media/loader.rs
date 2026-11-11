@@ -23,6 +23,7 @@ use super::decoders::MediaDecoder;
 use super::rdma::RdmaMediaDataDescriptor;
 #[cfg(feature = "nixl-media")]
 use super::rdma::{DataType, get_nixl_agent};
+use super::require_image_url;
 #[cfg(feature = "nixl-media")]
 use lru::LruCache;
 #[cfg(feature = "nixl-media")]
@@ -507,15 +508,7 @@ impl MediaLoader {
                     .as_ref()
                     .ok_or_else(|| anyhow::anyhow!("Model does not support image inputs"))?;
 
-                let url = image_part
-                    .image_url
-                    .as_ref()
-                    .map(|media| &media.url)
-                    .ok_or_else(|| {
-                        anyhow::anyhow!(
-                            "Cannot decode an image content part without a URL; UUID-only parts must be resolved by the backend cache"
-                        )
-                    })?;
+                let url = require_image_url(image_part)?;
                 self.media_fetcher
                     .check_if_url_allowed_with_dns(url)
                     .await?;
