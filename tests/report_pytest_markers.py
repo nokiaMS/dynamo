@@ -205,7 +205,7 @@ STUB_MODULES = [
     "sglang.srt.disaggregation.kv_events",
     "sglang.srt.disaggregation.utils",
     "sglang.srt.server_args",
-    "sglang.srt.server_args_config_parser",
+    "sglang.srt.utils.server_args_config_parser",
     "vllm",
     "vllm.config",
     "vllm.distributed",
